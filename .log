@@ -1,2 +1,23 @@
 INFO 2024-12-13 15:49:55,928 autoreload Watching for file changes with StatReloader
 INFO 2024-12-13 16:25:44,975 autoreload Watching for file changes with StatReloader
+INFO 2024-12-13 16:32:38,419 autoreload D:\django\elite-guard-services\project\settings.py changed, reloading.
+INFO 2024-12-13 16:32:38,842 autoreload Watching for file changes with StatReloader
+INFO 2024-12-13 16:33:00,505 autoreload D:\django\elite-guard-services\project\settings.py changed, reloading.
+INFO 2024-12-13 16:33:00,964 autoreload Watching for file changes with StatReloader
+WARNING 2024-12-13 16:42:53,954 utils No url supplied in custom link
+WARNING 2024-12-13 16:44:42,094 utils No url supplied in custom link
+WARNING 2024-12-13 16:44:57,378 utils No url supplied in custom link
+WARNING 2024-12-13 16:45:05,039 utils No url supplied in custom link
+WARNING 2024-12-13 16:45:08,538 utils No url supplied in custom link
+WARNING 2024-12-13 16:45:12,509 utils No url supplied in custom link
+WARNING 2024-12-13 16:45:39,066 utils No url supplied in custom link
+WARNING 2024-12-13 16:45:59,578 utils No url supplied in custom link
+WARNING 2024-12-13 16:46:12,604 utils No url supplied in custom link
+WARNING 2024-12-13 16:46:35,736 utils No url supplied in custom link
+WARNING 2024-12-13 16:46:42,946 utils No url supplied in custom link
+WARNING 2024-12-13 16:47:02,878 utils No url supplied in custom link
+WARNING 2024-12-13 16:47:18,949 utils No url supplied in custom link
+WARNING 2024-12-13 16:47:22,871 utils No url supplied in custom link
+WARNING 2024-12-13 16:48:04,808 utils No url supplied in custom link
+INFO 2024-12-13 16:48:17,859 autoreload D:\django\elite-guard-services\project\settings.py changed, reloading.
+INFO 2024-12-13 16:48:18,285 autoreload Watching for file changes with StatReloader

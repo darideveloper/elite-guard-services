@@ -149,10 +149,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Jazzmin (layout template) settings
 JAZZMIN_SETTINGS = {
     # Text
-    "site_title": "C4 Empresarial y Residencial Dashboard",
+    "site_title": "Elite Guard Services",
     "site_header": "Admin",
-    "site_brand": "C4EyR Dashboard",
-    "welcome_sign": "Bienvenido a C4 Empresarial y Residencial Dashboard",
+    "site_brand": "EGS Dashboard",
+    "welcome_sign": "Bienvenido a Elite Guard Services Dashboard",
     "copyright": "",
 
     # Media
@@ -175,7 +175,7 @@ JAZZMIN_SETTINGS = {
 
     # Links to put along the top menu
     "topmenu_links": [
-        {"name": "Landing", "url": LANDING_HOST},
+        # {"name": "Landing", "url": LANDING_HOST},
     ],
 
     #############
@@ -225,10 +225,6 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-        "leads.contact": "fas fa-phone",
-        "leads.contact": "fas fa-phone",
-        "leads.quotecompany": "fas fa-briefcase",
-        "leads.quoteresidential": "fas fa-house-user",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
