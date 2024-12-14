@@ -261,4 +261,4 @@ class WeeklyLoan(models.Model):
         # TODO: update employee balance when save a wekly loan
         
         # Save the wekly loan
-        super(WeklyLoan, self).save(*args, **kwargs)
+        super(WeeklyLoan, self).save(*args, **kwargs)
