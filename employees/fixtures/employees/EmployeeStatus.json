@@ -1,0 +1,30 @@
+[
+    {
+        "model": "employees.EmployeeStatus",
+        "pk": 1,
+        "fields": {
+            "name": "Activo"
+        }
+    },
+    {
+        "model": "employees.EmployeeStatus",
+        "pk": 2,
+        "fields": {
+            "name": "Renuncia"
+        }
+    },
+    {
+        "model": "employees.EmployeeStatus",
+        "pk": 3,
+        "fields": {
+            "name": "Despido"
+        }
+    },
+    {
+        "model": "employees.EmployeeStatus",
+        "pk": 4,
+        "fields": {
+            "name": "Baja temporal"
+        }
+    }
+]
