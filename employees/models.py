@@ -388,6 +388,13 @@ class Employee(models.Model):
         # Save the employee
         super(Employee, self).save(*args, **kwargs)
     
+    def get_age(self):
+        """ Calculate employee age """
+        today = timezone.now()
+        return today.year - self.birthdate.year - (
+            (today.month, today.day) < (self.birthdate.month, self.birthdate.day)
+        )
+    
 # TODO: EmployeeInventory related models
 
 

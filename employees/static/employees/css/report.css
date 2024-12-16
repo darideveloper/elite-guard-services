@@ -1,0 +1,84 @@
+.debug {
+  border: 1px solid red;
+}
+
+.general {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.general .tables {
+  width: calc(100% - 120px);
+}
+.general .tables table.employee-id {
+  margin-top: 0;
+}
+.general .profile-img-wrapper {
+  width: 100px;
+  height: 100px;
+}
+
+.report {
+  margin: 0;
+  padding: 20px;
+  background: #e1e0de;
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: "Roboto", sans-serif;
+  print-color-adjust: exact !important;
+  -webkit-print-color-adjust: exact;
+  font-size: 12px;
+}
+.report .border {
+  border: 1px solid black;
+}
+.report header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+.report header .logo-top {
+  width: 60px;
+  border-radius: 50%;
+}
+.report .logo-bg {
+  width: 100%;
+  opacity: 0.1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.report table, .report th, .report td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+.report table.w-full, .report th.w-full, .report td.w-full {
+  width: 100%;
+}
+.report table {
+  margin: 10px 0;
+}
+.report td, .report th {
+  padding: 2px;
+}
+.report td.title, .report th {
+  background-color: #7c332c;
+  color: #e1e0de;
+  font-weight: bold;
+}
+.report td .field-name, .report th .field-name {
+  display: block;
+  opacity: 0.8;
+  font-size: 10px;
+}
+
+@media print {
+  .report {
+    background: #e1e0de !important;
+  }
+}/*# sourceMappingURL=report.css.map */

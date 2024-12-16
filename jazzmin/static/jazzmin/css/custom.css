@@ -1,3 +1,7 @@
+.debug {
+  border: 1px solid red;
+}
+
 .jazzmin-page {
   background: #e1e0de;
 }
