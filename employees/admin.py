@@ -65,6 +65,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'daily_rate',
     )
     list_per_page = 20
+    readonly_fields = ('created_at', 'updated_at', 'status_history', 'balance')
     
 
 @admin.register(models.WeeklyLoan)
