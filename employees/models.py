@@ -412,16 +412,91 @@ class WeeklyLoan(models.Model):
 class Ref(models.Model):
     """ Reference model """
     id = models.AutoField(primary_key=True)
-    phone = models.CharField(
-        max_length=10,
-        verbose_name='Teléfono de referencia'
-    )
-    name = models.CharField(
-        max_length=100,
-        verbose_name='Nombre de referencia'
-    )
     employee = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
         verbose_name='Empleado'
     )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre de referencia'
+    )
+    phone = models.CharField(
+        max_length=10,
+        verbose_name='Teléfono de referencia'
+    )
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Referencia'
+        verbose_name_plural = 'Referencias'
+        
+    def __str__(self):
+        """ Text representation """
+        return f"{self.name} ({self.employee})"
+    
+    
+class Relationship(models.Model):
+    """ Secondary model for relative relationship with employee """
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre de relación'
+    )
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Parentesco'
+        verbose_name_plural = 'Parentescos'
+        ordering = ['name']
+    
+    def __str__(self):
+        """ Text representation """
+        return self.name
+    
+    
+class Relative(models.Model):
+    """ Relative model """
+    id = models.AutoField(primary_key=True)
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        verbose_name='Empleado'
+    )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre de familiar'
+    )
+    last_name_1 = models.CharField(
+        max_length=100,
+        verbose_name='Apellido paterno'
+    )
+    last_name_2 = models.CharField(
+        max_length=100,
+        verbose_name='Apellido materno',
+        null=True,
+        blank=True
+    )
+    relationship = models.CharField(
+        max_length=100,
+        verbose_name='Parentesco'
+    )
+    phone = models.CharField(
+        max_length=10,
+        verbose_name='Teléfono de familiar'
+    )
+    age = models.IntegerField(
+        verbose_name='Edad de familiar'
+    )
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Familiar'
+        verbose_name_plural = 'Familiares'
+    
+    def __str__(self):
+        """ Text representation """
+        return f"{self.name} ({self.relationship} - {self.employee})"
+    
+    

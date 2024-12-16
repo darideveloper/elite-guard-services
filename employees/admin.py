@@ -167,4 +167,52 @@ class WeeklyLoanAdmin(admin.ModelAdmin):
     )
     list_per_page = 20
 
+
+@admin.register(models.Ref)
+class RefAdmin(admin.ModelAdmin):
+    """ Ref model admin """
+    list_display = (
+        'employee',
+        'name',
+        'phone',
+    )
+    search_fields = (
+        'employee__name',
+        'employee__last_name',
+        'employee__rfc',
+        'employee__curp',
+    )
+    list_filter = (
+        'employee',
+    )
+    list_per_page = 20
+    
+    
+@admin.register(models.Relationship)
+class RelationshipAdmin(admin.ModelAdmin):
+    """ Relationship model admin """
+    list_display = ('name',)
+    
+
+@admin.register(models.Relative)
+class RelativeAdmin(admin.ModelAdmin):
+    """ Relative model admin """
+    list_display = (
+        'employee',
+        'name',
+        'last_name_1',
+        'last_name_2',
+        'relationship',
+    )
+    search_fields = (
+        'employee__name',
+        'employee__last_name',
+        'employee__rfc',
+        'employee__curp',
+    )
+    list_filter = (
+        'employee',
+        'relationship',
+    )
+    list_per_page = 20
     
