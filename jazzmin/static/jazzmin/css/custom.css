@@ -132,4 +132,12 @@ input[type=checkbox], input[type=radio] {
 .calendar caption, .clockbox h2 {
   background-color: #686868;
   color: #e1e0de;
+}
+
+.select2-selection__choice__display {
+  color: #2b2b2b !important;
+}
+
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #7c332c !important;
 }/*# sourceMappingURL=custom.css.map */
