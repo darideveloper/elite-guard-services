@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Colony(models.Model):
@@ -339,8 +340,7 @@ class Employee(models.Model):
     status_history = models.TextField(
         verbose_name='Historial de estatus',
         help_text='Historial de estatus (activo, inactivo, baja, etc). Autollenado',
-        blank=True,
-        null=True
+        default=''
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -363,10 +363,20 @@ class Employee(models.Model):
     def save(self, *args, **kwargs):
         """ Custom save method """
         
-        # TODO: save in status_history the employee register
-        # TODO: save in status_history the employee set to active
-        # TODO: save in status_history the employee set to inactive
+        is_new = self._state.adding
+        now = timezone.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         
+        # save in status_history the employee status change
+        if is_new:
+            self.status_history += f"({now_str}) Estado: {self.status}"
+        else:
+            old_status = self._meta.model.objects.get(pk=self.pk).status
+            new_status = self.status
+            if old_status != new_status:
+                text = f"\n({now_str}) Estado: {old_status} >>> {new_status}"
+                self.status_history += text
+
         # Save the employee
         super(Employee, self).save(*args, **kwargs)
     
