@@ -255,6 +255,12 @@ class Employee(models.Model):
         verbose_name='Estatus de empleado',
         default=1
     )
+    status_change_details = models.TextField(
+        verbose_name='Detalles de cambio de estatus',
+        help_text='Detalles del cambio de estatus',
+        blank=True,
+        null=True
+    )
     knowledge = models.TextField(
         verbose_name='Conocimientos',
         help_text='Conocimientos y experiencia del empleado'
@@ -375,6 +381,8 @@ class Employee(models.Model):
             new_status = self.status
             if old_status != new_status:
                 text = f"\n({now_str}) Estado: {old_status} >>> {new_status}"
+                if self.status_change_details:
+                    text += f" - Detalles: {self.status_change_details}"
                 self.status_history += text
 
         # Save the employee

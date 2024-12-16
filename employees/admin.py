@@ -104,6 +104,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                     'ine',
                     'uniform_date',
                     'status',
+                    'status_change_details',
                     'knowledge',
                     'skills',
                 ),
