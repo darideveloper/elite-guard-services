@@ -413,7 +413,9 @@ class WeeklyLoan(models.Model):
     def save(self, *args, **kwargs):
         """ Custom save method """
         
-        # TODO: update employee balance when save a wekly loan
+        # update employee balance when save a wekly loan
+        self.employee.balance += self.amount
+        self.employee.save()
         
         # Save the wekly loan
         super(WeeklyLoan, self).save(*args, **kwargs)
