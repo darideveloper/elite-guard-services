@@ -37,7 +37,8 @@ class EmployeeAdmin(admin.ModelAdmin):
     """ Employee model admin """
     list_display = (
         'name',
-        'last_name',
+        'last_name_1',
+        'last_name_2',
         'daily_rate',
         'status',
         'administrative_violations',
@@ -46,26 +47,104 @@ class EmployeeAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'name',
-        'last_name',
+        'last_name_1',
         'curp',
         'rfc',
         'imss',
         'infonavit',
-        'address',
+        'ine',
         'phone',
         'anti_doping_results',
         'administrative_comments',
     )
     list_filter = (
-        'status',
         'marital_status',
-        'colony',
+        'education',
+        'municipality_birth',
+        'status',
         'municipality',
+        'colony',
         'bank',
-        'daily_rate',
+        'created_at',
+        'updated_at',
     )
     list_per_page = 20
     readonly_fields = ('created_at', 'updated_at', 'status_history', 'balance')
+    fieldsets = (
+        (
+            "General", {
+                'fields': (
+                    'name',
+                    'last_name_1',
+                    'last_name_2',
+                    'height',
+                    'weight',
+                    'marital_status',
+                    'education',
+                    'languages',
+                ),
+            }
+        ),
+        (
+            "Nacimiento", {
+                'fields': (
+                    'birthdate',
+                    'municipality_birth'
+                ),
+            }
+        ),
+        (
+            "Laboral", {
+                'fields': (
+                    'daily_rate',
+                    'curp',
+                    'rfc',
+                    'imss',
+                    'infonavit',
+                    'ine',
+                    'uniform_date',
+                    'status',
+                    'knowledge',
+                    'skills',
+                ),
+            }
+        ),
+        (
+            "Contacto", {
+                'fields': (
+                    'municipality',
+                    'colony',
+                    'postal_code',
+                    'address_street',
+                    'address_number',
+                    'phone',
+                    'emergency_phone',
+                ),
+            }
+        ),
+        (
+            "Banco", {
+                'fields': (
+                    'bank',
+                    'card_number',
+                    'balance',
+                ),
+            }
+        ),
+        (
+            "Otro", {
+                'fields': (
+                    'anti_doping_results',
+                    'administrative_violations',
+                    'administrative_comments',
+                    'status_history',
+                    'created_at',
+                    'updated_at',
+                ),
+            }
+        ),
+        
+    )
     
 
 @admin.register(models.WeeklyLoan)

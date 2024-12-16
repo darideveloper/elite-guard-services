@@ -13,7 +13,9 @@ class Command(BaseCommand):
         commands_data = {
             "employees": [
                 "MaritialStatus",
-                "EmployeeStatus",
+                "Status",
+                "Education",
+                "Language",
             ],
         }
         

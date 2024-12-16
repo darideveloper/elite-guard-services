@@ -1,0 +1,37 @@
+[
+    {
+        "model": "employees.Education",
+        "pk": 1,
+        "fields": {
+            "name": "Primaria"
+        }
+    },
+    {
+        "model": "employees.Education",
+        "pk": 2,
+        "fields": {
+            "name": "Secundaria"
+        }
+    },
+    {
+        "model": "employees.Education",
+        "pk": 3,
+        "fields": {
+            "name": "Preparatoria"
+        }
+    },
+    {
+        "model": "employees.Education",
+        "pk": 4,
+        "fields": {
+            "name": "Técnica o comercial"
+        }
+    },
+    {
+        "model": "employees.Education",
+        "pk": 5,
+        "fields": {
+            "name": "Profesional"
+        }
+    }
+]

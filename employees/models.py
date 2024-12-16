@@ -72,8 +72,8 @@ class Status(models.Model):
     
     class Meta:
         """ Model metadata """
-        verbose_name = 'Estado'
-        verbose_name_plural = 'Estados'
+        verbose_name = 'Estatus de empleado'
+        verbose_name_plural = 'Estatus de empleados'
         ordering = ['name']
         
     def __str__(self):
@@ -100,27 +100,116 @@ class Bank(models.Model):
         """ Text representation """
         return self.name
     
-
-class Employee(models.Model):
-    """ Primary model for employees """
+    
+class Education(models.Model):
+    """ Secondary model for employee education """
     
     id = models.AutoField(primary_key=True)
     name = models.CharField(
         max_length=100,
-        verbose_name='Nombre'
+        verbose_name='Nombre del nivel educación'
     )
-    last_name = models.CharField(
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Educación'
+        verbose_name_plural = 'Educaciones'
+        ordering = ['id']
+        
+    def __str__(self):
+        """ Text representation """
+        return self.name
+    
+    
+class Language(models.Model):
+    """ Secondary model for employee language """
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
         max_length=100,
-        verbose_name='Apellido'
+        verbose_name='Nombre del idioma'
     )
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Idioma'
+        verbose_name_plural = 'Idiomas'
+        ordering = ['name']
+        
+    def __str__(self):
+        """ Text representation """
+        return self.name
+    
+    
+class Employee(models.Model):
+    """ Primary model for employees """
+    
     # TODO: service
+    
+    # General info
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre(s)'
+    )
+    last_name_1 = models.CharField(
+        max_length=100,
+        verbose_name='Apellido paterno'
+    )
+    last_name_2 = models.CharField(
+        max_length=100,
+        verbose_name='Apellido materno',
+        blank=True,
+        null=True
+    )
+    height = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        verbose_name='Estatura',
+        help_text='Estatura en metros',
+        blank=True,
+        null=True
+    )
+    weight = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Peso',
+        help_text='Peso en kilogramos',
+        blank=True,
+        null=True
+    )
+    marital_status = models.ForeignKey(
+        MaritalStatus,
+        on_delete=models.PROTECT,
+        verbose_name='Estado civil'
+    )
+    education = models.ForeignKey(
+        Education,
+        on_delete=models.PROTECT,
+        verbose_name='Nivel de educación'
+    )
+    languages = models.ManyToManyField(
+        Language,
+        verbose_name='Idiomas'
+    )
+    
+    # Birth info
+    birthdate = models.DateField(
+        verbose_name='Fecha de nacimiento'
+    )
+    municipality_birth = models.ForeignKey(
+        Municipality,
+        on_delete=models.PROTECT,
+        verbose_name='Lugar de nacimiento',
+        help_text='Estado y municipio de nacimiento',
+        related_name='municipality_birth'
+    )
+    
+    # Work info
     daily_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         verbose_name='Slario diario'
-    )
-    born_date = models.DateField(
-        verbose_name='Fecha de nacimiento'
     )
     curp = models.CharField(
         max_length=18,
@@ -130,83 +219,128 @@ class Employee(models.Model):
     rfc = models.CharField(
         max_length=13,
         verbose_name='RFC',
-        help_text='Registro Federal de Contribuyentes'
+        help_text='Registro Federal de Contribuyentes',
+        blank=True,
+        null=True
     )
     imss = models.CharField(
         max_length=11,
         verbose_name='IMSS',
-        help_text='Instituto Mexicano del Seguro Social'
+        help_text='Instituto Mexicano del Seguro Social',
+        blank=True,
+        null=True
     )
     infonavit = models.CharField(
         max_length=11,
         verbose_name='INFONAVIT',
-        help_text='Instituto del Fondo Nacional de la Vivienda para los Trabajadores'
+        help_text='Instituto del Fondo Nacional de la Vivienda para los Trabajadores',
+        blank=True,
+        null=True
     )
-    marital_status = models.ForeignKey(
-        MaritalStatus,
+    ine = models.CharField(
+        max_length=13,
+        verbose_name='INE',
+        help_text='Número de credencial de Instituto Nacional Electoral'
+    )
+    uniform_date = models.DateField(
+        verbose_name='Fecha de uniforme',
+        help_text='Fecha de entrega de uniforme',
+        blank=True,
+        null=True
+    )
+    status = models.ForeignKey(
+        Status,
         on_delete=models.PROTECT,
-        verbose_name='Estado civil'
+        verbose_name='Estatus de empleado',
+        default=1
+    )
+    knowledge = models.TextField(
+        verbose_name='Conocimientos',
+        help_text='Conocimientos y experiencia del empleado'
+    )
+    skills = models.TextField(
+        verbose_name='Habilidades',
+        help_text='Habilidades y destrezas del empleado'
+    )
+    
+    # Contact info
+    municipality = models.ForeignKey(
+        Municipality,
+        on_delete=models.PROTECT,
+        verbose_name='Lugar de residencia',
+        help_text='Estado y municipio de residencia'
     )
     colony = models.ForeignKey(
         Colony,
         on_delete=models.PROTECT,
         verbose_name='Colonia'
     )
-    municipality = models.ForeignKey(
-        Municipality,
-        on_delete=models.PROTECT,
-        verbose_name='Municipio'
-    )
     postal_code = models.CharField(
         max_length=5,
         verbose_name='Código postal'
     )
-    address = models.TextField(
-        verbose_name='Domicilio'
+    address_street = models.CharField(
+        max_length=100,
+        verbose_name='Calle de residencia'
+    )
+    address_number = models.CharField(
+        max_length=10,
+        verbose_name='Número de residencia',
+        help_text='Número de la casa o departamento'
     )
     phone = models.CharField(
         max_length=10,
         verbose_name='Teléfono'
     )
+    emergency_phone = models.CharField(
+        max_length=10,
+        verbose_name='Teléfono de emergencia'
+    )
+    
+    # Bank info
     bank = models.ForeignKey(
         Bank,
         on_delete=models.PROTECT,
         verbose_name='Banco',
-        help_text='Banco donde se deposita el salario'
+        help_text='Banco donde se deposita el salario',
+        blank=True,
+        null=True
     )
     card_number = models.CharField(
         max_length=16,
         verbose_name='Número de tarjeta',
-        help_text='Número de tarjeta de débito o nómina'
-    )
-    uniform_date = models.DateField(
-        verbose_name='Fecha de uniforme',
-        help_text='Fecha de entrega de uniforme'
-    )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.PROTECT,
-        verbose_name='Estatus'
-    )
-    anti_doping_results = models.TextField(
-        verbose_name='Resultados de antidoping'
-    )
-    administrative_violations = models.IntegerField(
-        verbose_name='Infracciones administrativas',
-        help_text='Número de infracciones administrativas hasta la fecha'
-    )
-    administrative_comments = models.TextField(
-        verbose_name='Comentarios administrativos',
-        help_text='Detalles de las infracciones administrativas'
-    )
-    status_history = models.TextField(
-        verbose_name='Historial de estatus',
-        help_text='Historial de estatus (activo, inactivo, baja, etc). Autollenado'
+        help_text='Número de tarjeta de débito o nómina',
+        blank=True,
+        null=True
     )
     balance = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Saldo de préstamos'
+        verbose_name='Saldo de préstamos',
+        default=0
+    )
+    
+    # Other info
+    anti_doping_results = models.TextField(
+        verbose_name='Resultados de antidoping',
+        default='Sin resultados de antidoping'
+    )
+    administrative_violations = models.IntegerField(
+        verbose_name='Infracciones administrativas',
+        help_text='Número de infracciones administrativas hasta la fecha',
+        default=0
+    )
+    administrative_comments = models.TextField(
+        verbose_name='Comentarios administrativos',
+        help_text='Detalles de las infracciones administrativas',
+        blank=True,
+        null=True
+    )
+    status_history = models.TextField(
+        verbose_name='Historial de estatus',
+        help_text='Historial de estatus (activo, inactivo, baja, etc). Autollenado',
+        blank=True,
+        null=True
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -273,3 +407,21 @@ class WeeklyLoan(models.Model):
         
         # Save the wekly loan
         super(WeeklyLoan, self).save(*args, **kwargs)
+       
+        
+class Ref(models.Model):
+    """ Reference model """
+    id = models.AutoField(primary_key=True)
+    phone = models.CharField(
+        max_length=10,
+        verbose_name='Teléfono de referencia'
+    )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre de referencia'
+    )
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        verbose_name='Empleado'
+    )

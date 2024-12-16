@@ -1,0 +1,16 @@
+[
+    {
+        "model": "employees.Language",
+        "pk": 1,
+        "fields": {
+            "name": "Español"
+        }
+    },
+    {
+        "model": "employees.Language",
+        "pk": 2,
+        "fields": {
+            "name": "Ingles"
+        }
+    }
+]
