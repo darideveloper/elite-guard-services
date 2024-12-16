@@ -478,8 +478,9 @@ class Relative(models.Model):
         null=True,
         blank=True
     )
-    relationship = models.CharField(
-        max_length=100,
+    relationship = models.ForeignKey(
+        Relationship,
+        on_delete=models.PROTECT,
         verbose_name='Parentesco'
     )
     phone = models.CharField(

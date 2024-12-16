@@ -16,6 +16,7 @@ class Command(BaseCommand):
                 "Status",
                 "Education",
                 "Language",
+                "Relationship",
             ],
         }
         

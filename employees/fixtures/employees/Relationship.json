@@ -1,0 +1,58 @@
+[
+    {
+        "model": "employees.Relationship",
+        "pk": 1,
+        "fields": {
+            "name": "Padre"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 2,
+        "fields": {
+            "name": "Madre"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 3,
+        "fields": {
+            "name": "Esposo(a)"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 4,
+        "fields": {
+            "name": "Hijo(a)"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 5,
+        "fields": {
+            "name": "Hermano(a)"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 6,
+        "fields": {
+            "name": "Abuelo(a)"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 7,
+        "fields": {
+            "name": "Tio(a)"
+        }
+    },
+    {
+        "model": "employees.Relationship",
+        "pk": 4,
+        "fields": {
+            "name": "Primo(a)"
+        }
+    }
+]
