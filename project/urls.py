@@ -8,8 +8,16 @@ from django.conf.urls.static import static
 from employees import urls as employees_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # Redirects
     path('', RedirectView.as_view(url='/admin/'), name='home-redirect-admin'),
+    path(
+        'accounts/login/',
+        RedirectView.as_view(url='/admin/'),
+        name='login-redirect-admin'
+    ),
+    
+    # Apps
+    path('admin/', admin.site.urls),
     path('employees/', include(employees_urls)),
 ]
 
