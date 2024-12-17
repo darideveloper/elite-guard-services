@@ -18,8 +18,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 LANDING_HOST = os.getenv('LANDING_HOST')
 STORAGE_AWS = os.environ.get("STORAGE_AWS") == "True"
+HOST = os.getenv('HOST')
 
 print(f"DEBUG: {DEBUG}")
+print(f"STORAGE_AWS: {STORAGE_AWS}")
+print(f"HOST: {HOST}")
 
 ALLOWED_HOSTS = ["*"]
 

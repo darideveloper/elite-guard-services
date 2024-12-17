@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 
 from employees import models
+from utils.media import get_media_url
 
     
 class ReportEmployeeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -69,6 +70,6 @@ class ReportEmployeeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         
         # add photo
         if employee.photo:
-            context["photo"] = employee.photo.url
+            context["photo"] = get_media_url(employee.photo)
         
         return context

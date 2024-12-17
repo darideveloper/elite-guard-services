@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+
 from employees import models
 
 
@@ -44,6 +46,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'administrative_violations',
         'created_at',
         'updated_at',
+        'acciones',
     )
     search_fields = (
         'name',
@@ -145,8 +148,14 @@ class EmployeeAdmin(admin.ModelAdmin):
                 ),
             }
         ),
-        
     )
+    list_display_links = ('name',)
+    
+    def acciones(self, obj):
+        return format_html(
+            '<a class="button" href="{}">Imprimir</a>',
+            f"/employees/report/employee/{obj.id}"
+        )
     
 
 @admin.register(models.WeeklyLoan)
