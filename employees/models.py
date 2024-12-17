@@ -193,6 +193,13 @@ class Employee(models.Model):
         Language,
         verbose_name='Idiomas'
     )
+    photo = models.ImageField(
+        upload_to='employees/photos/',
+        verbose_name='Foto',
+        help_text='Fotografía del empleado (tamaño recomendado: 300x300px)',
+        blank=True,
+        null=True
+    )
     
     # Birth info
     birthdate = models.DateField(

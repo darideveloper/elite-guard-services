@@ -18,6 +18,10 @@
   width: 100px;
   height: 100px;
 }
+.general .profile-img-wrapper img {
+  width: 100%;
+  height: auto;
+}
 
 .bottom {
   display: flex;

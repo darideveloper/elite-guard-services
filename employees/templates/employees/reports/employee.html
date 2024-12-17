@@ -92,7 +92,7 @@ Reporte de perfil de empleado
 
   </div>
   <div class="profile-img-wrapper border">
-    <img src="{% static 'employees/img/employees/' %}{{ employee.profile_img }}"
+    <img src="{{ photo }}"
       alt="Foto de perfil de {{ employee.name | title }} {{ employee.last_name_1 | title}} {{ employee.last_name_2 | title }}">
   </div>
 </div>

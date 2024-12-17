@@ -58,7 +58,7 @@ class ReportEmployeeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
             relatives_data.append(relative_data)
         context['relatives'] = relatives_data
         
-        # add esucation options and selected
+        # add education options and selected
         education_options = models.Education.objects.all()
         education_options_names = []
         for option in education_options:
@@ -66,5 +66,9 @@ class ReportEmployeeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         context["education_options"] = education_options_names
         education = employee.education.name
         context["education"] = education
+        
+        # add photo
+        if employee.photo:
+            context["photo"] = employee.photo.url
         
         return context

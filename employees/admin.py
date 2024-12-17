@@ -82,6 +82,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                     'marital_status',
                     'education',
                     'languages',
+                    'photo',
                 ),
             }
         ),
