@@ -14,3 +14,36 @@
     .profile-img-wrapper
         width: 100px
         height: 100px
+
+
+.bottom
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 20px
+
+    .left
+        width: 70%
+
+    .right
+        width: 30%
+
+        .education
+            td
+                .content
+                    display: flex
+                    align-items: center
+                    justify-content: space-between
+                    padding: 5px 25px
+
+                    .circle
+                        width: 20px
+                        height: 20px
+                        border-radius: 50%
+                        background-color: rgba($color-red, 0)
+                        display: inline-block
+                        margin-right: 5px
+                        border: 1px solid $color-red
+
+                        &.fill
+                            background-color: $color-red

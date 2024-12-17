@@ -19,6 +19,37 @@
   height: 100px;
 }
 
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.bottom .left {
+  width: 70%;
+}
+.bottom .right {
+  width: 30%;
+}
+.bottom .right .education td .content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 25px;
+}
+.bottom .right .education td .content .circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(124, 51, 44, 0);
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #7c332c;
+}
+.bottom .right .education td .content .circle.fill {
+  background-color: #7c332c;
+}
+
 .report {
   margin: 0;
   padding: 20px;
@@ -44,8 +75,8 @@
   border-radius: 50%;
 }
 .report .logo-bg {
-  width: 100%;
-  opacity: 0.1;
+  width: 60%;
+  opacity: 0.2;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -75,6 +106,9 @@
   display: block;
   opacity: 0.8;
   font-size: 10px;
+}
+.report td.bold {
+  font-weight: bold;
 }
 
 @media print {

@@ -10,147 +10,337 @@ Reporte de perfil de empleado
 {% endblock %}
 
 {% block table %}
-  <div class="general">
-    <div class="tables">
-      
-      <table class="employee-id w-full">
-        <tbody>
-          <tr>
-            <td class="title">Fecha de ingreso</td>
-            <td>10/11/2024</td>
-            <td class="title">No. de Empleado</td>
-            <td>EGS{{ employee.id }}</td>
-          </tr>
-        </tbody>
-      </table>
+<div class="general">
+  <div class="tables">
 
-      <table class="personal w-full">
-        <tbody>
-          <tr>
-            <th colspan="4">Datos Personales</th>
-          </tr>
-          <tr>
-            <td>
-              <span class="field-name">
-                Apellido Paterno
-              </span>
-              {{ employee.last_name_1 | upper }}
-            </td>
-            <td>
-              <span class="field-name">
-                Apellido Materno
-              </span>
-              {{ employee.last_name_2 | upper }}
-            </td>
-            <td colspan="2">
-              <span class="field-name">
-                Nombre(s)
-              </span>
-              {{ employee.name | upper }}
-            </td>
-          </tr>
+    <table class="employee-id w-full">
+      <tbody>
+        <tr>
+          <td class="title">Fecha de ingreso</td>
+          <td>10/11/2024</td>
+          <td class="title">No. de Empleado</td>
+          <td>EGS{{ employee.id }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-          <tr>
-            <td>
-              <span class="field-name">
-                Edad
-              </span>
-              {{ employee.age | upper }}
-            </td>
-            <td>
-              <span class="field-name">
-                Estatura
-              </span>
-              {{ employee.height | upper }}
-            </td>
-            <td>
-              <span class="field-name">
-                Peso
-              </span>
-              {{ employee.weight | upper }}
-            </td>
-            <td>
-              <span class="field-name">
-                Estado Civil
-              </span>
-              {{ employee.marital_status | upper }}
-            </td>
-          </tr>
+    <table class="personal w-full">
+      <tbody>
+        <tr>
+          <th colspan="4">Datos Personales</th>
+        </tr>
+        <tr>
+          <td>
+            <span class="field-name">
+              Apellido Paterno
+            </span>
+            {{ employee.last_name_1 | upper }}
+          </td>
+          <td>
+            <span class="field-name">
+              Apellido Materno
+            </span>
+            {{ employee.last_name_2 | upper }}
+          </td>
+          <td colspan="2">
+            <span class="field-name">
+              Nombre(s)
+            </span>
+            {{ employee.name | upper }}
+          </td>
+        </tr>
 
-          <tr>
-            <td colspan="2">
-              Lugar de nacimiento: &nbsp;
-              {{ employee.municipality_birth | title }}
-            </td>
-            <td colspan="2">
-              Fecha de nacimiento: &nbsp;
-              {{ employee.birthdate | date:"d/m/Y" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <tr>
+          <td>
+            <span class="field-name">
+              Edad
+            </span>
+            {{ employee.age | upper }}
+          </td>
+          <td>
+            <span class="field-name">
+              Estatura
+            </span>
+            {{ employee.height | upper }}
+          </td>
+          <td>
+            <span class="field-name">
+              Peso
+            </span>
+            {{ employee.weight | upper }}
+          </td>
+          <td>
+            <span class="field-name">
+              Estado Civil
+            </span>
+            {{ employee.marital_status | upper }}
+          </td>
+        </tr>
 
-    </div>
-    <div class="profile-img-wrapper border">
-      <img src="{% static 'employees/img/employees/' %}{{ employee.profile_img }}" alt="Foto de perfil de {{ employee.name | title }} {{ employee.last_name_1 | title}} {{ employee.last_name_2 | title }}">
-    </div>
+        <tr>
+          <td colspan="2">
+            Lugar de nacimiento: &nbsp;
+            {{ employee.municipality_birth | title }}
+          </td>
+          <td colspan="2">
+            Fecha de nacimiento: &nbsp;
+            {{ employee.birthdate | date:"d/m/Y" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
-  
-  <table class="address w-full">
-    <tbody>
-      <tr>
-        <th colspan="5">Domicilio</th>
-      </tr>
-      <tr>
-        <td>
-          <span class="field-name">
-            Calle
-          </span>
-          {{ employee.address_street | title }}
-        </td>
-        <td>
-          <span class="field-name">
-            No.
-          </span>
-          {{ employee.address_number | title }}
-        </td>
-        <td>
-          <span class="field-name">
-            Colonia
-          </span>
-          {{ employee.colony | title }}
-        </td>
-        <td>
-          <span class="field-name">
-            Municipio
-          </span>
-          {{ employee.municipio | title }}
-          &nbsp; C.P. {{ employee.postal_code }}
-        </td>
-        <td>
-          <span class="field-name">
-            Estado
-          </span>
-          {{ employee.estado | title }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <table class="documents w-full">
-    <tbody>
-      <tr>
-        <th colspan="4">No. de Documentos</th>
-      </tr>
-      <tr>
-        <td>
-          <span class="field-name">
-            Calle
-          </span>
-          {{ employee.address_street | title }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="profile-img-wrapper border">
+    <img src="{% static 'employees/img/employees/' %}{{ employee.profile_img }}"
+      alt="Foto de perfil de {{ employee.name | title }} {{ employee.last_name_1 | title}} {{ employee.last_name_2 | title }}">
+  </div>
+</div>
 
- {% endblock %}
+<table class="address w-full">
+  <tbody>
+    <tr>
+      <th colspan="5">Domicilio</th>
+    </tr>
+    <tr>
+      <td>
+        <span class="field-name">
+          Calle
+        </span>
+        {{ employee.address_street | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          No.
+        </span>
+        {{ employee.address_number | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Colonia
+        </span>
+        {{ employee.colony | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Municipio
+        </span>
+        {{ employee.municipio | title }}
+        &nbsp; C.P. {{ employee.postal_code }}
+      </td>
+      <td>
+        <span class="field-name">
+          Estado
+        </span>
+        {{ employee.estado | title }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="documents w-full">
+  <tbody>
+    <tr>
+      <th colspan="4">No. de Documentos</th>
+    </tr>
+    <tr>
+      <td class="bold">
+        No. IMSSS
+      </td>
+      <td>
+        {{ employee.imss }}
+      </td>
+      <td class="bold">
+        CURP
+      </td>
+      <td>
+        {{ employee.curp }}
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">
+        No. INE
+      </td>
+      <td>
+        {{ employee.ine }}
+      </td>
+      <td class="bold">
+        RFC
+      </td>
+      <td>
+        {{ employee.rfc }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="family w-full">
+  <tbody>
+    <tr>
+      <th colspan="5">Datos Familiares</th>
+    </tr>
+    {% for relative in relatives %}
+    <tr>
+      <td>
+        <span class="field-name">
+          Parentesco
+        </span>
+        {{ relative.relationship | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Apellido Paterno
+        </span>
+        {{ relative.last_name_1 | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Apellido Materno
+        </span>
+        {{ relative.last_name_2 | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Nombres
+        </span>
+        {{ relative.name | title }}
+      </td>
+      <td>
+        <span class="field-name">
+          Edad
+        </span>
+        {{ relative.age }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="bottom">
+
+  <div class="left">
+    <table class="phones w-full">
+      <tbody>
+        <tr>
+          <th colspan="4">Telefonos de contacto</th>
+        </tr>
+        <tr>
+          <td class="bold">
+            Celular personal
+          </td>
+          <td>
+            {{ employee.phone }}
+          </td>
+          <td class="bold">
+            Referencia 1
+          </td>
+          <td>
+            {% if refs_numbers|length > 1 %}
+            {{ refs_numbers.0 }}
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">
+            Telefono de emergencias
+          </td>
+          <td>
+            {{ employee.emergency_phone }}
+          </td>
+          <td class="bold">
+            Referencia 2
+          </td>
+          <td>
+            {% if refs_numbers|length > 1 %}
+            {{ refs_numbers.1 }}
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="service w-full">
+      <tbody>
+        <tr>
+          <th colspan="4">Datos del servicio asignado</th>
+        </tr>
+        <tr>
+          <td>
+            <span class="field-name">
+              Servicio
+            </span>
+            Oficina 1
+          </td>
+          <td>
+            <span class="field-name">
+              Puesto
+            </span>
+            Oficial
+          </td>
+          <td>
+            <span class="field-name">
+              Posición
+            </span>
+            Caseta principal
+          </td>
+          <td>
+            <span class="field-name">
+              Sueldo mensual
+            </span>
+            Confidencial
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="knowledge w-full">
+      <tbody>
+        <tr>
+          <th colspan="1">Conocimientos</th>
+        </tr>
+        <tr>
+          <td class="bold">
+            {{ employee.knowledge }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="skills w-full">
+      <tbody>
+        <tr>
+          <th colspan="1">Habilidades</th>
+        </tr>
+        <tr>
+          <td class="bold">
+            {{ employee.skills }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="right">
+    <table class="education w-full">
+      <tbody>
+        <tr>
+          <th colspan="1">Escolaridad</th>
+        </tr>
+        {% for education_option in education_options %}
+        <tr>
+          <td class="bold">
+            <div class="content">
+              {{ education_option }}
+              <span class="circle {% if education == education_option %} fill {% endif %}"></span>
+              </span>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{% endblock %}
