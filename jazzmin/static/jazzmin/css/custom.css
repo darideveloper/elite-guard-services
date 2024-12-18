@@ -110,7 +110,7 @@ a:hover {
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-danger:hover, .btn-danger:focus, .btn-danger:active {
   background-color: #686868 !important;
   border-color: #686868 !important;
-  color: #e1e0de;
+  color: #e1e0de !important;
 }
 
 .nav-link.active, .select2-results__option--highlighted {
