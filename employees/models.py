@@ -405,7 +405,7 @@ class Employee(models.Model):
 # TODO: EmployeeInventory related models
 
 
-class WeeklyLoan(models.Model):
+class Loan(models.Model):
     id = models.AutoField(primary_key=True)
     employee = models.ForeignKey(
         Employee,
@@ -419,14 +419,24 @@ class WeeklyLoan(models.Model):
         help_text='Monto pedido (-) o pagado (+)'
     )
     date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Fecha de registro'
+        default=timezone.now,
+        verbose_name='Fecha de prestamo o pago'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Fecha de modificación'
+    )
+    details = models.TextField(
+        verbose_name='Detalles',
+        help_text='Detalles del préstamo o pago',
+        blank=True,
+        null=True
     )
     
     class Meta:
         """ Model metadata """
-        verbose_name = 'Préstamo semanal'
-        verbose_name_plural = 'Préstamos semanales'
+        verbose_name = 'Préstamo'
+        verbose_name_plural = 'Préstamos'
         
     def __str__(self):
         """ Text representation """
@@ -440,7 +450,7 @@ class WeeklyLoan(models.Model):
         self.employee.save()
         
         # Save the wekly loan
-        super(WeeklyLoan, self).save(*args, **kwargs)
+        super(Loan, self).save(*args, **kwargs)
        
         
 class Ref(models.Model):

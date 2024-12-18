@@ -158,8 +158,8 @@ class EmployeeAdmin(admin.ModelAdmin):
         )
     
 
-@admin.register(models.WeeklyLoan)
-class WeeklyLoanAdmin(admin.ModelAdmin):
+@admin.register(models.Loan)
+class Loan(admin.ModelAdmin):
     """ WeklyLoan model admin """
     list_display = (
         'employee',

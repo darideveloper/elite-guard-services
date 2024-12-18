@@ -238,7 +238,7 @@ JAZZMIN_SETTINGS = {
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
         "employees.Employee": "fas fa-users",
-        "employees.WeeklyLoan": "fas fa-money-bill",
+        "employees.Loan": "fas fa-money-bill",
         "employees.Ref": "fas fa-people-arrows",
         "employees.Relative": "fas fa-user-friends",
     },
