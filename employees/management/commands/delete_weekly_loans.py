@@ -11,4 +11,7 @@ class Command(BaseCommand):
     help = 'Load data for all apps'
     
     def handle(self, *args, **kwargs):
+        
+        weekly_loans_num = WeeklyLoan.objects.count()
+        print(f"Deleting {weekly_loans_num} WeeklyLoan objects")
         WeeklyLoan.objects.all().delete()
