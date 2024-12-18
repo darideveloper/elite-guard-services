@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from employees import models
 
@@ -173,5 +174,73 @@ class LoanModelTest(TestCase):
         self.assertEqual(-100, self.employee.balance)
         
         
+class EmployeeAdminTest(TestCase):
+    """ Test custom features in admin/employee """
+    
+    def setUp(self):
+
+        # Create initial data
+        call_command("apps_loaddata")
+
+        # Create an employee
+        marital_status = models.MaritalStatus.objects.get(name="Soltero")
+        education = models.Education.objects.get(name="Primaria")
+        languages_es = models.Language.objects.get(name="Español")
+        municipality = models.Municipality.objects.create(
+            name="Estado / Municipio"
+        )
+        neighborhood = models.Neighborhood.objects.create(
+            name="Neighborhood"
+        )
+        self.employee = models.Employee.objects.create(
+            name="John",
+            last_name_1="Doe",
+            height=1.70,
+            weight=70,
+            marital_status=marital_status,
+            education=education,
+            birthdate="1990-01-01",
+            municipality_birth=municipality,
+            daily_rate=100,
+            curp="CURP",
+            ine="INE",
+            knowledge="Knowledge",
+            skills="Skills",
+            municipality=municipality,
+            neighborhood=neighborhood,
+            postal_code="12345",
+            address_street="Street",
+            address_number="123",
+            phone="1234567890",
+            emergency_phone="0987654321",
+        )
+        self.employee.languages.add(languages_es)
+        self.employee.save()
         
+        # Create admin user
+        self.admin = User.objects.create_superuser(
+            username="admin",
+            email="test@gmail.com",
+            password="admin"
+        )
+        
+    def test_actions_links(self):
+        """ Validate custom action links """
+        
+        links = {
+            "Imprimir": "/employees/report/employee-details/1",
+            "Ver": "/employees/report/employee-preview/1",
+        }
+        
+        # Login as admin
+        self.client.login(username="admin", password="admin")
+        
+        # Open employee list page
+        response = self.client.get("/admin/employees/employee/")
+        
+        # Validate links
+        for link_text, link in links.items():
+            self.assertContains(response, link_text)
+            self.assertContains(response, link)
+            
         
