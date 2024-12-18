@@ -4,8 +4,8 @@ from employees import views
 
 urlpatterns = [
     path(
-        'report/employee/<int:id>/',
-        views.ReportEmployeeView.as_view(),
+        'report/employee-details/<int:id>/',
+        views.ReportEmployeeDetailsView.as_view(),
         name='report-employee'
     ),
 ]

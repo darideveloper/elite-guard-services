@@ -153,8 +153,11 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     def acciones(self, obj):
         return format_html(
-            '<a class="button" href="{}">Imprimir</a>',
-            f"/employees/report/employee/{obj.id}"
+            '<a class="button" href="{}" target="_blank">Imprimir</a>'
+            '<br />'
+            '<a class="button" href="{}" target="_blank">Ver</a>',
+            f"/employees/report/employee-details/{obj.id}",
+            f"/employees/report/employee-preview/{obj.id}",
         )
     
 
