@@ -35,8 +35,8 @@ class ReportEmployeeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         municipality_birth = employee.municipality_birth.name
         context['employee']["municipality_birth"] = municipality_birth
         
-        colony = employee.colony.name
-        context['employee']["colony"] = colony
+        neighborhood = employee.neighborhood.name
+        context['employee']["neighborhood"] = neighborhood
         
         estado, municipio = employee.municipality.name.split(" / ")
         context['employee']["estado"] = estado

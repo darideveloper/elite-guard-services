@@ -150,8 +150,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             }
         ),
     )
-    list_display_links = ('name',)
-    
+
     def acciones(self, obj):
         return format_html(
             '<a class="button" href="{}">Imprimir</a>',
