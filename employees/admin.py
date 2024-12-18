@@ -47,7 +47,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'neighborhood',
         'address_street',
         'address_number',
-        'acciones',
+        'custom_links',
     )
     search_fields = (
         'name',
@@ -151,7 +151,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ),
     )
 
-    def acciones(self, obj):
+    def custom_links(self, obj):
         return format_html(
             '<a class="btn btn-primary my-1" href="{}" target="_blank">Imprimir</a>'
             '<br />'
@@ -159,6 +159,9 @@ class EmployeeAdmin(admin.ModelAdmin):
             f"/employees/report/employee-details/{obj.id}",
             f"/employees/report/employee-preview/{obj.id}",
         )
+    
+    # Labels
+    custom_links.short_description = 'Acciones'
     
 
 @admin.register(models.Loan)
