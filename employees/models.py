@@ -166,16 +166,12 @@ class Employee(models.Model):
         decimal_places=2,
         verbose_name='Estatura',
         help_text='Estatura en metros',
-        blank=True,
-        null=True
     )
     weight = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         verbose_name='Peso',
         help_text='Peso en kilogramos',
-        blank=True,
-        null=True
     )
     marital_status = models.ForeignKey(
         MaritalStatus,
