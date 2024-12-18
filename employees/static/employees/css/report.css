@@ -80,7 +80,7 @@
 }
 .report .logo-bg {
   width: 60%;
-  opacity: 0.2;
+  opacity: 0.1;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -97,6 +97,13 @@
 }
 .report table {
   margin: 10px 0;
+}
+.report table.text-xl {
+  font-size: 18px;
+}
+.report table.text-xl td {
+  padding: 8px;
+  font-weight: bold;
 }
 .report td, .report th {
   padding: 2px;

@@ -30,7 +30,9 @@
     {% block table %}{% endblock %}
 
     <script>
-      print()
+      {% if auto_print %}
+        print()
+      {% endif %}
     </script>
   </main>
 </body>

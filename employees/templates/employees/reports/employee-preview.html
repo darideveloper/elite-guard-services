@@ -1,0 +1,23 @@
+{% extends "employees/reports/base.html" %}
+{% load static %}
+
+{% block title %}
+Reporte de perfil de empleado {{ employee.name | title }} {{ employee.last_name_1 | title}} {{ employee.last_name_2 | title }}
+{% endblock %}
+
+{% block h1 %}
+Reporte de perfil resumido de empleado
+{% endblock %}
+
+{% block table %}
+<table class="employee-preview w-full text-xl">
+  <tbody>
+    {% for key, value in employee_data.items %}
+      <tr>
+        <td class="title">{{key}}</td>
+        <td>{{ value }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

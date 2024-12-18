@@ -258,4 +258,103 @@ class ReportEmployeeDetailsViewTest(TestCase):
         # Validate education
         education_name = self.employee.education.name
         self.assertContains(response, f"fill-{education_name}")
+
+
+class ReportEmployeePreviewViewTest(TestCase):
+    """ Test content of custom view with employee preview """
+    
+    def setUp(self):
+
+        # Create initial data
+        call_command("apps_loaddata")
+        self.employee = create_employee()
+        self.admin_user, self.admin_pass = create_admin_user()
         
+        self.endpoint = f"/employees/report/employee-preview/{self.employee.id}/"
+    
+    def test_unauthorized(self):
+        """ Validate redirect when user is not logged in
+        or don't have permission """
+        
+        # Open page
+        response = self.client.get(self.endpoint)
+        
+        # Validate redirect
+        self.assertEqual(302, response.status_code)
+    
+    def test_content_required(self):
+        """ Valdiate content required data in page """
+        
+        # Employee required details
+        report_data = [
+            self.employee.name.title(),
+            self.employee.last_name_1.title(),
+            self.employee.service,
+            self.employee.daily_rate,
+            self.employee.birthdate.strftime("%d/%m/%Y"),
+            self.employee.get_age(),
+            "N/A",
+            self.employee.marital_status.name,
+            self.employee.address_street.title(),
+            self.employee.address_number,
+            self.employee.neighborhood.name,
+            self.employee.municipality.name,
+            self.employee.postal_code,
+            self.employee.phone,
+            "Si"
+        ]
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+    
+        # Validate report data
+        for report_value in report_data:
+            self.assertContains(response, report_value)
+    
+    def test_content_all(self):
+        """ Valdiate content all data in page """
+        
+        # Update employee data
+        self.employee.last_name_2 = "Last 2"
+        self.employee.rfc = "test RFC"
+        self.employee.imss = "test IMSS"
+        self.employee.infonavit = "test INFONAVIT"
+        self.employee.uniform_date = timezone.now()
+        self.employee.bank = models.Bank.objects.create(name="Bank")
+        self.employee.card_number = "1234567890"
+        self.employee.save()
+        
+        # Employee required details
+        report_data = [
+            self.employee.name.title(),
+            self.employee.last_name_1.title(),
+            self.employee.last_name_2.title(),
+            self.employee.service,
+            self.employee.daily_rate,
+            self.employee.birthdate.strftime("%d/%m/%Y"),
+            self.employee.get_age(),
+            self.employee.rfc,
+            self.employee.curp,
+            self.employee.imss,
+            self.employee.infonavit,
+            self.employee.marital_status.name,
+            self.employee.address_street.title(),
+            self.employee.address_number,
+            self.employee.neighborhood.name,
+            self.employee.municipality.name,
+            self.employee.postal_code,
+            self.employee.phone,
+            self.employee.bank.name,
+            self.employee.card_number,
+            self.employee.uniform_date.strftime("%d/%m/%Y"),
+            "Si"
+        ]
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+    
+        # Validate report data
+        for report_value in report_data:
+            self.assertContains(response, report_value)
