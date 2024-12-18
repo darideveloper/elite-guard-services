@@ -108,6 +108,70 @@ class EmployeeModelTest(TestCase):
         
         self.assertEqual(19, self.employee.get_age())
         
+
+class LoanModelTest(TestCase):
+    """ Test custom methods in Loan Model """
+    
+    def setUp(self):
+
+        # Create initial data
+        call_command("apps_loaddata")
+
+        # Create an employee
+        marital_status = models.MaritalStatus.objects.get(name="Soltero")
+        education = models.Education.objects.get(name="Primaria")
+        languages_es = models.Language.objects.get(name="Español")
+        municipality = models.Municipality.objects.create(
+            name="Estado / Municipio"
+        )
+        neighborhood = models.Neighborhood.objects.create(
+            name="Neighborhood"
+        )
+        self.employee = models.Employee.objects.create(
+            name="John",
+            last_name_1="Doe",
+            height=1.70,
+            weight=70,
+            marital_status=marital_status,
+            education=education,
+            birthdate="1990-01-01",
+            municipality_birth=municipality,
+            daily_rate=100,
+            curp="CURP",
+            ine="INE",
+            knowledge="Knowledge",
+            skills="Skills",
+            municipality=municipality,
+            neighborhood=neighborhood,
+            postal_code="12345",
+            address_street="Street",
+            address_number="123",
+            phone="1234567890",
+            emergency_phone="0987654321",
+        )
+        self.employee.languages.add(languages_es)
+        self.employee.save()
+        
+    def test_save_update_balance_positive(self):
+        """ Update employee balance when add a positive loan """
+        
+        models.Loan.objects.create(
+            employee=self.employee,
+            amount=100,
+        )
+        
+        self.assertEqual(100, self.employee.balance)
+        
+    def test_save_update_balance_negative(self):
+        """ Update employee balance when add a negative loan """
+        
+        models.Loan.objects.create(
+            employee=self.employee,
+            amount=-100,
+        )
+        
+        self.assertEqual(-100, self.employee.balance)
+        
         
         
         
