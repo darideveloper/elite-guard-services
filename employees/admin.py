@@ -40,7 +40,7 @@ class BankAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     """ Employee model admin """
     list_display = (
-        'created_at',
+        'start_date',
         'name',
         'last_name_1',
         'last_name_2',
@@ -153,6 +153,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ),
     )
 
+    # Custom list fields
     def custom_links(self, obj):
         return format_html(
             '<a class="btn btn-primary my-1" href="{}" target="_blank">Imprimir</a>'
@@ -162,8 +163,13 @@ class EmployeeAdmin(admin.ModelAdmin):
             f"/admin/employees/employee/{obj.id}/preview/",
         )
     
+    def start_date(self, obj):
+        return obj.created_at.strftime("%d/%m/%Y")
+    
     # Labels for custom fields
     custom_links.short_description = 'Acciones'
+    start_date.short_description = 'Fecha de alta'
+    start_date.admin_order_field = 'created_at'
     
     def get_urls(self):
         # Setup urls

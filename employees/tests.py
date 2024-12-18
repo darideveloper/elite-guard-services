@@ -135,6 +135,18 @@ class EmployeeAdminTest(TestCase):
             self.assertContains(response, link_text)
             self.assertContains(response, link)
             
+    def test_date_format(self):
+        """ Validate created_at date format like dd/mm/yyyy """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get("/admin/employees/employee/")
+        
+        # Validate date format
+        self.assertContains(response, self.employee.created_at.strftime("%d/%m/%Y"))
+            
             
 class ReportEmployeeDetailsViewTest(TestCase):
     """ Test content of custom view with employee details """

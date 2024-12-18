@@ -357,7 +357,7 @@ class Employee(models.Model):
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Fecha de ingreso'
+        verbose_name='Fecha de ingreso',
     )
     updated_at = models.DateTimeField(
         auto_now=True,
