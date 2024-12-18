@@ -4,9 +4,9 @@ from django.utils.html import format_html
 from employees import models
 
 
-@admin.register(models.Colony)
-class ColonyAdmin(admin.ModelAdmin):
-    """ Colony model admin """
+@admin.register(models.Neighborhood)
+class NeighborhoodAdmin(admin.ModelAdmin):
+    """ Neighborhood model admin """
     list_display = ('name',)
     
     
@@ -38,14 +38,15 @@ class BankAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     """ Employee model admin """
     list_display = (
+        'created_at',
         'name',
         'last_name_1',
         'last_name_2',
         'daily_rate',
-        'status',
-        'administrative_violations',
-        'created_at',
-        'updated_at',
+        'birthdate',
+        'neighborhood',
+        'address_street',
+        'address_number',
         'acciones',
     )
     search_fields = (
@@ -66,7 +67,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'municipality_birth',
         'status',
         'municipality',
-        'colony',
+        'neighborhood',
         'bank',
         'created_at',
         'updated_at',
@@ -118,7 +119,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             "Contacto", {
                 'fields': (
                     'municipality',
-                    'colony',
+                    'neighborhood',
                     'postal_code',
                     'address_street',
                     'address_number',

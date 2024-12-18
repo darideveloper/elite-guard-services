@@ -2,8 +2,8 @@ from django.db import models
 from django.utils import timezone
 
 
-class Colony(models.Model):
-    """ Secondary model for employee colony """
+class Neighborhood(models.Model):
+    """ Secondary model for employee neighborhood """
     
     id = models.AutoField(primary_key=True)
     name = models.CharField(
@@ -144,9 +144,7 @@ class Language(models.Model):
     
 class Employee(models.Model):
     """ Primary model for employees """
-    
-    # TODO: service
-    
+        
     # General info
     id = models.AutoField(primary_key=True)
     name = models.CharField(
@@ -214,10 +212,16 @@ class Employee(models.Model):
     )
     
     # Work info
+    # TODO: Add service model
+    service = models.TextField(
+        verbose_name='Servicio',
+        help_text='Servicio que asignado el empleado',
+        default='Sin servicio'
+    )
     daily_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Slario diario'
+        verbose_name='Sueldo diario'
     )
     curp = models.CharField(
         max_length=18,
@@ -284,10 +288,10 @@ class Employee(models.Model):
         verbose_name='Lugar de residencia',
         help_text='Estado y municipio de residencia'
     )
-    colony = models.ForeignKey(
-        Colony,
+    neighborhood = models.ForeignKey(
+        Neighborhood,
         on_delete=models.PROTECT,
-        verbose_name='Colonia'
+        verbose_name='Colonia',
     )
     postal_code = models.CharField(
         max_length=5,
@@ -357,11 +361,11 @@ class Employee(models.Model):
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Fecha de creación'
+        verbose_name='Fecha de ingreso'
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name='Fecha de modificación'
+        verbose_name='Última modificación'
     )
     
     class Meta:
