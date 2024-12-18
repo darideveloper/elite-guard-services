@@ -71,6 +71,9 @@ class ReportEmployeeDetailsView(
         context["education_options"] = education_options_names
         education = employee.education.name
         context["education"] = education
+        
+        # Add created at date
+        context['employee']["created_at"] = employee.created_at
 
         # add photo
         if employee.photo:

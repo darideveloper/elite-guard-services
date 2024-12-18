@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
-from django.contrib.auth.models import User
 
 from employees import models
+from utils.test_data import create_employee, create_admin_user
 
 
 class EmployeeModelTest(TestCase):
@@ -13,41 +13,7 @@ class EmployeeModelTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-
-        # Create an employee
-        marital_status = models.MaritalStatus.objects.get(name="Soltero")
-        education = models.Education.objects.get(name="Primaria")
-        languages_es = models.Language.objects.get(name="Español")
-        municipality = models.Municipality.objects.create(
-            name="Estado / Municipio"
-        )
-        neighborhood = models.Neighborhood.objects.create(
-            name="Neighborhood"
-        )
-        self.employee = models.Employee.objects.create(
-            name="John",
-            last_name_1="Doe",
-            height=1.70,
-            weight=70,
-            marital_status=marital_status,
-            education=education,
-            birthdate="1990-01-01",
-            municipality_birth=municipality,
-            daily_rate=100,
-            curp="CURP",
-            ine="INE",
-            knowledge="Knowledge",
-            skills="Skills",
-            municipality=municipality,
-            neighborhood=neighborhood,
-            postal_code="12345",
-            address_street="Street",
-            address_number="123",
-            phone="1234567890",
-            emergency_phone="0987654321",
-        )
-        self.employee.languages.add(languages_es)
-        self.employee.save()
+        self.employee = create_employee()
         
     def test_save_initial_status(self):
         """ Test set initial value in status_history """
@@ -117,41 +83,7 @@ class LoanModelTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-
-        # Create an employee
-        marital_status = models.MaritalStatus.objects.get(name="Soltero")
-        education = models.Education.objects.get(name="Primaria")
-        languages_es = models.Language.objects.get(name="Español")
-        municipality = models.Municipality.objects.create(
-            name="Estado / Municipio"
-        )
-        neighborhood = models.Neighborhood.objects.create(
-            name="Neighborhood"
-        )
-        self.employee = models.Employee.objects.create(
-            name="John",
-            last_name_1="Doe",
-            height=1.70,
-            weight=70,
-            marital_status=marital_status,
-            education=education,
-            birthdate="1990-01-01",
-            municipality_birth=municipality,
-            daily_rate=100,
-            curp="CURP",
-            ine="INE",
-            knowledge="Knowledge",
-            skills="Skills",
-            municipality=municipality,
-            neighborhood=neighborhood,
-            postal_code="12345",
-            address_street="Street",
-            address_number="123",
-            phone="1234567890",
-            emergency_phone="0987654321",
-        )
-        self.employee.languages.add(languages_es)
-        self.employee.save()
+        self.employee = create_employee()
         
     def test_save_update_balance_positive(self):
         """ Update employee balance when add a positive loan """
@@ -181,48 +113,8 @@ class EmployeeAdminTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-
-        # Create an employee
-        marital_status = models.MaritalStatus.objects.get(name="Soltero")
-        education = models.Education.objects.get(name="Primaria")
-        languages_es = models.Language.objects.get(name="Español")
-        municipality = models.Municipality.objects.create(
-            name="Estado / Municipio"
-        )
-        neighborhood = models.Neighborhood.objects.create(
-            name="Neighborhood"
-        )
-        self.employee = models.Employee.objects.create(
-            name="John",
-            last_name_1="Doe",
-            height=1.70,
-            weight=70,
-            marital_status=marital_status,
-            education=education,
-            birthdate="1990-01-01",
-            municipality_birth=municipality,
-            daily_rate=100,
-            curp="CURP",
-            ine="INE",
-            knowledge="Knowledge",
-            skills="Skills",
-            municipality=municipality,
-            neighborhood=neighborhood,
-            postal_code="12345",
-            address_street="Street",
-            address_number="123",
-            phone="1234567890",
-            emergency_phone="0987654321",
-        )
-        self.employee.languages.add(languages_es)
-        self.employee.save()
-        
-        # Create admin user
-        self.admin = User.objects.create_superuser(
-            username="admin",
-            email="test@gmail.com",
-            password="admin"
-        )
+        self.employee = create_employee()
+        self.admin_user, self.admin_pass = create_admin_user()
         
     def test_actions_links(self):
         """ Validate custom action links """
@@ -233,7 +125,7 @@ class EmployeeAdminTest(TestCase):
         }
         
         # Login as admin
-        self.client.login(username="admin", password="admin")
+        self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
         response = self.client.get("/admin/employees/employee/")
@@ -243,4 +135,127 @@ class EmployeeAdminTest(TestCase):
             self.assertContains(response, link_text)
             self.assertContains(response, link)
             
+            
+class ReportEmployeeDetailsViewTest(TestCase):
+    """ Test content of custom view with employee details """
+    
+    def setUp(self):
+
+        # Create initial data
+        call_command("apps_loaddata")
+        self.employee = create_employee()
+        self.admin_user, self.admin_pass = create_admin_user()
+        
+        self.endpoint = f"/employees/report/employee-details/{self.employee.id}/"
+    
+    def test_unauthorized(self):
+        """ Validate redirect when user is not logged in
+        or don't have permission """
+        
+        # Open page
+        response = self.client.get(self.endpoint)
+        
+        # Validate redirect
+        self.assertEqual(302, response.status_code)
+    
+    def test_content(self):
+        """ Valdiate content in page """
+        
+        # Create refs
+        refs_numbers = ["1000000001", "1000000002"]
+        for number in refs_numbers:
+            models.Ref.objects.create(
+                employee=self.employee,
+                name="Ref",
+                phone=number,
+            )
+            
+        # Create relatives
+        relatives = [
+            {
+                "name": "Relative 1",
+                "last_name_1": "Last 1",
+                "last_name_2": "Last 2",
+                "relationship": "Padre",
+                "phone": "1000000003",
+                "age": 50,
+            },
+            {
+                "name": "Relative 2",
+                "last_name_1": "Last 3",
+                "last_name_2": "Last 4",
+                "relationship": "Madre",
+                "phone": "1000000004",
+                "age": 45,
+            }
+        ]
+        for relative in relatives:
+            relationship = models.Relationship.objects.get(name=relative["relationship"])
+            models.Relative.objects.create(
+                employee=self.employee,
+                name=relative["name"],
+                last_name_1=relative["last_name_1"],
+                last_name_2=relative["last_name_2"],
+                relationship=relationship,
+                phone=relative["phone"],
+                age=relative["age"],
+            )
+        
+        # Employee details
+        report_data = {
+            "Fecha de ingreso": self.employee.created_at.strftime("%d/%m/%Y"),
+            "No. de Empleado": f"EGS{self.employee.id}",
+            "Apellido Paterno": self.employee.last_name_1,
+            "Apellido Materno": self.employee.last_name_2,
+            "Nombre(s)": self.employee.name,
+            "Edad": self.employee.get_age(),
+            "Estatura": self.employee.height,
+            "Peso": self.employee.weight,
+            "Estado Civil": self.employee.marital_status.name.upper(),
+            "Lugar de nacimiento": self.employee.municipality_birth.name,
+            "Fecha de nacimiento": self.employee.birthdate.strftime("%d/%m/%Y"),
+            "Calle": self.employee.address_street,
+            "No": self.employee.address_number,
+            "Colonia": self.employee.neighborhood,
+            "Municipio": self.employee.municipality.name.split(" / ")[1],
+            "Estado": self.employee.municipality.name.split(" / ")[0],
+            "No. IMSSS": self.employee.imss,
+            "No. INE": self.employee.ine,
+            "CURP": self.employee.curp,
+            "RFC": self.employee.rfc,
+            "Celular personal": self.employee.phone,
+            "Telefono de emergencias": self.employee.emergency_phone,
+            "Conocimientos": self.employee.knowledge,
+            "Habilidades": self.employee.skills,
+        }
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+        
+        # Validate employee details
+        for report_title, report_value in report_data.items():
+            self.assertContains(response, report_title)
+            if report_value:
+                self.assertContains(response, report_value)
+                
+        # Validate refs numbers
+        for number in refs_numbers:
+            ref_index = refs_numbers.index(number)
+            ref_title = f"Referencia {ref_index + 1}"
+            self.assertContains(response, ref_title)
+            self.assertContains(response, number)
+            
+        # Validate relatives data
+        for relative in relatives:
+            self.assertContains(response, relative["relationship"])
+            self.assertContains(response, relative["last_name_1"])
+            self.assertContains(response, relative["last_name_2"])
+            self.assertContains(response, relative["name"])
+            self.assertContains(response, relative["age"])
+            self.assertContains(response, relative["phone"])
+            
+        # Validate education
+        education_name = self.employee.education.name
+        self.assertContains(response, f"fill-{education_name}")
         

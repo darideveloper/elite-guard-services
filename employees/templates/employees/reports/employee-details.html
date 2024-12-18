@@ -17,7 +17,7 @@ Reporte de perfil de empleado
       <tbody>
         <tr>
           <td class="title">Fecha de ingreso</td>
-          <td>10/11/2024</td>
+          <td>{{ employee.created_at | date:"d/m/Y" }}</td>
           <td class="title">No. de Empleado</td>
           <td>EGS{{ employee.id }}</td>
         </tr>
@@ -211,6 +211,12 @@ Reporte de perfil de empleado
         </span>
         {{ relative.age }}
       </td>
+      <td>
+        <span class="field-name">
+          Teléfono
+        </span>
+        {{ relative.phone }}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -331,7 +337,7 @@ Reporte de perfil de empleado
           <td class="bold">
             <div class="content">
               {{ education_option }}
-              <span class="circle {% if education == education_option %} fill {% endif %}"></span>
+              <span class="circle {% if education == education_option %} fill fill-{{education}}{% endif %}"></span>
               </span>
             </div>
           </td>
