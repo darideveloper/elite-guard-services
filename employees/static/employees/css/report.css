@@ -65,16 +65,19 @@
   -webkit-print-color-adjust: exact;
   font-size: 12px;
 }
+.report.left {
+  margin-left: 0;
+}
 .report .border {
   border: 1px solid black;
 }
-.report header {
+.report header, .report .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 20px 0;
 }
-.report header .logo-top {
+.report header .logo-top, .report .header .logo-top {
   width: 60px;
   border-radius: 50%;
 }
@@ -98,10 +101,7 @@
 .report table {
   margin: 10px 0;
 }
-.report table.text-xl {
-  font-size: 18px;
-}
-.report table.text-xl td {
+.report table td {
   padding: 8px;
   font-weight: bold;
 }
@@ -112,6 +112,8 @@
   background-color: #7c332c;
   color: #e1e0de;
   font-weight: bold;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 .report td .field-name, .report th .field-name {
   display: block;

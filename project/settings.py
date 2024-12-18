@@ -208,7 +208,7 @@ JAZZMIN_SETTINGS = {
 
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [
-        "employees.Colony",
+        "employees.Neighborhood",
         "employees.Municipality",
         "employees.MaritalStatus",
         "employees.Status",

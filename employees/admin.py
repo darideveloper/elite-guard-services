@@ -1,5 +1,7 @@
+from django.urls import path
 from django.contrib import admin
 from django.utils.html import format_html
+from django.shortcuts import render
 
 from employees import models
 
@@ -155,13 +157,69 @@ class EmployeeAdmin(admin.ModelAdmin):
         return format_html(
             '<a class="btn btn-primary my-1" href="{}" target="_blank">Imprimir</a>'
             '<br />'
-            '<a class="btn btn-primary my-1" href="{}" target="_blank">Ver</a>',
+            '<a class="btn btn-primary my-1" href="{}">Ver</a>',
             f"/employees/report/employee-details/{obj.id}",
-            f"/employees/report/employee-preview/{obj.id}",
+            f"/admin/employees/employee/{obj.id}/preview/",
         )
     
-    # Labels
+    # Labels for custom fields
     custom_links.short_description = 'Acciones'
+    
+    def get_urls(self):
+        # Setup urls
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<int:pk>/preview/',
+                self.admin_site.admin_view(self.employee_preview),
+                name='employee_preview',
+            ),
+        ]
+        return custom_urls + urls
+    
+    def employee_preview(self, request, pk):
+        # Custom view to render employee preview
+        
+        # Get employee
+        employee = models.Employee.objects.get(pk=pk)
+        
+        # Add specific employee data to the context
+        last_name = employee.last_name_1
+        if employee.last_name_2:
+            last_name += " " + employee.last_name_2
+        uniform_date = "N/A"
+        if employee.uniform_date:
+            uniform_date = employee.uniform_date.strftime("%d/%m/%Y")
+        
+        # Get admin context
+        context = self.admin_site.each_context(request)
+        context['employee_data'] = {
+            "Nombre": employee.name.title(),
+            "Apellidos": last_name.title(),
+            "Servicio": employee.service,
+            "Sueldo": f"$ {employee.daily_rate} / dia",
+            "Fecha de nacimiento": employee.birthdate.strftime("%d/%m/%Y"),
+            "Edad": employee.get_age(),
+            "RFC": employee.rfc if employee.rfc else "N/A",
+            "CURP": employee.curp if employee.curp else "N/A",
+            "IMSS": employee.imss if employee.imss else "N/A",
+            "Infonavit": employee.infonavit if employee.infonavit else "N/A",
+            "Estado Civil": employee.marital_status.name,
+            "Dirección": f"{employee.address_street} {employee.address_number}".title(),
+            "Colonia": employee.neighborhood.name,
+            "Municipio": employee.municipality.name,
+            "C.P.": employee.postal_code,
+            "Teléfono": employee.phone,
+            "Banco": employee.bank.name if employee.bank else "N/A",
+            "Numero de tarjeta": employee.card_number if employee.card_number else "N/A",
+            "Fecha de uniforme": uniform_date,
+            "Activo": "Si" if employee.status.name == "Activo" else "No",
+        }
+        full_name = f"{employee.name.title()} {last_name.title()}"
+        context['title'] = f"Vista previa de {full_name}"
+        
+        # Render preview
+        return render(request, 'employees/reports/employee-preview.html', context)
     
 
 @admin.register(models.Loan)

@@ -1,23 +1,56 @@
-{% extends "employees/reports/base.html" %}
+{% extends "admin/base_site.html" %}
 {% load static %}
 
-{% block title %}
-Reporte de perfil de empleado {{ employee.name | title }} {{ employee.last_name_1 | title}} {{ employee.last_name_2 | title }}
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'jazzmin/css/custom.css' %}">
+<link rel="stylesheet" href="{% static 'employees/css/report.css' %}">
 {% endblock %}
 
-{% block h1 %}
-Reporte de perfil resumido de empleado
+{% block content %}
+<div class="report employee left p-0 m-0">
+
+  <div class="header">
+    <img class="logo-top" src="{% static 'core/imgs/logo.webp' %}" alt="Logo de la empresa">
+    <h1 class="title text-lg">{{ title }}</h1>
+  </div>
+  
+  <img class="logo-bg" src="{% static 'core/imgs/logo.webp' %}" alt="Logo de la empresa">
+  
+
+  <table class="employee-preview text-md">
+    <tbody>
+      {% for key, value in employee_data.items %}
+        <tr>
+          <td class="title">{{key}}</td>
+          <td>{{ value }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn btn-primary my-4" onclick="goBack()">
+    Regresar
+  </button>
+  <button class="btn btn-success my-4" onclick="goEdit()">
+    Editar
+  </button>
+</div>
 {% endblock %}
 
-{% block table %}
-<table class="employee-preview w-full text-xl">
-  <tbody>
-    {% for key, value in employee_data.items %}
-      <tr>
-        <td class="title">{{key}}</td>
-        <td>{{ value }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% block extrajs %}
+
+<script>
+  function goBack() {
+    window.history.back();
+  }
+  
+  function goEdit() {
+    const url = window.location
+    const editUrl = url.origin + url.pathname.replace('preview', 'change')
+    window.location.href = editUrl
+  }
+
+</script>
+
 {% endblock %}

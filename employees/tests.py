@@ -121,7 +121,7 @@ class EmployeeAdminTest(TestCase):
         
         links = {
             "Imprimir": "/employees/report/employee-details/1",
-            "Ver": "/employees/report/employee-preview/1",
+            "Ver": "/admin/employees/employee/1/preview/",
         }
         
         # Login as admin
@@ -270,7 +270,7 @@ class ReportEmployeePreviewViewTest(TestCase):
         self.employee = create_employee()
         self.admin_user, self.admin_pass = create_admin_user()
         
-        self.endpoint = f"/employees/report/employee-preview/{self.employee.id}/"
+        self.endpoint = f"/admin/employees/employee/{self.employee.id}/preview/"
     
     def test_unauthorized(self):
         """ Validate redirect when user is not logged in
@@ -358,3 +358,14 @@ class ReportEmployeePreviewViewTest(TestCase):
         # Validate report data
         for report_value in report_data:
             self.assertContains(response, report_value)
+            
+    def test_buttons(self):
+        """ Validate edit and back buttons in page """
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+        
+        buttons = ["Editar", "Regresar"]
+        for button in buttons:
+            self.assertContains(response, button)

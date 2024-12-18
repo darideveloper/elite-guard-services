@@ -8,9 +8,4 @@ urlpatterns = [
         views.ReportEmployeeDetailsView.as_view(),
         name='report-employee'
     ),
-    path(
-        'report/employee-preview/<int:id>/',
-        views.ReportEmployeePreviewView.as_view(),
-        name='report-employee-list'
-    ),
 ]
