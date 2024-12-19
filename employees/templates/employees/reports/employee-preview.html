@@ -10,15 +10,6 @@
 
 {% block content %}
 <div class="report employee left p-0 m-0">
-
-  <div class="header">
-    <img class="logo-top" src="{% static 'core/imgs/logo.webp' %}" alt="Logo de la empresa">
-    <h1 class="title text-lg">{{ title }}</h1>
-  </div>
-  
-  <img class="logo-bg" src="{% static 'core/imgs/logo.webp' %}" alt="Logo de la empresa">
-  
-
   <table class="employee-preview text-md">
     <tbody>
       {% for key, value in employee_data.items %}
