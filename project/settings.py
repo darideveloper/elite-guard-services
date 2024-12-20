@@ -1,5 +1,6 @@
 import os
 import sys
+import locale
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -135,8 +136,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
+# Setup language and time zone
 LANGUAGE_CODE = 'es-mx'
-
+locale.setlocale(locale.LC_TIME, "es_MX.UTF-8")
 TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True

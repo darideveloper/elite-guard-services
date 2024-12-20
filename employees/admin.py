@@ -1,3 +1,4 @@
+
 from django.urls import path
 from django.contrib import admin
 from django.utils.html import format_html
@@ -164,7 +165,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         )
     
     def start_date(self, obj):
-        return obj.created_at.strftime("%d/%m/%Y")
+        return obj.created_at.strftime("%d/%b/%Y")
     
     # Labels for custom fields
     custom_links.short_description = 'Acciones'
