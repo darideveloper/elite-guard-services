@@ -52,8 +52,13 @@ WORKDIR /app
 COPY . /app/
 
 # Install system dependencies (e.g., for PostgreSQL support)
+# Install locales for spanish
 RUN apt-get update && apt-get install -y \
     libpq-dev gcc \
+    locales \
+    && sed -i '/es_MX.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen \
+    && update-locale LANG=es_MX.UTF-8 LANGUAGE=es_MX:es LC_ALL=es_MX.UTF-8 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
