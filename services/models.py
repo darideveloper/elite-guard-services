@@ -90,8 +90,8 @@ class Agreement(models.Model):
     )
     
     class Meta:
-        verbose_name = 'Acuerdo'
-        verbose_name_plural = 'Acuerdos'
+        verbose_name = 'Contrato'
+        verbose_name_plural = 'Contratos'
         
     def __str__(self):
         return f"{self.company_name} (vigencia: {self.effective_date})"
