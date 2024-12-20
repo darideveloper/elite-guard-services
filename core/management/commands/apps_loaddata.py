@@ -18,6 +18,9 @@ class Command(BaseCommand):
                 "Language",
                 "Relationship",
             ],
+            "services": [
+                "Schedule",
+            ],
         }
         
         for command_category, commands in commands_data.items():
