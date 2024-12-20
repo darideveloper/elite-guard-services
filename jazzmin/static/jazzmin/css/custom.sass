@@ -132,3 +132,20 @@ input[type=checkbox], input[type=radio]
 
 input:focus-visible, textarea:focus-visible, select:focus-visible
     outline: 2px solid $color-red !important
+
+// Fix dashboard responsive
+@media screen and (max-width: 768px)
+
+    .container-fluid > .row > div:nth-child(1)
+        flex-direction: column !important
+
+        h1
+            margin-right: 0 !important
+            padding-right: 0 !important
+
+        ol
+            margin-left: 0 !important
+            padding-left: 0 !important
+
+    .container-fluid > .row > div:nth-child(2)
+        justify-content: flex-start !important

@@ -144,4 +144,21 @@ input[type=checkbox], input[type=radio] {
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid #7c332c !important;
+}
+
+@media screen and (max-width: 768px) {
+  .container-fluid > .row > div:nth-child(1) {
+    flex-direction: column !important;
+  }
+  .container-fluid > .row > div:nth-child(1) h1 {
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+  .container-fluid > .row > div:nth-child(1) ol {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  .container-fluid > .row > div:nth-child(2) {
+    justify-content: flex-start !important;
+  }
 }/*# sourceMappingURL=custom.css.map */
