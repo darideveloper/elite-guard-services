@@ -3,7 +3,7 @@ from django.utils import timezone
 from employees.models import Employee
 
 
-class Schedules(models.Model):
+class Schedule(models.Model):
     """ Service schedules model """
     
     id = models.AutoField(primary_key=True)
@@ -115,7 +115,7 @@ class Service(models.Model):
         verbose_name='Acuerdo'
     )
     schedule = models.ForeignKey(
-        Schedules,
+        Schedule,
         on_delete=models.CASCADE,
         verbose_name='Horario'
     )
