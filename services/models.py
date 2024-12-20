@@ -52,29 +52,43 @@ class Agreement(models.Model):
     salary = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Salario diario sugerido'
+        verbose_name='Salario diario sugerido',
+        null=True,
+        blank=True
     )
     extra_hour_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Precio por hora extra sugerido'
+        verbose_name='Precio por hora extra sugerido',
+        null=True,
+        blank=True
     )
     bonuses = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Bonificaciones sugeridas'
+        verbose_name='Bonificaciones sugeridas',
+        null=True,
+        blank=True
     )
     profile_requirements = models.TextField(
-        verbose_name='Requisitos de perfil'
+        verbose_name='Requisitos de perfil',
+        null=True,
+        blank=True
     )
     docs_requirements = models.TextField(
-        verbose_name='Documentos requeridos'
+        verbose_name='Documentos requeridos',
+        null=True,
+        blank=True
     )
     uniforms = models.TextField(
-        verbose_name='Uniformes'
+        verbose_name='Uniformes',
+        null=True,
+        blank=True
     )
     safety_equipment = models.TextField(
-        verbose_name='Equipo de seguridad'
+        verbose_name='Equipo de seguridad',
+        null=True,
+        blank=True
     )
     
     class Meta:
@@ -110,11 +124,11 @@ class Service(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Empleado'
     )
-    description = models.TextField(
-        verbose_name='Descripción'
-    )
     location = models.TextField(
         verbose_name='Ubicación'
+    )
+    description = models.TextField(
+        verbose_name='Descripción'
     )
     
     class Meta:
