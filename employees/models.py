@@ -208,12 +208,6 @@ class Employee(models.Model):
     )
     
     # Work info
-    # TODO: Add service model
-    service = models.TextField(
-        verbose_name='Servicio',
-        help_text='Servicio que asignado el empleado',
-        default='Sin servicio'
-    )
     daily_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,

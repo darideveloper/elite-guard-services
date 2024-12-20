@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     # Custom apps
     'core',
     'employees',
+    'services',
+    
+    # Template admin
     'jazzmin',
     
     # Django apps
