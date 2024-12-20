@@ -1,0 +1,114 @@
+[
+    {
+        "model": "employees.Municipality",
+        "pk": 1,
+        "fields": {
+            "name": "Ciudad de México / Álvaro Obregón"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 2,
+        "fields": {
+            "name": "Ciudad de México / Azcapotzalco"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 3,
+        "fields": {
+            "name": "Ciudad de México / Benito Juárez"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 4,
+        "fields": {
+            "name": "Ciudad de México / Coyoacán"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 5,
+        "fields": {
+            "name": "Ciudad de México / Cuajimalpa de Morelos"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 6,
+        "fields": {
+            "name": "Ciudad de México / Cuauhtémoc"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 7,
+        "fields": {
+            "name": "Ciudad de México / Gustavo A. Madero"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 8,
+        "fields": {
+            "name": "Ciudad de México / Iztacalco"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 9,
+        "fields": {
+            "name": "Ciudad de México / Iztapalapa"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 10,
+        "fields": {
+            "name": "Ciudad de México / Magdalena Contreras"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 11,
+        "fields": {
+            "name": "Ciudad de México / Miguel Hidalgo"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 12,
+        "fields": {
+            "name": "Ciudad de México / Milpa Alta"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 13,
+        "fields": {
+            "name": "Ciudad de México / Tláhuac"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 14,
+        "fields": {
+            "name": "Ciudad de México / Tlalpan"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 15,
+        "fields": {
+            "name": "Ciudad de México / Venustiano Carranza"
+        }
+    },
+    {
+        "model": "employees.Municipality",
+        "pk": 16,
+        "fields": {
+            "name": "Ciudad de México / Xochimilco"
+        }
+    }
+]
