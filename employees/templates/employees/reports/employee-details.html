@@ -268,32 +268,38 @@ Reporte de perfil detallado de empleado
     <table class="service w-full">
       <tbody>
         <tr>
-          <th colspan="4">Datos del servicio asignado</th>
+          <th colspan="5">Datos del servicio asignado</th>
         </tr>
         <tr>
           <td>
             <span class="field-name">
               Servicio
             </span>
-            Oficina 1
+            {{ service.description }}
           </td>
           <td>
             <span class="field-name">
               Puesto
             </span>
-            Oficial
+            {{ service.location | title }}
           </td>
           <td>
             <span class="field-name">
-              Posición
+              Empresa
             </span>
-            Caseta principal
+            {{ service.company | title }}
           </td>
           <td>
             <span class="field-name">
-              Sueldo mensual
+              Horario
             </span>
-            Confidencial
+            {{ service.schedule }}
+          </td>
+          <td>
+            <span class="field-name">
+              Sueldo diario
+            </span>
+            {{ employee.daily_rate }}
           </td>
         </tr>
       </tbody>

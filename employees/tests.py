@@ -4,7 +4,6 @@ from django.utils import timezone
 
 from utils import test_data
 from employees import models
-from services import models as services_models
 
 
 class EmployeeModelTest(TestCase):
@@ -158,6 +157,8 @@ class ReportEmployeeDetailsViewTest(TestCase):
         call_command("apps_loaddata")
         self.employee = test_data.create_employee()
         self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.agreement = test_data.create_agreement()
+        self.service = test_data.create_service(self.agreement, self.employee)
         
         self.endpoint = f"/employees/report/employee-details/{self.employee.id}/"
     

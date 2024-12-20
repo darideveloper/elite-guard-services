@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 
 from employees import models
+from services import models as services_models
 from utils.media import get_media_url
 
 
@@ -81,5 +82,27 @@ class ReportEmployeeDetailsView(
             
         # Auto print
         context["auto_print"] = True
+        
+        # Service data
+        service = services_models.Service.objects.filter(employee=employee)
+        if service:
+            service = service[0]
+            description = service.description
+            location = service.location
+            company = service.agreement.company_name
+            schedule = service.schedule.name
+            context["service"] = {
+                "description": description,
+                "location": location,
+                "company": company,
+                "schedule": schedule
+            }
+        else:
+            context["service"] = {
+                "description": "N/A",
+                "location": "N/A",
+                "company": "N/A",
+                "schedule": "N/A"
+            }
 
         return context
