@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from django.shortcuts import render
 
 from employees import models
+from services import models as services_models
 
 
 @admin.register(models.Neighborhood)
@@ -154,8 +155,10 @@ class EmployeeAdmin(admin.ModelAdmin):
         ),
     )
 
-    # Custom list fields
+    # CUSTOM FIELDS
+
     def custom_links(self, obj):
+        """ Create custom Imprimir and Ver buttons """
         return format_html(
             '<a class="btn btn-primary my-1" href="{}" target="_blank">Imprimir</a>'
             '<br />'
@@ -165,6 +168,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         )
     
     def start_date(self, obj):
+        """ Return the created_at date in a specific format """
         return obj.created_at.strftime("%d/%b/%Y")
     
     # Labels for custom fields
@@ -172,8 +176,10 @@ class EmployeeAdmin(admin.ModelAdmin):
     start_date.short_description = 'Fecha de alta'
     start_date.admin_order_field = 'created_at'
     
+    # CUSTOM VIEWS
+    
     def get_urls(self):
-        # Setup urls
+        """ Setup custom urls """
         urls = super().get_urls()
         custom_urls = [
             path(
@@ -185,7 +191,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         return custom_urls + urls
     
     def employee_preview(self, request, pk):
-        # Custom view to render employee preview
+        """ Custom view to render employee preview """
         
         # Get employee
         employee = models.Employee.objects.get(pk=pk)
@@ -197,13 +203,24 @@ class EmployeeAdmin(admin.ModelAdmin):
         uniform_date = "N/A"
         if employee.uniform_date:
             uniform_date = employee.uniform_date.strftime("%d/%m/%Y")
-        
+            
+        # Get service details
+        service = services_models.Service.objects.filter(employee=employee)
+        if service:
+            service = service[0]
+            location = service.location
+            company = service.agreement.company_name
+            schedule = service.schedule.name
+            service_text = f"{company} - {location} ({schedule})"
+        else:
+            service_text = "N/A"
+            
         # Get admin context
         context = self.admin_site.each_context(request)
         context['employee_data'] = {
             "Nombre": employee.name.title(),
             "Apellidos": last_name.title(),
-            "Servicio": employee.service,
+            "Servicio": service_text,
             "Sueldo": f"$ {employee.daily_rate} / dia",
             "Fecha de nacimiento": employee.birthdate.strftime("%d/%m/%Y"),
             "Edad": employee.get_age(),

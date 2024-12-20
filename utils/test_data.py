@@ -2,29 +2,30 @@ import datetime
 
 from django.contrib.auth.models import User
 
-from employees import models
+from employees import models as models_employees
+from services import models as models_services
 
 
-def create_employee() -> models.Employee:
+def create_employee() -> models_employees.Employee:
     """ Create a new employee and return it
     
     Returns:
-        models.Employee: Employee created
+        models_employees.Employee: Employee created
     """
     
     # Get required data
-    marital_status = models.MaritalStatus.objects.get(name="Soltero")
-    education = models.Education.objects.get(name="Primaria")
-    languages_es = models.Language.objects.get(name="Español")
-    municipality = models.Municipality.objects.create(
+    marital_status = models_employees.MaritalStatus.objects.get(name="Soltero")
+    education = models_employees.Education.objects.get(name="Primaria")
+    languages_es = models_employees.Language.objects.get(name="Español")
+    municipality = models_employees.Municipality.objects.create(
         name="Estado / Municipio"
     )
-    neighborhood = models.Neighborhood.objects.create(
+    neighborhood = models_employees.Neighborhood.objects.create(
         name="Neighborhood"
     )
     
     # Create employee
-    employee = models.Employee.objects.create(
+    employee = models_employees.Employee.objects.create(
         name="John",
         last_name_1="Doe",
         height=1.70,
@@ -68,3 +69,54 @@ def create_admin_user() -> tuple[str, str]:
     )
     
     return user.username, password
+
+
+def create_agreement() -> models_services.Agreement:
+    """ Create a new agreement and return it
+    
+    Returns:
+        models_employees.Agreement: Agreement created
+    """
+    
+    # Create agreement
+    agreement = models_services.Agreement.objects.create(
+        company_name="Company",
+        start_date=datetime.date(2021, 1, 1),
+        effective_date=datetime.date(2022, 1, 1),
+        safety_equipment="Safety equipment",
+    )
+    
+    return agreement
+
+
+def create_service(
+    agreement: models_services.Agreement,
+    employee: models_employees.Employee
+) -> models_services.Service:
+    """ Create a new service and return it
+    
+    Args:
+        agreement (models_employees.Agreement): Agreement of the service
+        employee (models_employees.Employee): Employee of the service
+        
+    Returns:
+        models_employees.Service: Service created
+    """
+    
+    # Get required data
+    schedule = models_services.Schedule.objects.create(
+        name="Schedule",
+        start_time=datetime.time(8, 0),
+        end_time=datetime.time(16, 0),
+    )
+    
+    # Create service
+    service = models_services.Service.objects.create(
+        agreement=agreement,
+        schedule=schedule,
+        employee=employee,
+        location="Location",
+        description="Description",
+    )
+    
+    return service

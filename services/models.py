@@ -63,9 +63,7 @@ class Agreement(models.Model):
         null=True,
         blank=True
     )
-    bonuses = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
+    bonuses = models.TextField(
         verbose_name='Bonificaciones sugeridas',
         null=True,
         blank=True
@@ -96,7 +94,7 @@ class Agreement(models.Model):
         verbose_name_plural = 'Acuerdos'
         
     def __str__(self):
-        return f"{self.company_name} - {self.effective_date}"
+        return f"{self.company_name} (vigencia: {self.effective_date})"
     
     def get_services(self):
         return Service.objects.filter(agreement=self)

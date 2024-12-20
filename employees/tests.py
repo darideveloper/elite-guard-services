@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
 
+from utils import test_data
 from employees import models
-from utils.test_data import create_employee, create_admin_user
+from services import models as services_models
 
 
 class EmployeeModelTest(TestCase):
@@ -13,7 +14,7 @@ class EmployeeModelTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-        self.employee = create_employee()
+        self.employee = test_data.create_employee()
         
     def test_save_initial_status(self):
         """ Test set initial value in status_history """
@@ -83,7 +84,7 @@ class LoanModelTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-        self.employee = create_employee()
+        self.employee = test_data.create_employee()
         
     def test_save_update_balance_positive(self):
         """ Update employee balance when add a positive loan """
@@ -113,8 +114,8 @@ class EmployeeAdminTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-        self.employee = create_employee()
-        self.admin_user, self.admin_pass = create_admin_user()
+        self.employee = test_data.create_employee()
+        self.admin_user, self.admin_pass = test_data.create_admin_user()
         
     def test_actions_links(self):
         """ Validate custom action links """
@@ -155,8 +156,8 @@ class ReportEmployeeDetailsViewTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-        self.employee = create_employee()
-        self.admin_user, self.admin_pass = create_admin_user()
+        self.employee = test_data.create_employee()
+        self.admin_user, self.admin_pass = test_data.create_admin_user()
         
         self.endpoint = f"/employees/report/employee-details/{self.employee.id}/"
     
@@ -279,8 +280,10 @@ class ReportEmployeePreviewViewTest(TestCase):
 
         # Create initial data
         call_command("apps_loaddata")
-        self.employee = create_employee()
-        self.admin_user, self.admin_pass = create_admin_user()
+        self.employee = test_data.create_employee()
+        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.agreement = test_data.create_agreement()
+        self.service = test_data.create_service(self.agreement, self.employee)
         
         self.endpoint = f"/admin/employees/employee/{self.employee.id}/preview/"
     
@@ -301,7 +304,9 @@ class ReportEmployeePreviewViewTest(TestCase):
         report_data = [
             self.employee.name.title(),
             self.employee.last_name_1.title(),
-            self.employee.service,
+            self.agreement.company_name,
+            self.service.location,
+            self.service.schedule.name,
             self.employee.daily_rate,
             self.employee.birthdate.strftime("%d/%m/%Y"),
             self.employee.get_age(),
@@ -342,7 +347,9 @@ class ReportEmployeePreviewViewTest(TestCase):
             self.employee.name.title(),
             self.employee.last_name_1.title(),
             self.employee.last_name_2.title(),
-            self.employee.service,
+            self.agreement.company_name,
+            self.service.location,
+            self.service.schedule.name,
             self.employee.daily_rate,
             self.employee.birthdate.strftime("%d/%m/%Y"),
             self.employee.get_age(),
