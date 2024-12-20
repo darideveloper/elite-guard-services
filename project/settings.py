@@ -217,6 +217,7 @@ JAZZMIN_SETTINGS = {
         "employees.Status",
         "employees.Bank",
         "employees.Relationship",
+        "services.Schedule",
     ],
 
     # List of apps (and/or models) to base side menu ordering off of
@@ -244,6 +245,8 @@ JAZZMIN_SETTINGS = {
         "employees.Loan": "fas fa-money-bill",
         "employees.Ref": "fas fa-people-arrows",
         "employees.Relative": "fas fa-user-friends",
+        "services.agreement": "fas fa-handshake",
+        "services.service": "fas fa-briefcase",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",

@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 
-@admin.register(models.Schedules)
-class SchedulesAdmin(admin.ModelAdmin):
+@admin.register(models.Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_time', 'end_time')
 
 
