@@ -1,6 +1,5 @@
 from services import models
 from django.contrib import admin
-from django.utils.html import format_html
 
 
 @admin.register(models.Schedule)
@@ -12,8 +11,10 @@ class ScheduleAdmin(admin.ModelAdmin):
 class AgreementAdmin(admin.ModelAdmin):
     list_display = (
         'company_name',
-        'effective_date',
         'salary',
+        'responsible_name',
+        'responsible_phone',
+        'end_date',
         # TODO. Add services num and employees num
     )
     search_fields = (
@@ -26,7 +27,16 @@ class AgreementAdmin(admin.ModelAdmin):
         'safety_equipment',
     )
     list_filter = ('effective_date', 'salary', 'start_date')
-
+    
+    # CUSTOM FIELDS
+    def end_date(self, obj):
+        """ Return the effective_date date in a specific format """
+        return obj.effective_date.strftime("%d/%b/%Y")
+    
+    # Labels for custom fields
+    end_date.short_description = 'Fecha de vigencia'
+    end_date.admin_order_field = 'effective_date'
+    
 
 @admin.register(models.Service)
 class ServiceAdmin(admin.ModelAdmin):

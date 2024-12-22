@@ -94,7 +94,7 @@ class Agreement(models.Model):
         verbose_name_plural = 'Contratos'
         
     def __str__(self):
-        return f"{self.company_name} (vigencia: {self.effective_date})"
+        return f"{self.company_name}"
     
     def get_services(self):
         return Service.objects.filter(agreement=self)
