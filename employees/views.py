@@ -13,8 +13,11 @@ class ReportEmployeeDetailsView(
     PermissionRequiredMixin,
     TemplateView
 ):
+    """ Custom view to generate a report with all the details of an employee """
+    
+    # Template and permission
     template_name = "employees/reports/employee-details.html"
-    permission_required = 'auth.is_staff'  # Permission to validate
+    permission_required = 'employees.view_employee'
 
     def get_context_data(self, **kwargs):
         # Get employee data
