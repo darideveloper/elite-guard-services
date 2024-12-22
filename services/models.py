@@ -122,7 +122,8 @@ class Service(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Empleado'
     )
-    location = models.TextField(
+    location = models.CharField(
+        max_length=150,
         verbose_name='Ubicación'
     )
     description = models.TextField(
