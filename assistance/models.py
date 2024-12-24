@@ -29,7 +29,8 @@ class Assistance(models.Model):
         default=0
     )
     notes = models.TextField(
-        verbose_name='Notas'
+        verbose_name='Notas',
+        default=''
     )
     
     class Meta:
