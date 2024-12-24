@@ -396,8 +396,6 @@ class Employee(models.Model):
             (today.month, today.day) < (self.birthdate.month, self.birthdate.day)
         )
     
-# TODO: EmployeeInventory related models
-
 
 class Loan(models.Model):
     id = models.AutoField(primary_key=True)

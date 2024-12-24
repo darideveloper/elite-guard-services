@@ -15,7 +15,6 @@ class AgreementAdmin(admin.ModelAdmin):
         'responsible_name',
         'responsible_phone',
         'end_date',
-        # TODO. Add services num and employees num
     )
     search_fields = (
         'company_name',
