@@ -5,8 +5,9 @@ from assistance import models
 
 
 class TodayDateFilter(admin.SimpleListFilter):
-    title = 'Fecha'  # Label for the filter
-    parameter_name = 'date'  # Query parameter in the URL
+    """ Custom detae filter with default value: today """
+    title = 'Fecha'
+    parameter_name = 'date'
 
     def lookups(self, request, model_admin):
         return [
@@ -17,7 +18,7 @@ class TodayDateFilter(admin.SimpleListFilter):
         ]
 
     def queryset(self, request, queryset):
-        # Filter by today if the 'today' option is selected
+        # Value is the selected filter
         if self.value() == 'today':
             return queryset.filter(date=timezone.now().date())
         elif self.value() == 'week':
@@ -27,9 +28,9 @@ class TodayDateFilter(admin.SimpleListFilter):
         return queryset
 
     def value(self):
-        # Set default to 'today' if no filter is applied
+        # Set default to 'today'
         value = super().value()
-        return value or 'today'  # Default to 'today'
+        return value or 'today'
 
 
 @admin.register(models.Assistance)
@@ -58,3 +59,51 @@ class AssistanceAdmin(admin.ModelAdmin):
         'service__employee',
         'attendance',
     )
+    
+    
+@admin.register(models.WeeklyAssistance)
+class WeeklyAssistanceAdmin(admin.ModelAdmin):
+    """ Weekly assistance model admin """
+    list_display = (
+        'company_name',
+        'employee',
+        'week_number',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'total_extra_paid_hours',
+        'total_extra_unpaid_hours',
+    )
+    search_fields = (
+        'service__agreement__company_name',
+        'service__location',
+        'service__description',
+        'service__employee__name',
+        'service__employee__last_name_1',
+        'service__employee__last_name_2',
+    )
+    list_filter = (
+        'service__agreement__company_name',
+        'service__employee',
+        'week_number',
+        'start_date',
+        'end_date',
+    )
+    
+    # Custom fields
+    
+    def company_name(self, obj):
+        """ Return the company name """
+        return obj.service.agreement.company_name
+    
+    def employee(self, obj):
+        """ Return the employee name """
+        return str(obj.service.employee)
+    
+    # Labels for custom fields
+    company_name.short_description = 'Empresa'
+    employee.short_description = 'Empleado'
