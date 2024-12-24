@@ -116,8 +116,8 @@ class EmployeeAdminTest(TestCase):
         self.employee = test_data.create_employee()
         self.admin_user, self.admin_pass = test_data.create_admin_user()
         
-    def test_actions_links(self):
-        """ Validate custom action links """
+    def test_custom_links(self):
+        """ Validate custom custom links """
         
         links = {
             "Imprimir": "/employees/report/employee-details/1",
@@ -135,8 +135,8 @@ class EmployeeAdminTest(TestCase):
             self.assertContains(response, link_text)
             self.assertContains(response, link)
             
-    def test_date_format(self):
-        """ Validate created_at date format like dd/mm/yyyy """
+    def test_start_date(self):
+        """ Validate start_date date format like dd/mo./yyyy """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -145,7 +145,7 @@ class EmployeeAdminTest(TestCase):
         response = self.client.get("/admin/employees/employee/")
         
         # Validate date format
-        self.assertContains(response, self.employee.created_at.strftime("%d/%m/%Y"))
+        self.assertContains(response, self.employee.created_at.strftime("%d/%b/%Y"))
             
             
 class ReportEmployeeDetailsViewTest(TestCase):
