@@ -28,9 +28,7 @@ class AgreementAdminTest(TestCase):
         response = self.client.get("/admin/services/agreement/")
         
         # Validate date format
-        date_str = self.agreement.effective_date
-        date = datetime.strptime(date_str, "%Y-%m-%d")
         self.assertContains(
             response,
-            date.strftime("%d/%b/%Y"),
+            self.agreement.effective_date.strftime("%d/%b/%Y")
         )
