@@ -248,8 +248,10 @@ JAZZMIN_SETTINGS = {
         "employees.Loan": "fas fa-money-bill",
         "employees.Ref": "fas fa-people-arrows",
         "employees.Relative": "fas fa-user-friends",
-        "services.agreement": "fas fa-handshake",
-        "services.service": "fas fa-briefcase",
+        "services.Agreement": "fas fa-handshake",
+        "services.Service": "fas fa-briefcase",
+        "assistance.Assistance": "fas fa-calendar-check",
+        "assistance.WeeklyAssistance": "fas fa-calendar-week",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
