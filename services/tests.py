@@ -4,10 +4,10 @@ from django.test import TestCase
 from django.core.management import call_command
 
 from utils import test_data
-from services import models
 
 
 class AgreementAdminTest(TestCase):
+    """ Test custom features in admin/agreement """
     
     def setUp(self):
         
@@ -16,13 +16,7 @@ class AgreementAdminTest(TestCase):
         self.admin_user, self.admin_pass = test_data.create_admin_user()
         
         # Create Agreement
-        self.agreement = models.Agreement.objects.create(
-            company_name="Company Test",
-            salary=1000,
-            responsible_name="Responsible Test",
-            responsible_phone="1234567890",
-            effective_date="2020-01-01",
-        )
+        self.agreement = test_data.create_agreement()
         
     def test_end_date(self):
         """ Valdate end_date format like dd/mo./yyyy """

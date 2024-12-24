@@ -110,6 +110,7 @@ class AssistanceAdmin(admin.ModelAdmin):
 @admin.register(models.WeeklyAssistance)
 class WeeklyAssistanceAdmin(admin.ModelAdmin):
     """ Weekly assistance model admin """
+    
     list_display = (
         'company_name',
         'employee',
