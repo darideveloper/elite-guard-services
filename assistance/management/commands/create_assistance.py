@@ -17,9 +17,15 @@ class Command(BaseCommand):
             
             # Validate if the assistance already exists
             today = timezone.now().date()
+            week_number = today.isocalendar()[1]
+            weekly_assistance = assistance_models.WeeklyAssistance.objects.filter(
+                service=service,
+                week_number=week_number
+            ).first()
             assistance = assistance_models.Assistance.objects.filter(
                 service=service,
-                date=today
+                date=today,
+                weekly_assistance=weekly_assistance
             )
             if assistance:
                 # Skip this service

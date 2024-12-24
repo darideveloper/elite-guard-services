@@ -32,6 +32,13 @@ class Assistance(models.Model):
         verbose_name='Notas',
         default=''
     )
+    weekly_assistance = models.ForeignKey(
+        'WeeklyAssistance',
+        on_delete=models.CASCADE,
+        verbose_name='Asistencia semanal',
+        null=True,
+        editable=False
+    )
     
     class Meta:
         verbose_name = 'Asistencia diaria'
