@@ -136,7 +136,7 @@ class EmployeeAdminTest(TestCase):
             self.assertContains(response, link)
             
     def test_start_date(self):
-        """ Validate start_date date format like dd/mo./yyyy """
+        """ Validate start_date format like dd/mo./yyyy """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
