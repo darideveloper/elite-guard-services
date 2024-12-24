@@ -15,20 +15,18 @@ class Command(BaseCommand):
             
             print(f"Service: {service}")
             
-            # Validate if the assistance already exists
             today = timezone.now().date()
-            assistance = assistance_models.Assistance.objects.filter(
+            weekly_assistance = assistance_models.WeeklyAssistance.objects.filter(
                 service=service,
-                date=today
+                week_number=today.isocalendar()[1]
             )
-            if assistance:
-                # Skip this service
-                print("\tAssistance already exists")
+            if weekly_assistance:
+                # Skip week creation
+                print("\tWeekly assistance already exists")
             else:
-                # Create new asistance for today
-                assistance = assistance_models.Assistance(
+                # Create new weekly assistance
+                weekly_assistance = assistance_models.WeeklyAssistance(
                     service=service,
-                    attendance=False,
                 )
-                assistance.save()
-                print("\tCreated assistance")
+                weekly_assistance.save()
+                print("\tCreated weekly assistance")
