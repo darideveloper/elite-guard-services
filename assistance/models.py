@@ -97,7 +97,7 @@ class WeeklyAssistance(models.Model):
         verbose_name='Horas extras no pagadas',
         default=0
     )
-    
+        
     class Meta:
         verbose_name = 'Asistencia semanal'
         verbose_name_plural = 'Asistencias semanales'
