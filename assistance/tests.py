@@ -12,7 +12,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         
         # Create initial data
         call_command("apps_loaddata")
-        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
         
         # Create WeeklyAssistance
         self.employee = test_data.create_employee()

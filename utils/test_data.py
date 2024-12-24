@@ -57,7 +57,10 @@ def create_admin_user() -> tuple[str, str]:
     """ Create a new admin user and return it
     
     Returns:
-        tuple[str, str]: Username and password of the user created
+        tuple:
+            str: Username of the user created
+            str: Password of the user created
+            User: User created
     """
     
     # Create admin user
@@ -68,7 +71,7 @@ def create_admin_user() -> tuple[str, str]:
         password=password,
     )
     
-    return user.username, password
+    return user.username, password, user
 
 
 def create_agreement() -> models_services.Agreement:

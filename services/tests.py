@@ -13,7 +13,7 @@ class AgreementAdminTest(TestCase):
         
         # Create initial data
         call_command("apps_loaddata")
-        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
         
         # Create Agreement
         self.agreement = test_data.create_agreement()

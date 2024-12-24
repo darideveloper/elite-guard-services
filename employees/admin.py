@@ -3,6 +3,7 @@ from django.urls import path
 from django.contrib import admin
 from django.utils.html import format_html
 from django.shortcuts import render
+from django.core.exceptions import PermissionDenied
 
 from employees import models
 from services import models as services_models
@@ -192,6 +193,10 @@ class EmployeeAdmin(admin.ModelAdmin):
     
     def employee_preview(self, request, pk):
         """ Custom view to render employee preview """
+        
+        # Check if user has the required permission
+        if not request.user.has_perm('employees.view_employee'):
+            raise PermissionDenied
         
         # Get employee
         employee = models.Employee.objects.get(pk=pk)

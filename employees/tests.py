@@ -114,7 +114,7 @@ class EmployeeAdminTest(TestCase):
         # Create initial data
         call_command("apps_loaddata")
         self.employee = test_data.create_employee()
-        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
         
     def test_custom_links(self):
         """ Validate custom custom links """
@@ -156,21 +156,34 @@ class ReportEmployeeDetailsViewTest(TestCase):
         # Create initial data
         call_command("apps_loaddata")
         self.employee = test_data.create_employee()
-        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.admin_user, self.admin_pass, self.admin = test_data.create_admin_user()
         self.agreement = test_data.create_agreement()
         self.service = test_data.create_service(self.agreement, self.employee)
         
         self.endpoint = f"/employees/report/employee-details/{self.employee.id}/"
     
-    def test_unauthorized(self):
-        """ Validate redirect when user is not logged in
-        or don't have permission """
+    def test_no_logged(self):
+        """ Validate redirect when user is not """
         
         # Open page
         response = self.client.get(self.endpoint)
         
         # Validate redirect
         self.assertEqual(302, response.status_code)
+    
+    def test_no_permission(self):
+        """ Validate redirect when user don't have permission """
+        
+        # Update user to not have permission
+        self.admin.is_superuser = False
+        self.admin.save()
+        
+        # Open page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+        
+        # Validate redirect
+        self.assertEqual(403, response.status_code)
     
     def test_content(self):
         """ Valdiate content in page """
@@ -282,21 +295,34 @@ class ReportEmployeePreviewViewTest(TestCase):
         # Create initial data
         call_command("apps_loaddata")
         self.employee = test_data.create_employee()
-        self.admin_user, self.admin_pass = test_data.create_admin_user()
+        self.admin_user, self.admin_pass, self.admin = test_data.create_admin_user()
         self.agreement = test_data.create_agreement()
         self.service = test_data.create_service(self.agreement, self.employee)
         
         self.endpoint = f"/admin/employees/employee/{self.employee.id}/preview/"
     
-    def test_unauthorized(self):
-        """ Validate redirect when user is not logged in
-        or don't have permission """
+    def test_no_logged(self):
+        """ Validate redirect when user is not logged """
         
         # Open page
         response = self.client.get(self.endpoint)
         
         # Validate redirect
         self.assertEqual(302, response.status_code)
+    
+    def test_no_permission(self):
+        """ Validate redirect when user don't have permission """
+        
+        # Update user to not have permission
+        self.admin.is_superuser = False
+        self.admin.save()
+        
+        # Open page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.get(self.endpoint)
+        
+        # Validate redirect
+        self.assertEqual(403, response.status_code)
     
     def test_content_required(self):
         """ Valdiate content required data in page """
