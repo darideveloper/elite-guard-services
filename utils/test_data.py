@@ -1,5 +1,4 @@
-import datetime
-
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 from employees import models as models_employees
@@ -33,7 +32,7 @@ def create_employee() -> models_employees.Employee:
         weight=70,
         marital_status=marital_status,
         education=education,
-        birthdate=datetime.date(1990, 1, 1),
+        birthdate=timezone.datetime(1999, 1, 1).date(),
         municipality_birth=municipality,
         daily_rate=100,
         curp="test CURP",
@@ -85,8 +84,8 @@ def create_agreement() -> models_services.Agreement:
     # Create agreement
     agreement = models_services.Agreement.objects.create(
         company_name="Company",
-        start_date=datetime.date(2021, 1, 1),
-        effective_date=datetime.date(2022, 1, 1),
+        start_date=timezone.datetime(2021, 1, 1).date(),
+        effective_date=timezone.datetime(2021, 1, 1).date(),
         safety_equipment="Safety equipment",
     )
     
@@ -116,8 +115,8 @@ def create_service(
     # Get required data
     schedule = models_services.Schedule.objects.create(
         name="Schedule",
-        start_time=datetime.time(8, 0),
-        end_time=datetime.time(16, 0),
+        start_time=timezone.datetime(2021, 1, 1, 8, 0).time(),
+        end_time=timezone.datetime(2021, 1, 1, 16, 0).time(),
     )
     
     # Create service

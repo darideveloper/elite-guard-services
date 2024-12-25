@@ -229,8 +229,10 @@ class ReportEmployeeDetailsViewTest(TestCase):
             )
         
         # Employee details
+        time_zone = timezone.get_current_timezone()
         report_data = {
-            "Fecha de ingreso": self.employee.created_at.strftime("%d/%m/%Y"),
+            "Fecha de ingreso":
+                self.employee.created_at.astimezone(time_zone).strftime("%d/%m/%Y"),
             "No. de Empleado": f"EGS{self.employee.id}",
             "Apellido Paterno": self.employee.last_name_1,
             "Apellido Materno": self.employee.last_name_2,
@@ -240,7 +242,8 @@ class ReportEmployeeDetailsViewTest(TestCase):
             "Peso": self.employee.weight,
             "Estado Civil": self.employee.marital_status.name.upper(),
             "Lugar de nacimiento": self.employee.municipality_birth.name,
-            "Fecha de nacimiento": self.employee.birthdate.strftime("%d/%m/%Y"),
+            "Fecha de nacimiento":
+                self.employee.birthdate.strftime("%d/%m/%Y"),
             "Calle": self.employee.address_street,
             "No": self.employee.address_number,
             "Colonia": self.employee.neighborhood,
@@ -259,6 +262,10 @@ class ReportEmployeeDetailsViewTest(TestCase):
         # Login as admin and get page
         self.client.login(username=self.admin_user, password=self.admin_pass)
         response = self.client.get(self.endpoint)
+        
+        # Save response content to file
+        with open("employees_report.html", "w") as file:
+            file.write(response.content.decode("utf-8"))
         
         # Validate employee details
         for report_title, report_value in report_data.items():
@@ -323,7 +330,7 @@ class ReportEmployeePreviewViewTest(TestCase):
         
         # Validate redirect
         self.assertEqual(403, response.status_code)
-    
+            
     def test_content_required(self):
         """ Valdiate content required data in page """
         
@@ -364,7 +371,7 @@ class ReportEmployeePreviewViewTest(TestCase):
         self.employee.rfc = "test RFC"
         self.employee.imss = "test IMSS"
         self.employee.infonavit = "test INFONAVIT"
-        self.employee.uniform_date = timezone.now()
+        self.employee.uniform_date = timezone.now().date()
         self.employee.bank = models.Bank.objects.create(name="Bank")
         self.employee.card_number = "1234567890"
         self.employee.save()
