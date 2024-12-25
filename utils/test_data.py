@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from employees import models as models_employees
 from services import models as models_services
+from assistance import models as models_assistance
 
 
 def create_employee() -> models_employees.Employee:
@@ -93,8 +94,8 @@ def create_agreement() -> models_services.Agreement:
 
 
 def create_service(
-    agreement: models_services.Agreement,
-    employee: models_employees.Employee
+    agreement: models_services.Agreement = None,
+    employee: models_employees.Employee = None,
 ) -> models_services.Service:
     """ Create a new service and return it
     
@@ -105,6 +106,12 @@ def create_service(
     Returns:
         models_employees.Service: Service created
     """
+    
+    # Default values
+    if agreement is None:
+        agreement = create_agreement()
+    if employee is None:
+        employee = create_employee()
     
     # Get required data
     schedule = models_services.Schedule.objects.create(
@@ -123,3 +130,56 @@ def create_service(
     )
     
     return service
+
+
+def create_weekly_assistance(
+    service: models_services.Service = None
+) -> models_assistance.WeeklyAssistance:
+    """ Create a new weekly assistance and return it
+    
+    Args:
+        service (models_services.Service): Service of the weekly assistance
+        
+    Returns:
+        models_services.WeeklyAssistance: Weekly assistance created
+    """
+    
+    # Default values
+    if service is None:
+        service = create_service()
+    
+    # Create weekly assistance
+    weekly_assistance = models_assistance.WeeklyAssistance.objects.create(
+        service=service,
+    )
+    
+    return weekly_assistance
+
+
+def create_assistance(
+    service: models_services.Service = None,
+    weekly_assistance: models_assistance.WeeklyAssistance = None,
+) -> models_assistance.Assistance:
+    """ Create a new assistance and return it
+    
+    Args:
+        service (models_services.Service): Service of the assistance
+        weekly_assistance (models_services.WeeklyAssistance): Weekly assistance to use
+        
+    Returns:
+        models_services.Assistance: Assistance created
+    """
+    
+    # Default values
+    if service is None:
+        service = create_service()
+    if weekly_assistance is None:
+        weekly_assistance = create_weekly_assistance(service)
+    
+    # Create assistance
+    assistance = models_assistance.Assistance.objects.create(
+        service=service,
+        weekly_assistance=weekly_assistance,
+    )
+    
+    return assistance

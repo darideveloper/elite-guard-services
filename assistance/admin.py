@@ -105,6 +105,11 @@ class AssistanceAdmin(admin.ModelAdmin):
         'service__employee',
         'attendance',
     )
+    readonly_fields = (
+        'service',
+        'date',
+        'weekly_assistance',
+    )
     
     
 @admin.register(models.WeeklyAssistance)
@@ -139,6 +144,21 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         WeekNumberFilter,
         'start_date',
         'end_date',
+    )
+    readonly_fields = (
+        'service',
+        'week_number',
+        'start_date',
+        'end_date',
+        'total_extra_paid_hours',
+        'total_extra_unpaid_hours',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
     )
     
     # Custom fields

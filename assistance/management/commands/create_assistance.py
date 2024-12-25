@@ -32,9 +32,10 @@ class Command(BaseCommand):
                 print("\tAssistance already exists")
             else:
                 # Create new asistance for today
-                assistance = assistance_models.Assistance(
+                assistance = assistance_models.Assistance.objects.create(
                     service=service,
                     attendance=False,
+                    weekly_assistance=weekly_assistance
                 )
                 assistance.save()
                 print("\tCreated assistance")

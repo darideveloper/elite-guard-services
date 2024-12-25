@@ -5,6 +5,46 @@ from utils import test_data
 from assistance import models
 
 
+class AssistanceTest(TestCase):
+    """ Test custom methods in assistance model """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        
+        # Create initial data
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance
+        )
+        self.week_days = [
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+            'sunday'
+        ]
+        
+    def test_save_update_weekly_date_status(self):
+        """ Validate day status updated in weekly assistance
+        when change assistance status """
+        
+        # Update assistance status
+        self.assistance.attendance = True
+        self.assistance.save()
+        week_day = self.assistance.date.weekday()
+        
+        # Valdiate weekly assistance status
+        self.weekly_assistance.refresh_from_db()
+        self.assertTrue(getattr(
+            self.weekly_assistance,
+            self.week_days[week_day]
+        ))
+        
+
 class WeeklyAssistanceAdminTest(TestCase):
     """ Test custom features in admin/weekly-assistance """
     
