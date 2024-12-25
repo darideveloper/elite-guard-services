@@ -65,6 +65,22 @@ class AssistanceModelTest(TestCase):
             self.weekly_assistance.total_extra_unpaid_hours,
             2
         )
+
+
+class AssistanceAdminTest(TestCase):
+    """ Test custom features in admin/assistance """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
+        
+        # Create initial data
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance
+        )
         
 
 class WeeklyAssistanceAdminTest(TestCase):

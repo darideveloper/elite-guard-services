@@ -87,28 +87,29 @@ class WeekNumberFilter(admin.SimpleListFilter):
 
 
 class YearFilter(admin.SimpleListFilter):
-    """ Custom filter for year with default value as the current year """
     title = "Año"
     parameter_name = "year"
-    
+    field_name = ""
+
     def lookups(self, request, model_admin):
         """ Defines the available options in the filter """
-        
+        field_name = getattr(model_admin, "year_filter_field", "start_date")
+        YearFilter.field_name = field_name
         years = model_admin.get_queryset(request).values(
-            'start_date__year'
+            f"{field_name}__year"
         ).distinct()
         options = [
-            (year['start_date__year'], year['start_date__year'])
+            (year[f"{field_name}__year"], year[f"{field_name}__year"])
             for year in years
         ]
         return options
-    
+
     def queryset(self, request, queryset):
         """ Filters the queryset based on the selected value """
         if self.value():
-            return queryset.filter(start_date__year=self.value())
+            return queryset.filter(**{f"{YearFilter.field_name}__year": self.value()})
         return queryset
-    
+
     def value(self):
         """ Sets the default value to the current year """
         value = super().value()
@@ -142,16 +143,18 @@ class AssistanceAdmin(admin.ModelAdmin):
         'notes',
     )
     list_filter = (
+        YearFilter,
+        'weekly_assistance__week_number',
         TodayDateFilter,
         'weekly_assistance__service__agreement__company_name',
         'weekly_assistance__service__employee',
         'attendance',
-        'weekly_assistance__week_number',
     )
     readonly_fields = (
         'date',
         'weekly_assistance',
     )
+    year_filter_field = "date"
     
     # Custom fields
     
@@ -191,12 +194,12 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'service__employee__last_name_2',
     )
     list_filter = (
-        'service__agreement__company_name',
-        'service__employee',
-        WeekNumberFilter,
         YearFilter,
+        WeekNumberFilter,
         'start_date',
         'end_date',
+        'service__agreement__company_name',
+        'service__employee',
     )
     readonly_fields = (
         'service',
@@ -213,6 +216,7 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'saturday',
         'sunday',
     )
+    year_filter_field = "start_date"
     
     # Custom fields
     
