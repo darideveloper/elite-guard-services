@@ -2,6 +2,7 @@ from django.utils import timezone
 
 from django.db import models
 from services import models as services_models
+from utils.dates import get_week_day
 
 
 class Assistance(models.Model):
@@ -54,19 +55,8 @@ class Assistance(models.Model):
         # Update weekly assistance data when change
         if (self.id):
 
-            week_day = self.date.weekday()
-
             # Update weekday status
-            weekday_list = [
-                'monday',
-                'tuesday',
-                'wednesday',
-                'thursday',
-                'friday',
-                'saturday'
-                'sunday'
-            ]
-            day_name = weekday_list[week_day]
+            day_name = get_week_day(self.date, "en")
             setattr(self.weekly_assistance, day_name, self.attendance)
             super(Assistance, self).save(*args, **kwargs)
             

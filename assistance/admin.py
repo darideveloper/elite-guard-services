@@ -1,7 +1,10 @@
 from django.utils import timezone
 from django.contrib import admin
+from django.utils.html import format_html
 
 from assistance import models
+from utils.dates import get_week_day
+
 
 # FILTERS
 
@@ -113,6 +116,7 @@ class YearFilter(admin.SimpleListFilter):
             return str(timezone.now().year)
         return value
         
+        
 # MODELS
 
 
@@ -121,6 +125,7 @@ class AssistanceAdmin(admin.ModelAdmin):
     """ Assistance model admin """
     list_display = (
         'date',
+        'week_day_name',
         'service',
         'attendance',
         'extra_paid_hours',
@@ -141,12 +146,22 @@ class AssistanceAdmin(admin.ModelAdmin):
         'service__agreement__company_name',
         'service__employee',
         'attendance',
+        'weekly_assistance__week_number',
     )
     readonly_fields = (
         'service',
         'date',
         'weekly_assistance',
     )
+    
+    # Custom fields
+    
+    def week_day_name(self, obj):
+        """ Return the name of the week day """
+        return get_week_day(obj.date)
+            
+    # Labels for custom fields
+    week_day_name.short_description = 'Día de la semana'
     
     
 @admin.register(models.WeeklyAssistance)
@@ -166,6 +181,7 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'sunday',
         'total_extra_paid_hours',
         'total_extra_unpaid_hours',
+        'custom_links',
     )
     search_fields = (
         'service__agreement__company_name',
@@ -209,6 +225,20 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         """ Return the employee name """
         return str(obj.service.employee)
     
+    def custom_links(self, obj):
+        """ Create custom Imprimir and Ver buttons """
+        
+        employee_id = obj.service.employee.id
+        week_number = obj.week_number
+        
+        return format_html(
+            '<a class="btn btn-primary my-1 w-110" href="{}">Editar Dias</a>',
+            "/admin/assistance/assistance/?"
+            f"service__employee__id__exact={employee_id}"
+            f"&weekly_assistance__week_number={week_number}"
+        )
+    
     # Labels for custom fields
     company_name.short_description = 'Empresa'
     employee.short_description = 'Empleado'
+    custom_links.short_description = 'Acciones'

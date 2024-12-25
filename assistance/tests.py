@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.management import call_command
 
 from utils import test_data
+from utils.dates import get_week_day
 from assistance import models
 
 
@@ -18,15 +19,6 @@ class AssistanceModelTest(TestCase):
         self.assistance = test_data.create_assistance(
             weekly_assistance=self.weekly_assistance
         )
-        self.week_days = [
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-            'sunday'
-        ]
         
     def test_save_update_weekly_date_status(self):
         """ Validate day status updated in weekly assistance
@@ -35,13 +27,13 @@ class AssistanceModelTest(TestCase):
         # Update assistance status
         self.assistance.attendance = True
         self.assistance.save()
-        week_day = self.assistance.date.weekday()
+        week_day = get_week_day(self.assistance.date, "en")
         
         # Valdiate weekly assistance status
         self.weekly_assistance.refresh_from_db()
         self.assertTrue(getattr(
             self.weekly_assistance,
-            self.week_days[week_day]
+            week_day
         ))
         
     def test_save_update_weekly_paid_hours(self):

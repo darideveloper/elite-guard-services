@@ -161,4 +161,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   .container-fluid > .row > div:nth-child(2) {
     justify-content: flex-start !important;
   }
+}
+.w-110 {
+  width: 110px;
 }/*# sourceMappingURL=custom.css.map */
