@@ -68,9 +68,23 @@ class Assistance(models.Model):
             ]
             day_name = weekday_list[week_day]
             setattr(self.weekly_assistance, day_name, self.attendance)
-            self.weekly_assistance.save()
+            super(Assistance, self).save(*args, **kwargs)
+            
+            # Update weekly paid hours
+            all_weekly_assistances = Assistance.objects.filter(
+                weekly_assistance=self.weekly_assistance
+            )
+            self.weekly_assistance.total_extra_paid_hours = sum(
+                [assistance.extra_paid_hours for assistance in all_weekly_assistances]
+            )
+            
+            # Update weekly unpaid hours
+            self.weekly_assistance.total_extra_unpaid_hours = sum(
+                [assistance.extra_unpaid_hours for assistance in all_weekly_assistances]
+            )
             
         # Save the object
+        self.weekly_assistance.save()
         super(Assistance, self).save(*args, **kwargs)
 
 

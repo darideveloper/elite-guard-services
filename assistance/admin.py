@@ -105,11 +105,11 @@ class AssistanceAdmin(admin.ModelAdmin):
         'service__employee',
         'attendance',
     )
-    readonly_fields = (
-        'service',
-        'date',
-        'weekly_assistance',
-    )
+    # readonly_fields = (
+    #     'service',
+    #     'date',
+    #     'weekly_assistance',
+    # )
     
     
 @admin.register(models.WeeklyAssistance)

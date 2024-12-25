@@ -5,7 +5,7 @@ from utils import test_data
 from assistance import models
 
 
-class AssistanceTest(TestCase):
+class AssistanceModelTest(TestCase):
     """ Test custom methods in assistance model """
     
     def setUp(self):
@@ -43,6 +43,36 @@ class AssistanceTest(TestCase):
             self.weekly_assistance,
             self.week_days[week_day]
         ))
+        
+    def test_save_update_weekly_paid_hours(self):
+        """ Validate weekly paid hours updated in weekly assistance
+        when change assistance status """
+        
+        # Update assistance status
+        self.assistance.extra_paid_hours = 2
+        self.assistance.save()
+        
+        # Valdiate weekly assistance status
+        self.weekly_assistance.refresh_from_db()
+        self.assertEqual(
+            self.weekly_assistance.total_extra_paid_hours,
+            2
+        )
+        
+    def test_save_update_weekly_unpaid_hours(self):
+        """ Validate weekly unpaid hours updated in weekly assistance
+        when change assistance status """
+        
+        # Update assistance status
+        self.assistance.extra_unpaid_hours = 2
+        self.assistance.save()
+        
+        # Valdiate weekly assistance status
+        self.weekly_assistance.refresh_from_db()
+        self.assertEqual(
+            self.weekly_assistance.total_extra_unpaid_hours,
+            2
+        )
         
 
 class WeeklyAssistanceAdminTest(TestCase):
