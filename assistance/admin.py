@@ -126,30 +126,29 @@ class AssistanceAdmin(admin.ModelAdmin):
     list_display = (
         'date',
         'week_day_name',
-        'service',
+        'weekly_assistance',
         'attendance',
         'extra_paid_hours',
         'extra_unpaid_hours',
         'notes',
     )
     search_fields = (
-        'service__agreement__company_name',
-        'service__location',
-        'service__description',
-        'service__employee__name',
-        'service__employee__last_name_1',
-        'service__employee__last_name_2',
+        'weekly_assistance__service__agreement__company_name',
+        'weekly_assistance__service__location',
+        'weekly_assistance__service__description',
+        'weekly_assistance__service__employee__name',
+        'weekly_assistance__service__employee__last_name_1',
+        'weekly_assistance__service__employee__last_name_2',
         'notes',
     )
     list_filter = (
         TodayDateFilter,
-        'service__agreement__company_name',
-        'service__employee',
+        'weekly_assistance__service__agreement__company_name',
+        'weekly_assistance__service__employee',
         'attendance',
         'weekly_assistance__week_number',
     )
     readonly_fields = (
-        'service',
         'date',
         'weekly_assistance',
     )

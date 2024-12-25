@@ -177,7 +177,6 @@ def create_assistance(
     
     # Create assistance
     assistance = models_assistance.Assistance.objects.create(
-        service=service,
         weekly_assistance=weekly_assistance,
     )
     

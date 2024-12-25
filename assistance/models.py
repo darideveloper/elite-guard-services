@@ -13,11 +13,6 @@ class Assistance(models.Model):
         verbose_name='Fecha',
         default=timezone.now
     )
-    service = models.ForeignKey(
-        services_models.Service,
-        on_delete=models.CASCADE,
-        verbose_name='Servicio'
-    )
     attendance = models.BooleanField(
         verbose_name='Asistencia',
         default=False
@@ -48,7 +43,7 @@ class Assistance(models.Model):
         verbose_name_plural = 'Asistencias diarias'
 
     def __str__(self):
-        return f"{self.date} - {self.service}"
+        return f"{self.date} - {self.weekly_assistance}"
 
     def save(self, *args, **kwargs):
         
