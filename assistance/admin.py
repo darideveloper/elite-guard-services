@@ -21,12 +21,19 @@ class TodayDateFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         # Value is the selected filter
+        time_zone = timezone.get_current_timezone()
         if self.value() == 'today':
-            return queryset.filter(date=timezone.now().date())
+            return queryset.filter(
+                date=timezone.now().astimezone(time_zone).date()
+            )
         elif self.value() == 'week':
-            return queryset.filter(date__week=timezone.now().isocalendar()[1])
+            return queryset.filter(
+                date__week=timezone.now().astimezone(time_zone).isocalendar()[1]
+            )
         elif self.value() == 'month':
-            return queryset.filter(date__month=timezone.now().month)
+            return queryset.filter(
+                date__month=timezone.now().astimezone(time_zone).month
+            )
         return queryset
 
     def value(self):
@@ -105,11 +112,11 @@ class AssistanceAdmin(admin.ModelAdmin):
         'service__employee',
         'attendance',
     )
-    # readonly_fields = (
-    #     'service',
-    #     'date',
-    #     'weekly_assistance',
-    # )
+    readonly_fields = (
+        'service',
+        'date',
+        'weekly_assistance',
+    )
     
     
 @admin.register(models.WeeklyAssistance)
