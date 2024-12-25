@@ -83,6 +83,36 @@ class WeekNumberFilter(admin.SimpleListFilter):
         return value
 
 
+class YearFilter(admin.SimpleListFilter):
+    """ Custom filter for year with default value as the current year """
+    title = "Año"
+    parameter_name = "year"
+    
+    def lookups(self, request, model_admin):
+        """ Defines the available options in the filter """
+        
+        years = model_admin.get_queryset(request).values(
+            'start_date__year'
+        ).distinct()
+        options = [
+            (year['start_date__year'], year['start_date__year'])
+            for year in years
+        ]
+        return options
+    
+    def queryset(self, request, queryset):
+        """ Filters the queryset based on the selected value """
+        if self.value():
+            return queryset.filter(start_date__year=self.value())
+        return queryset
+    
+    def value(self):
+        """ Sets the default value to the current year """
+        value = super().value()
+        if value is None:
+            return str(timezone.now().year)
+        return value
+        
 # MODELS
 
 
@@ -149,6 +179,7 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'service__agreement__company_name',
         'service__employee',
         WeekNumberFilter,
+        YearFilter,
         'start_date',
         'end_date',
     )
