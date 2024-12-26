@@ -125,7 +125,7 @@ class YearFilter(admin.SimpleListFilter):
 class AssistanceAdmin(admin.ModelAdmin):
     """ Assistance model admin """
     list_display = (
-        'date',
+        'custom_date',
         'week_day_name',
         'weekly_assistance',
         'attendance',
@@ -161,10 +161,16 @@ class AssistanceAdmin(admin.ModelAdmin):
     def week_day_name(self, obj):
         """ Return the name of the week day """
         return get_week_day(obj.date)
+    
+    def custom_date(self, obj):
+        """ Return the date in the format dd/mm/yyyy """
+        return obj.date.strftime("%d/%b/%Y")
             
     # Labels for custom fields
     week_day_name.short_description = 'Día de la semana'
-    
+    custom_date.short_description = 'Fecha'
+    custom_date.admin_order_field = 'date'
+        
     
 @admin.register(models.WeeklyAssistance)
 class WeeklyAssistanceAdmin(admin.ModelAdmin):

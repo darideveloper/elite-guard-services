@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.core.management import call_command
+from django.utils import timezone
+from bs4 import BeautifulSoup
 
 from utils import test_data
 from utils.dates import get_week_day
@@ -76,13 +80,100 @@ class AssistanceAdminTest(TestCase):
         call_command("apps_loaddata")
         self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
         
-        # Create initial data
+        # Create today assistance
         self.weekly_assistance = test_data.create_weekly_assistance()
-        self.assistance = test_data.create_assistance(
+        self.assistances = []
+        assistance = test_data.create_assistance(
             weekly_assistance=self.weekly_assistance
         )
+        self.assistances.append(assistance)
         
-
+        # Create yesterday assistance
+        yesterday = assistance.date - timezone.timedelta(days=1)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=yesterday,
+        )
+        self.assistances.append(assistance)
+        
+        # Create last year assistance
+        last_year = assistance.date - timezone.timedelta(days=365)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=last_year,
+        )
+        self.assistances.append(assistance)
+        
+    def test_custom_filters_options(self):
+        """ Validate custom filters options in admin """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get("/admin/assistance/assistance/")
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Validate years
+        years = list(set([
+            assistance.date.year
+            for assistance in self.assistances
+        ]))
+        
+        year_options = soup.select('option[data-name="year"]')
+        for option in year_options:
+            self.assertIn(
+                int(option.text),
+                years
+            )
+        
+        # Validate week number
+        weeks = list(set([
+            assistance.weekly_assistance.week_number
+            for assistance in self.assistances
+        ]))
+        
+        weeks_options = soup.select('option[data-name="weekly_assistance__week_number"]')
+        for option in weeks_options:
+            self.assertIn(
+                int(option.text),
+                weeks
+            )
+            
+    def test_custom_filters_default(self):
+        """ Validate custom filters default option in admin """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get("/admin/assistance/assistance/")
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Validate years filter
+        current_year = timezone.now().year
+        year_selected = soup.select_one('option[data-name="year"][selected]')
+        self.assertEqual(
+            int(year_selected.text),
+            current_year
+        )
+        
+        # Validate today filter
+        today_option = soup.select_one('option[data-name="date"][selected]')
+        self.assertIn(
+            "hoy",
+            today_option.text.lower()
+        )
+        
+        # Validate only today registers
+        time_zone = timezone.get_current_timezone()
+        today = timezone.now().astimezone(time_zone).date()
+        today_str = today.strftime("%d/%b/%Y")
+        dates = soup.select('.row .field-custom_date')
+        self.assertEqual(len(dates), 1)
+        self.assertEqual(dates[0].text.strip(), today_str)
+        
+        
 class WeeklyAssistanceAdminTest(TestCase):
     """ Test custom features in admin/weekly-assistance """
     
