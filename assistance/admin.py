@@ -96,12 +96,13 @@ class YearFilter(admin.SimpleListFilter):
         field_name = getattr(model_admin, "year_filter_field", "start_date")
         YearFilter.field_name = field_name
         years = model_admin.get_queryset(request).values(
-            f"{field_name}__year"
+            f"{YearFilter.field_name}__year"
         ).distinct()
-        options = [
-            (year[f"{field_name}__year"], year[f"{field_name}__year"])
-            for year in years
-        ]
+        years_values = [year[f"{YearFilter.field_name}__year"] for year in years]
+        years_unique = list(set(years_values))
+        options = []
+        for year in years_unique:
+            options.append((str(year), year))
         return options
 
     def queryset(self, request, queryset):
@@ -181,13 +182,13 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'company_name',
         'employee',
         'week_number',
-        'monday',
-        'tuesday',
-        'wednesday',
         'thursday',
         'friday',
         'saturday',
         'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
         'total_extra_paid_hours',
         'total_extra_unpaid_hours',
         'custom_links',
