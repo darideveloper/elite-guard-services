@@ -204,8 +204,6 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
     list_filter = (
         YearFilter,
         WeekNumberFilter,
-        'start_date',
-        'end_date',
         'service__agreement__company_name',
         'service__employee',
     )
