@@ -23,7 +23,6 @@ class Command(BaseCommand):
                 week_number=week_number
             ).first()
             assistance = assistance_models.Assistance.objects.filter(
-                service=service,
                 date=today,
                 weekly_assistance=weekly_assistance
             )
@@ -33,7 +32,6 @@ class Command(BaseCommand):
             else:
                 # Create new asistance for today
                 assistance = assistance_models.Assistance.objects.create(
-                    service=service,
                     attendance=False,
                     weekly_assistance=weekly_assistance
                 )
