@@ -1,10 +1,12 @@
+from time import sleep
+
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
 from bs4 import BeautifulSoup
 
 from utils import test_data
-from utils.dates import get_week_day
+from utils.dates import get_week_day, get_current_week
 from assistance import models
 
 
@@ -301,7 +303,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         )
         
         # Validate week number filter
-        current_week = timezone.now().isocalendar()[1]
+        current_week = get_current_week()
         week_selected = soup.select_one(
             'option[data-name="week_number"]'
             '[selected]'
@@ -352,6 +354,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
+        sleep(2)
         response = self.client.get(self.endpoint)
         
         # Validate custom links

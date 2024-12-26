@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from assistance import models
-from utils.dates import get_week_day
+from utils.dates import get_week_day, get_current_week
 
 
 # FILTERS
@@ -54,10 +54,10 @@ class WeekNumberFilter(admin.SimpleListFilter):
         """ Defines the available options in the filter """
         # Get all distinct week numbers from the dataset
         week_numbers = model_admin.get_queryset(request).values('week_number').distinct()
-        current_week = timezone.now().isocalendar()[1]
-        options = []
+        current_week = get_current_week()
         
         # Generate the options
+        options = []
         for week_number in week_numbers:
             if week_number['week_number'] == current_week:
                 options.append((
@@ -82,7 +82,7 @@ class WeekNumberFilter(admin.SimpleListFilter):
         """ Sets the default value to the current week number """
         value = super().value()
         if value is None:
-            return str(timezone.now().isocalendar()[1])
+            return str(get_current_week())
         return value
 
 
@@ -155,6 +155,7 @@ class AssistanceAdmin(admin.ModelAdmin):
         'weekly_assistance',
     )
     year_filter_field = "date"
+    ordering = ('-date',)
     
     # Custom fields
     

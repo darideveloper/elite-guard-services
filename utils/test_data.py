@@ -165,6 +165,7 @@ def create_assistance(
     Args:
         service (models_services.Service): Service of the assistance
         weekly_assistance (models_services.WeeklyAssistance): Weekly assistance to use
+        date (timezone.datetime): Date of the assistance
         
     Returns:
         models_services.Assistance: Assistance created

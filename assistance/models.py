@@ -2,7 +2,7 @@ from django.utils import timezone
 
 from django.db import models
 from services import models as services_models
-from utils.dates import get_week_day
+from utils.dates import get_week_day, get_current_week
 
 
 class Assistance(models.Model):
@@ -83,7 +83,7 @@ class WeeklyAssistance(models.Model):
     )
     week_number = models.IntegerField(
         verbose_name='Número de semana',
-        default=timezone.now().isocalendar()[1]
+        default=get_current_week()
     )
     start_date = models.DateField(
         verbose_name='Fecha de inicio',
