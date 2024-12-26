@@ -246,36 +246,6 @@ class WeeklyAssistanceAdminTest(TestCase):
         
         self.endpoint = "/admin/assistance/weeklyassistance/"
         
-    def test_custom_field_company_name(self):
-        """ Validate "company name" custom field in lst view """
-        
-        # Login as admin
-        self.client.login(username=self.admin_user, password=self.admin_pass)
-        
-        # Open employee list page
-        response = self.client.get(self.endpoint)
-        
-        # Validate company name
-        self.assertContains(
-            response,
-            self.agreement.company_name,
-        )
-        
-    def test_custom_field_employee(self):
-        """ Validate "employee name" custom field in lst view """
-        
-        # Login as admin
-        self.client.login(username=self.admin_user, password=self.admin_pass)
-        
-        # Open employee list page
-        response = self.client.get(self.endpoint)
-        
-        # Validate company name
-        self.assertContains(
-            response,
-            str(self.employee),
-        )
-        
     def test_custom_filters_options(self):
         """ Validate custom filters options in admin """
         
@@ -344,3 +314,64 @@ class WeeklyAssistanceAdminTest(TestCase):
             week_selected.text.strip(),
             f"Semana actual ({current_week})"
         )
+        
+    def test_custom_field_company_name(self):
+        """ Validate "company name" custom field in lst view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate company name
+        self.assertContains(
+            response,
+            self.agreement.company_name,
+        )
+        
+    def test_custom_field_employee(self):
+        """ Validate "employee name" custom field in lst view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate company name
+        self.assertContains(
+            response,
+            str(self.employee),
+        )
+    
+    def test_custom_field_custom_links(self):
+        """ Validate custom links in lst view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate custom links
+        link_data = {
+            "Editar Dias": [
+                self.employee.id,
+                self.weekly_assistance.week_number,
+                self.weekly_assistance.start_date.year,
+                "all"
+            ]
+        }
+        
+        # Validate button texts and links content
+        for link_text, link_values in link_data.items():
+            self.assertContains(
+                response,
+                link_text
+            )
+            for value in link_values:
+                self.assertContains(
+                    response,
+                    f"={value}"
+                )

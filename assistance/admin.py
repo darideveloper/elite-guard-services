@@ -240,11 +240,14 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         employee_id = obj.service.employee.id
         week_number = obj.week_number
         
+        link = "/admin/assistance/assistance/?"
+        link += f"weekly_assistance__service__employee__id__exact={employee_id}"
+        link += f"&weekly_assistance__week_number={week_number}"
+        link += f"&year={obj.start_date.year}"
+        link += "&date=all"
         return format_html(
             '<a class="btn btn-primary my-1 w-110" href="{}">Editar Dias</a>',
-            "/admin/assistance/assistance/?"
-            f"service__employee__id__exact={employee_id}"
-            f"&weekly_assistance__week_number={week_number}"
+            link
         )
     
     # Labels for custom fields
