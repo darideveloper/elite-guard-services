@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
@@ -104,6 +102,36 @@ class AssistanceAdminTest(TestCase):
         )
         self.assistances.append(assistance)
         
+        self.endpoint = "/admin/assistance/assistance/"
+    
+    def test_custom_field_custom_date(self):
+        """ Validate "date" custom field in lst view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate date
+        time_zone = timezone.get_current_timezone()
+        date = timezone.now().astimezone(time_zone).date()
+        date_str = date.strftime("%d/%b/%Y")
+        self.assertContains(response, date_str)
+    
+    def test_custom_field_week_day_name(self):
+        """ Validate "week day name" custom field in lst view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate week day name
+        week_day = get_week_day(timezone.now(), "es")
+        self.assertContains(response, week_day)
+    
     def test_custom_filters_options(self):
         """ Validate custom filters options in admin """
         
@@ -111,7 +139,7 @@ class AssistanceAdminTest(TestCase):
         self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
-        response = self.client.get("/admin/assistance/assistance/")
+        response = self.client.get(self.endpoint)
         soup = BeautifulSoup(response.content, "html.parser")
         
         # Validate years
@@ -127,17 +155,18 @@ class AssistanceAdminTest(TestCase):
                 years
             )
         
-        # Validate week number
-        weeks = list(set([
-            assistance.weekly_assistance.week_number
-            for assistance in self.assistances
-        ]))
-        
-        weeks_options = soup.select('option[data-name="weekly_assistance__week_number"]')
-        for option in weeks_options:
+        # Validate dates options
+        options = [
+            "hoy",
+            "esta semana",
+            "este mes",
+            "todas las fechas",
+        ]
+        date_options = soup.select('option[data-name="date"]')
+        for option in date_options:
             self.assertIn(
-                int(option.text),
-                weeks
+                option.text.lower().strip(),
+                options
             )
             
     def test_custom_filters_default(self):
@@ -147,7 +176,7 @@ class AssistanceAdminTest(TestCase):
         self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
-        response = self.client.get("/admin/assistance/assistance/")
+        response = self.client.get(self.endpoint)
         soup = BeautifulSoup(response.content, "html.parser")
         
         # Validate years filter
@@ -191,14 +220,40 @@ class WeeklyAssistanceAdminTest(TestCase):
             service=self.service,
         )
         
-    def test_company_name(self):
-        """ Validate company name in lst view """
+        # Create today assistance
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistances = []
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance
+        )
+        self.assistances.append(assistance)
+        
+        # Create yesterday assistance
+        yesterday = assistance.date - timezone.timedelta(days=1)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=yesterday,
+        )
+        self.assistances.append(assistance)
+        
+        # Create last year assistance
+        last_year = assistance.date - timezone.timedelta(days=365)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=last_year,
+        )
+        self.assistances.append(assistance)
+        
+        self.endpoint = "/admin/assistance/weeklyassistance/"
+        
+    def test_custom_field_company_name(self):
+        """ Validate "company name" custom field in lst view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
-        response = self.client.get("/admin/assistance/weeklyassistance/")
+        response = self.client.get(self.endpoint)
         
         # Validate company name
         self.assertContains(
@@ -206,14 +261,14 @@ class WeeklyAssistanceAdminTest(TestCase):
             self.agreement.company_name,
         )
         
-    def test_employee(self):
-        """ Validate employee name in lst view """
+    def test_custom_field_employee(self):
+        """ Validate "employee name" custom field in lst view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
         
         # Open employee list page
-        response = self.client.get("/admin/assistance/weeklyassistance/")
+        response = self.client.get(self.endpoint)
         
         # Validate company name
         self.assertContains(
@@ -221,4 +276,71 @@ class WeeklyAssistanceAdminTest(TestCase):
             str(self.employee),
         )
         
+    def test_custom_filters_options(self):
+        """ Validate custom filters options in admin """
         
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Validate years
+        years = list(set([
+            assistance.date.year
+            for assistance in self.assistances
+        ]))
+        
+        year_options = soup.select('option[data-name="year"]')
+        for option in year_options:
+            self.assertIn(
+                int(option.text),
+                years
+            )
+        
+        # Validate week number
+        weeks = list(set([
+            assistance.weekly_assistance.week_number
+            for assistance in self.assistances
+        ]))
+        
+        weeks_options = soup.select('option[data-name="weekly_assistance__week_number"]')
+        for option in weeks_options:
+            self.assertIn(
+                int(option.value),
+                weeks
+            )
+    
+    def test_custom_filters_default(self):
+        """ Validate custom filters default option in admin """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Validate years filter
+        current_year = timezone.now().year
+        year_selected = soup.select_one('option[data-name="year"][selected]')
+        self.assertEqual(
+            int(year_selected.text),
+            current_year
+        )
+        
+        # Validate week number filter
+        current_week = timezone.now().isocalendar()[1]
+        week_selected = soup.select_one(
+            'option[data-name="week_number"]'
+            '[selected]'
+        )
+        self.assertEqual(
+            int(week_selected["value"]),
+            current_week
+        )
+        self.assertEqual(
+            week_selected.text.strip(),
+            f"Semana actual ({current_week})"
+        )
