@@ -378,3 +378,117 @@ class WeeklyAssistanceAdminTest(TestCase):
                     response,
                     f"={value}"
                 )
+                
+                
+class CommandCreateWeeklyAssistanceTest(TestCase):
+    """ Test running the command create_weekly_assistance """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        
+        # Create service
+        self.service = test_data.create_service()
+        
+    def test_run_with_service(self):
+        """ Validate the command create_weekly_assistance regular runnign"""
+        
+        # Run command
+        call_command("create_weekly_assistance")
+        
+        # Validate weekly assistance created and content
+        weekly_assistance = models.WeeklyAssistance.objects.first()
+        self.assertIsNotNone(weekly_assistance)
+        self.assertEqual(weekly_assistance.week_number, get_current_week())
+        self.assertEqual(weekly_assistance.start_date, timezone.now().date())
+        self.assertEqual(weekly_assistance.service, self.service)
+        
+    def test_run_no_service(self):
+        """  Validate command create_weekly_assistance without services
+            (no weekly assistance created) """
+        
+        # Delete all services
+        self.service.delete()
+        
+        # Run command
+        call_command("create_weekly_assistance")
+        
+        # Validate no weekly assistance created
+        weekly_assistance = models.WeeklyAssistance.objects.all()
+        self.assertEqual(len(weekly_assistance), 0)
+        
+        
+class CommandCreateAssistanceTest(TestCase):
+    """ Test running the command create_assistance """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        
+        # Create service
+        self.service = test_data.create_service()
+        self.weekly_assistance = test_data.create_weekly_assistance(
+            service=self.service
+        )
+        
+    def test_run_with_service(self):
+        """ Validate the command create_assistance regular runnign"""
+        
+        # Run command
+        call_command("create_assistance")
+        
+        # Validate weekly assistance created and content
+        assistance = models.Assistance.objects.first()
+        self.assertIsNotNone(assistance)
+        self.assertEqual(assistance.date, timezone.now().date())
+        self.assertEqual(assistance.weekly_assistance, self.weekly_assistance)
+    
+    def test_run_no_service(self):
+        """  Validate command create_assistance without services
+            (no assistance created) """
+        
+        # Delete all services
+        self.service.delete()
+        
+        # Run command
+        call_command("create_assistance")
+        
+        # Validate no weekly assistance created
+        assistance = models.Assistance.objects.all()
+        self.assertEqual(len(assistance), 0)
+        
+    def test_run_no_weekly_assistance(self):
+        """  Validate command create_assistance without weekly assistance
+            (assistance and weekly asistance created) """
+        
+        # Delete all services
+        models.WeeklyAssistance.objects.all().delete()
+        
+        # Run command
+        call_command("create_assistance")
+        
+        # Validate weekly assistances created
+        weekly_assistance = models.WeeklyAssistance.objects.all()
+        self.assertEqual(len(weekly_assistance), 1)
+        
+        # Validate week number in weekly assistance
+        weekly_assistance = weekly_assistance[0]
+        current_week = get_current_week()
+        self.assertEqual(weekly_assistance.week_number, current_week)
+        
+        # Validate start date in weekly assistance
+        week_start_date = weekly_assistance.start_date
+        print(">>>>>")
+        print(week_start_date)
+        week_start_date_num = week_start_date.weekday()
+        self.assertEqual(week_start_date_num, 3)
+        
+        # Validate no weekly assistance created
+        assistance = models.Assistance.objects.all()
+        self.assertEqual(len(assistance), 1)
+        assistance = assistance[0]
+        self.assertEqual(assistance.weekly_assistance, weekly_assistance)
+        
+        

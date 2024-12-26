@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from assistance import models as assistance_models
+from assistance.models import Assistance, WeeklyAssistance
 from services import models as services_models
+from utils.dates import get_current_week
 
 
 class Command(BaseCommand):
@@ -15,14 +16,26 @@ class Command(BaseCommand):
             
             print(f"Service: {service}")
             
-            # Validate if the assistance already exists
-            today = timezone.now().date()
-            week_number = today.isocalendar()[1]
-            weekly_assistance = assistance_models.WeeklyAssistance.objects.filter(
+            # Get or create weekly assistance
+            week_number = get_current_week()
+            
+            # Calculate thursday as start of the week
+            thursday = timezone.now().date()
+            while thursday.weekday() != 3:
+                thursday -= timezone.timedelta(days=1)
+            week_number = get_current_week(thursday)
+            
+            weekly_assistance, created = WeeklyAssistance.objects.get_or_create(
                 service=service,
-                week_number=week_number
-            ).first()
-            assistance = assistance_models.Assistance.objects.filter(
+                week_number=week_number,
+                start_date=thursday,
+                end_date=thursday + timezone.timedelta(days=6)
+            )
+            if created:
+                print("\tCreated weekly assistance")
+            
+            today = timezone.now().date()
+            assistance = Assistance.objects.filter(
                 date=today,
                 weekly_assistance=weekly_assistance
             )
@@ -31,7 +44,7 @@ class Command(BaseCommand):
                 print("\tAssistance already exists")
             else:
                 # Create new asistance for today
-                assistance = assistance_models.Assistance.objects.create(
+                assistance = Assistance.objects.create(
                     attendance=False,
                     weekly_assistance=weekly_assistance
                 )

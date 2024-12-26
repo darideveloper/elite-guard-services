@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
 from assistance import models as assistance_models
 from services import models as services_models
+from utils.dates import get_current_week
 
 
 class Command(BaseCommand):
@@ -15,10 +15,9 @@ class Command(BaseCommand):
             
             print(f"Service: {service}")
             
-            today = timezone.now().date()
             weekly_assistance = assistance_models.WeeklyAssistance.objects.filter(
                 service=service,
-                week_number=today.isocalendar()[1]
+                week_number=get_current_week()
             )
             if weekly_assistance:
                 # Skip week creation
