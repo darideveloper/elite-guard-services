@@ -157,6 +157,7 @@ class AssistanceAdmin(admin.ModelAdmin):
     )
     year_filter_field = "date"
     ordering = ('-date',)
+    list_editable = ('attendance', 'extra_paid_hours', 'extra_unpaid_hours', 'notes')
     
     # Custom fields
     
