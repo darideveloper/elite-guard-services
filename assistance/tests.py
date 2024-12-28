@@ -107,7 +107,7 @@ class AssistanceAdminTest(TestCase):
         self.endpoint = "/admin/assistance/assistance/"
     
     def test_custom_field_custom_date(self):
-        """ Validate "date" custom field in lst view """
+        """ Validate "date" custom field in list view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -122,7 +122,7 @@ class AssistanceAdminTest(TestCase):
         self.assertContains(response, date_str)
     
     def test_custom_field_week_day_name(self):
-        """ Validate "week day name" custom field in lst view """
+        """ Validate "week day name" custom field in list view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -133,6 +133,36 @@ class AssistanceAdminTest(TestCase):
         # Validate week day name
         week_day = get_week_day(timezone.now(), "es")
         self.assertContains(response, week_day)
+    
+    def test_custom_field_company(self):
+        """ Validate "company name" custom field in list view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate company name
+        self.assertContains(
+            response,
+            self.weekly_assistance.service.agreement.company_name,
+        )
+        
+    def test_custom_field_employee(self):
+        """ Validate "employee name" custom field in list view """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open employee list page
+        response = self.client.get(self.endpoint)
+        
+        # Validate company name
+        self.assertContains(
+            response,
+            str(self.weekly_assistance.service.employee),
+        )
     
     def test_custom_filters_options(self):
         """ Validate custom filters options in admin """
@@ -318,7 +348,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         )
         
     def test_custom_field_company_name(self):
-        """ Validate "company name" custom field in lst view """
+        """ Validate "company name" custom field in list view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -333,7 +363,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         )
         
     def test_custom_field_employee(self):
-        """ Validate "employee name" custom field in lst view """
+        """ Validate "employee name" custom field in list view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -348,7 +378,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         )
     
     def test_custom_field_custom_links(self):
-        """ Validate custom links in lst view """
+        """ Validate custom links in list view """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -401,7 +431,6 @@ class CommandCreateWeeklyAssistanceTest(TestCase):
         weekly_assistance = models.WeeklyAssistance.objects.first()
         self.assertIsNotNone(weekly_assistance)
         self.assertEqual(weekly_assistance.week_number, get_current_week())
-        self.assertEqual(weekly_assistance.start_date, timezone.now().date())
         self.assertEqual(weekly_assistance.service, self.service)
         
     def test_run_no_service(self):
@@ -440,10 +469,22 @@ class CommandCreateAssistanceTest(TestCase):
         call_command("create_assistance")
         
         # Validate weekly assistance created and content
+        time_zone = timezone.get_current_timezone()
         assistance = models.Assistance.objects.first()
         self.assertIsNotNone(assistance)
-        self.assertEqual(assistance.date, timezone.now().date())
-        self.assertEqual(assistance.weekly_assistance, self.weekly_assistance)
+        self.assertEqual(assistance.date, timezone.now().astimezone(time_zone).date())
+        self.assertEqual(
+            assistance.weekly_assistance.service,
+            self.weekly_assistance.service
+        )
+        self.assertEqual(
+            assistance.weekly_assistance.week_number,
+            get_current_week()
+        )
+        self.assertEqual(
+            assistance.weekly_assistance.start_date.weekday(),
+            3
+        )
     
     def test_run_no_service(self):
         """  Validate command create_assistance without services

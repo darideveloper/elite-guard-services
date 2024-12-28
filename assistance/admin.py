@@ -128,7 +128,8 @@ class AssistanceAdmin(admin.ModelAdmin):
     list_display = (
         'custom_date',
         'week_day_name',
-        'weekly_assistance',
+        'company',
+        'employee',
         'attendance',
         'extra_paid_hours',
         'extra_unpaid_hours',
@@ -168,11 +169,21 @@ class AssistanceAdmin(admin.ModelAdmin):
     def custom_date(self, obj):
         """ Return the date in the format dd/mm/yyyy """
         return obj.date.strftime("%d/%b/%Y")
+    
+    def company(self, obj):
+        """ Return the company name """
+        return obj.weekly_assistance.service.agreement.company_name
+    
+    def employee(self, obj):
+        """ Return the employee name """
+        return str(obj.weekly_assistance.service.employee)
             
     # Labels for custom fields
     week_day_name.short_description = 'Día de la semana'
     custom_date.short_description = 'Fecha'
     custom_date.admin_order_field = 'date'
+    company.short_description = 'Empresa'
+    employee.short_description = 'Empleado'
         
     
 @admin.register(models.WeeklyAssistance)
