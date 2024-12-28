@@ -164,4 +164,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 }
 .w-110 {
   width: 110px;
+}
+
+.field-notes > textarea {
+  height: 37px;
 }/*# sourceMappingURL=custom.css.map */
