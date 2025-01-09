@@ -149,3 +149,47 @@ class WeeklyAssistance(models.Model):
 
     def __str__(self):
         return f"{self.service} - Semana {self.week_number}"
+    
+    def get_data_header(self):
+        
+        return ([
+            "Contrato",
+            "Empleado",
+            "J",
+            "V",
+            "S",
+            "D",
+            "L",
+            "M",
+            "X",
+            "Turnos",
+            "Extra pagadas",
+            "Extra no pagadas",
+            "Comentarios"
+        ])
+    
+    def get_data_list(self):
+        
+        return ([
+            self.service.agreement.company_name,
+            self.service.employee.get_full_name(),
+            "a" if self.thursday else "f",
+            "a" if self.friday else "f",
+            "a" if self.saturday else "f",
+            "a" if self.sunday else "f",
+            "a" if self.monday else "f",
+            "a" if self.tuesday else "f",
+            "a" if self.wednesday else "f",
+            sum([
+                self.thursday,
+                self.friday,
+                self.saturday,
+                self.sunday,
+                self.monday,
+                self.tuesday,
+                self.wednesday
+            ]),
+            self.total_extra_paid_hours,
+            self.total_extra_unpaid_hours,
+            self.notes
+        ])

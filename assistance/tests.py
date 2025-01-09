@@ -1,8 +1,11 @@
 from time import sleep
+from io import BytesIO
 
+import openpyxl
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
+from django.urls import reverse
 from bs4 import BeautifulSoup
 
 from utils import test_data
@@ -436,7 +439,48 @@ class WeeklyAssistanceAdminTest(TestCase):
                     f"={value}"
                 )
                 
-                
+    def test_action_export_excel(self):
+        """ Validate excel generated in export action """
+        
+        # Generate excel
+        url = reverse("admin:assistance_weeklyassistance_changelist")
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            url,
+            {
+                "action": "export_excel",
+                "_selected_action": [self.weekly_assistance.id]
+            },
+        )
+        
+        # Check response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response["Content-Type"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        self.assertIn("Content-Disposition", response)
+        self.assertIn(
+            "attachment; filename=export.xlsx",
+            response["Content-Disposition"]
+        )
+
+        workbook = openpyxl.load_workbook(BytesIO(response.content))
+        worksheet = workbook.active
+        
+        # Check the sheet title
+        self.assertEqual(
+            worksheet.title,
+            f"Asistencias Semana {self.weekly_assistance.week_number}"
+        )
+        
+        # Check header and data row
+        header = self.weekly_assistance.get_data_header()
+        data_row = self.weekly_assistance.get_data_list()
+        self.assertEqual([cell.value for cell in worksheet[1]], header)
+        self.assertEqual([cell.value for cell in worksheet[2]], data_row)
+        
+    
 class CommandCreateWeeklyAssistanceTest(TestCase):
     """ Test running the command create_weekly_assistance """
     

@@ -395,6 +395,14 @@ class Employee(models.Model):
         return today.year - self.birthdate.year - (
             (today.month, today.day) < (self.birthdate.month, self.birthdate.day)
         )
+        
+    def get_full_name(self):
+        """ Return the full name of the employee
+        
+        Returns:
+            str: Full name of the employee
+        """
+        return f"{self.name} {self.last_name_1} {self.last_name_2}"
     
 
 class Loan(models.Model):
