@@ -9,7 +9,11 @@ from employees import urls as employees_urls
 
 urlpatterns = [
     # Redirects
-    path('', RedirectView.as_view(url='/admin/'), name='home-redirect-admin'),
+    path(
+        '',
+        RedirectView.as_view(url='/admin/'),
+        name='home-redirect-admin'
+    ),
     path(
         'accounts/login/',
         RedirectView.as_view(url='/admin/'),
