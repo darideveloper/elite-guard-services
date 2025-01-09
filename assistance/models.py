@@ -68,6 +68,14 @@ class Assistance(models.Model):
                 [assistance.extra_unpaid_hours for assistance in all_weekly_assistances]
             )
             
+            # Update comments
+            all_comments = [
+                assistance.notes for assistance in all_weekly_assistances
+            ]
+            all_comments = list(filter(lambda note: note is not None, all_comments))
+            print(all_comments)
+            self.weekly_assistance.notes = "\n".join(all_comments)
+            
         # Save the object
         self.weekly_assistance.save()
         super(Assistance, self).save(*args, **kwargs)
@@ -128,6 +136,11 @@ class WeeklyAssistance(models.Model):
     total_extra_unpaid_hours = models.IntegerField(
         verbose_name='Horas extras no pagadas',
         default=0
+    )
+    notes = models.TextField(
+        verbose_name='Notas',
+        null=True,
+        blank=True
     )
 
     class Meta:

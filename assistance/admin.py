@@ -1,6 +1,8 @@
+import openpyxl
 from django.utils import timezone
 from django.contrib import admin
 from django.utils.html import format_html
+from django.http import HttpResponse
 
 from assistance import models
 from utils.dates import get_week_day, get_current_week
@@ -17,9 +19,7 @@ class TodayDateFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return [
             ('today', 'Hoy'),
-            ('week', 'Esta semana'),
-            ('month', 'Este mes'),
-            ('all', 'Todas las fechas'),
+            ('all', 'Todas las fechas (filtrar por año y semana)'),
         ]
 
     def queryset(self, request, queryset):
@@ -233,6 +233,7 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
         'friday',
         'saturday',
         'sunday',
+        'notes',
     )
     year_filter_field = "start_date"
     
@@ -266,3 +267,42 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
     company_name.short_description = 'Empresa'
     employee.short_description = 'Empleado'
     custom_links.short_description = 'Acciones'
+    
+    # Django actions
+    def export_excel(self, request, queryset):
+        """ Export the queryset to an Excel file """
+        
+        # Create file and sheet
+        workbook = openpyxl.Workbook()
+        worksheet = workbook.active
+        worksheet.title = 'Asistencias Semanales'
+        
+        # Save sales header
+        header = [
+            "Contrato",
+            "Empleado",
+            "J",
+            "V",
+            "S",
+            "D",
+            "L",
+            "M",
+            "X",
+            "Total de turnos",
+            "Horas extra pagadas",
+            "Horas extra no pagadas",
+            "Comentarios"
+        ]
+        
+        worksheet.append(header)
+        
+        content_type = "application/vnd.openxmlformats-officedocument"
+        content_type += ".spreadsheetml.sheet"
+        response = HttpResponse(content_type=content_type)
+        response['Content-Disposition'] = 'attachment; filename=export.xlsx'
+        workbook.save(response)
+
+        return response
+    
+    export_excel.short_description = 'Exportar a Excel'
+    actions = [export_excel]
