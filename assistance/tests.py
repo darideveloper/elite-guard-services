@@ -20,18 +20,24 @@ class AssistanceModelTest(TestCase):
         
         # Create initial data
         self.weekly_assistance = test_data.create_weekly_assistance()
-        self.assistance = test_data.create_assistance(
+        assistance_1 = test_data.create_assistance(
             weekly_assistance=self.weekly_assistance
         )
+        yesterday = assistance_1.date - timezone.timedelta(days=1)
+        assistance_2 = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=yesterday
+        )
+        self.assistances = [assistance_1, assistance_2]
         
     def test_save_update_weekly_date_status(self):
         """ Validate day status updated in weekly assistance
         when change assistance status """
         
         # Update assistance status
-        self.assistance.attendance = True
-        self.assistance.save()
-        week_day = get_week_day(self.assistance.date, "en")
+        self.assistances[0].attendance = True
+        self.assistances[0].save()
+        week_day = get_week_day(self.assistances[0].date, "en")
         
         # Valdiate weekly assistance status
         self.weekly_assistance.refresh_from_db()
@@ -42,32 +48,53 @@ class AssistanceModelTest(TestCase):
         
     def test_save_update_weekly_paid_hours(self):
         """ Validate weekly paid hours updated in weekly assistance
-        when change assistance status """
+        when update assistance """
         
-        # Update assistance status
-        self.assistance.extra_paid_hours = 2
-        self.assistance.save()
+        # Update assistance
+        self.assistances[0].extra_paid_hours = 2
+        self.assistances[0].save()
+        self.assistances[1].extra_paid_hours = 3
+        self.assistances[1].save()
         
         # Valdiate weekly assistance status
         self.weekly_assistance.refresh_from_db()
         self.assertEqual(
             self.weekly_assistance.total_extra_paid_hours,
-            2
+            5
         )
         
     def test_save_update_weekly_unpaid_hours(self):
         """ Validate weekly unpaid hours updated in weekly assistance
-        when change assistance status """
+        when update assistance """
         
-        # Update assistance status
-        self.assistance.extra_unpaid_hours = 2
-        self.assistance.save()
+        # Update assistance
+        self.assistances[0].extra_unpaid_hours = 2
+        self.assistances[0].save()
+        self.assistances[1].extra_unpaid_hours = 3
+        self.assistances[1].save()
         
         # Valdiate weekly assistance status
         self.weekly_assistance.refresh_from_db()
         self.assertEqual(
             self.weekly_assistance.total_extra_unpaid_hours,
-            2
+            5
+        )
+        
+    def test_save_update_weekly_notes(self):
+        """ valdiate weekly notes updated in weekly assistance
+        when update assistance """
+        
+        # Update assistance
+        self.assistances[0].notes = "note 1"
+        self.assistances[0].save()
+        self.assistances[1].notes = "note 2"
+        self.assistances[1].save()
+        
+        # Valdiate weekly assistance status
+        self.weekly_assistance.refresh_from_db()
+        self.assertEqual(
+            self.weekly_assistance.notes,
+            "note 1\nnote 2"
         )
 
 
