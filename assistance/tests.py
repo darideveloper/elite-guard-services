@@ -2,15 +2,20 @@ from time import sleep
 from io import BytesIO
 
 import openpyxl
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 from django.core.management import call_command
 from django.utils import timezone
 from django.urls import reverse
+from django.conf import settings
 from bs4 import BeautifulSoup
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
+from assistance import models
 from utils import test_data
 from utils.dates import get_week_day, get_current_week
-from assistance import models
+from utils.automation import get_selenium_elems
 
 
 class AssistanceModelTest(TestCase):
@@ -305,7 +310,7 @@ class WeeklyAssistanceAdminTest(TestCase):
         self.assistances.append(assistance)
         
         self.endpoint = "/admin/assistance/weeklyassistance/"
-        
+    
     def test_custom_filters_options(self):
         """ Validate custom filters options in admin """
         
@@ -477,8 +482,112 @@ class WeeklyAssistanceAdminTest(TestCase):
         data_row = self.weekly_assistance.get_data_list()
         self.assertEqual([cell.value for cell in worksheet[1]], header)
         self.assertEqual([cell.value for cell in worksheet[2]], data_row)
-        
+
+
+class WeeklyAssistanceAdminSeleniumTest(LiveServerTestCase):
     
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
+        
+        # Create WeeklyAssistance
+        self.employee = test_data.create_employee()
+        self.agreement = test_data.create_agreement()
+        self.service = test_data.create_service(self.agreement, self.employee)
+        self.weekly_assistance = models.WeeklyAssistance.objects.create(
+            service=self.service,
+        )
+        
+        # Create today assistance
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistances = []
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance
+        )
+        self.assistances.append(assistance)
+        
+        # Create yesterday assistance
+        yesterday = assistance.date - timezone.timedelta(days=1)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=yesterday,
+        )
+        self.assistances.append(assistance)
+        
+        # Create last year assistance
+        last_year = assistance.date - timezone.timedelta(days=365)
+        assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance,
+            date=last_year,
+        )
+        self.assistances.append(assistance)
+        
+        self.endpoint = "/admin/assistance/weeklyassistance/"
+        
+        self.__setup_selenium__()
+        self.__login__()
+
+    def tearDown(self):
+        """ Close selenium """
+        try:
+            self.driver.quit()
+        except Exception:
+            pass
+
+    def __setup_selenium__(self):
+        """ Setup and open selenium browser """
+        
+        chrome_options = Options()
+        if settings.TEST_HEADLESS:
+            chrome_options.add_argument("--headless")
+        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver.implicitly_wait(5)
+    
+    def __login__(self):
+        """ Login and load main page """
+        
+        # Load login page and get fields
+        self.driver.get(f"{self.live_server_url}/admin/")
+        sleep(2)
+        selectors_login = {
+            "username": "input[name='username']",
+            "password": "input[name='password']",
+            "submit": "button[type='submit']",
+        }
+        fields_login = get_selenium_elems(self.driver, selectors_login)
+
+        fields_login["username"].send_keys(self.admin_user)
+        fields_login["password"].send_keys(self.admin_pass)
+        fields_login["submit"].click()
+
+        # Wait after login
+        sleep(3)
+        
+        # Open page
+        self.driver.get(f"{self.live_server_url}{self.endpoint}")
+
+    def test_default_action(self):
+        """ Validate to have the export_excel action as default with js """
+        
+        # Get data
+        selectors = {
+            "select_action_value": 'select[name="action"] + span'
+        }
+        values = get_selenium_elems(self.driver, selectors)
+        self.assertEqual(values["select_action_value"].text, "Exportar a Excel")
+        
+    def test_all_rows_selected(self):
+        """ Validate all rows selected by default """
+        
+        sleep(2)
+        selector_checkboxes = "input.action-select"
+        checkboxes = self.driver.find_elements(By.CSS_SELECTOR, selector_checkboxes)
+        for checkbox in checkboxes:
+            self.assertTrue(checkbox.is_selected())
+
+
 class CommandCreateWeeklyAssistanceTest(TestCase):
     """ Test running the command create_weekly_assistance """
     
