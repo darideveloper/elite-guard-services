@@ -263,10 +263,6 @@ class ReportEmployeeDetailsViewTest(TestCase):
         self.client.login(username=self.admin_user, password=self.admin_pass)
         response = self.client.get(self.endpoint)
         
-        # Save response content to file
-        with open("employees_report.html", "w") as file:
-            file.write(response.content.decode("utf-8"))
-        
         # Validate employee details
         for report_title, report_value in report_data.items():
             self.assertContains(response, report_title)

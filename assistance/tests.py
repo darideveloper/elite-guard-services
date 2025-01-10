@@ -220,9 +220,7 @@ class AssistanceAdminTest(TestCase):
         # Validate dates options
         options = [
             "hoy",
-            "esta semana",
-            "este mes",
-            "todas las fechas",
+            "todas las fechas (filtrar por año y semana)",
         ]
         date_options = soup.select('option[data-name="date"]')
         for option in date_options:
