@@ -9,7 +9,7 @@ class ItemAdmin(admin.ModelAdmin):
         'name',
         'price',
         'stock',
-        # 'total_price',
+        'total_price',
     )
     search_fields = (
         'name',
@@ -34,7 +34,13 @@ class ItemAdmin(admin.ModelAdmin):
         
         obj.save()
     
-    # TODO: custom field: total_price
+    # Custom fields
+    def total_price(self, obj):
+        """ Return the total price of the item """
+        return obj.price * obj.stock
+    
+    # Labels for custom fields
+    total_price.short_description = 'Precio total'
     
 
 @admin.register(models.ItemTransaction)
