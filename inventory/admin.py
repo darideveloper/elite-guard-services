@@ -62,22 +62,6 @@ class ItemTransactionAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         """ Save model without updating quantity """
-        
-        if change and obj.quantity != form.initial['quantity']:
-            # Show error
-            messages.set_level(request, messages.WARNING)
-            messages.error(
-                request,
-                'No se puede modificar la cantidad de una '
-                'transacción de artículo directamente'
-            )
-            messages.warning(
-                request,
-                'Por favor, añada una ''nueva transacción de artículo'
-            )
-        
-            # Set quantity to initial value
-            obj.quantity = form.initial['quantity']
             
         # Try to save and show error or confirmation message
         try:

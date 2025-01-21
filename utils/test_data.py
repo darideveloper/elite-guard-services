@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from employees import models as models_employees
 from services import models as models_services
 from assistance import models as models_assistance
+from inventory import models as models_inventory
 
 
 def create_employee() -> models_employees.Employee:
@@ -184,3 +185,22 @@ def create_assistance(
     )
     
     return assistance
+
+
+def create_item() -> models_inventory.Item:
+    """ Create a new item and return it
+    
+    Returns:
+        models_inventory.Item: Item created
+    """
+    
+    # Create item
+    item = models_inventory.Item.objects.create(
+        uuid='123e4567-e89b-12d3-a456-426614174000',
+        name='Item Test',
+        price=10.00,
+        stock=5,
+        details='This is a test item',
+    )
+    
+    return item

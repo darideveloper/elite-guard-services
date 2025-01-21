@@ -422,15 +422,15 @@ class Loan(models.Model):
         default=timezone.now,
         verbose_name='Fecha de prestamo o pago'
     )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name='Fecha de modificación'
-    )
     details = models.TextField(
         verbose_name='Detalles',
         help_text='Detalles del préstamo o pago',
         blank=True,
         null=True
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Fecha de modificación'
     )
     
     class Meta:
