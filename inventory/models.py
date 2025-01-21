@@ -89,6 +89,8 @@ class ItemLoan(models.Model):
     )
     details = models.TextField(
         verbose_name='Detalles',
+        blank=True,
+        null=True,
     )
     employee = models.ForeignKey(
         Employee,
