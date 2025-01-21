@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'employees',
     'services',
     'assistance',
+    'inventory',
     
     # Template admin
     'jazzmin',
@@ -370,3 +371,9 @@ else:
     # Static files (CSS, JavaScript, Images)
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
+    
+# Global datetime format
+DATE_FORMAT = "d/b/Y"
+TIME_FORMAT = "H:M"
+DATETIME_FORMAT = f"{DATE_FORMAT} {TIME_FORMAT}"
+USE_L10N = False

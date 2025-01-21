@@ -55,20 +55,20 @@ def get_current_week(date: timezone.datetime = timezone.now()) -> int:
     """
     
     time_zone = timezone.get_current_timezone()
-    logger.info(f"Time zone: {time_zone}")
+    logger.debug(f"Time zone: {time_zone}")
     try:
         date = date.astimezone(time_zone)
-        logger.info(f"Date: {date}")
+        logger.debug(f"Date: {date}")
     except Exception as e:
-        logger.error(f"Error: {e}")
+        logger.debug(f"Error: {e}")
         pass
     
     # Get last Thursday if today is not Thursday
     week_day = date.weekday()
-    logger.info(f"Week day: {week_day}")
+    logger.debug(f"Week day: {week_day}")
     if week_day < 3:
         date = date - timezone.timedelta(
             days=week_day + 3
         )
-        logger.info(f"New date: {date}")
+        logger.debug(f"New date: {date}")
     return date.isocalendar()[1]

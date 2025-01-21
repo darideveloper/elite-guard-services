@@ -14,7 +14,7 @@ class AgreementAdmin(admin.ModelAdmin):
         'salary',
         'responsible_name',
         'responsible_phone',
-        'end_date',
+        'effective_date',
     )
     search_fields = (
         'company_name',
