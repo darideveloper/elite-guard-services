@@ -146,3 +146,32 @@ class ItemLoanModelTestCase(TestCase):
             f"<<Préstamo>>: item: {self.item} - cantidad: {item_loan.quantity} "
             f"- servicio: {self.service} - detalles: {item_loan.details}",
         )
+
+
+class ItemAdminTestCase(TestCase):
+    """ Validate custom fields and methods in model admin """
+    
+    def setUp(self):
+    
+        # Create test data
+        self.item = test_data.create_item()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
+        self.endpoints = {
+            "list": "/admin/inventory/item/",
+            "change": f"/admin/inventory/item/{self.item.pk}/change/",
+        }
+        
+    def test_list_total_price(self):
+        """ Test custom field total price field in list view """
+        
+        # Login and get list view response
+        self.client.login(
+            username=self.admin_user,
+            password=self.admin_pass
+        )
+        response = self.client.get(self.endpoints["list"])
+        
+        # Check total price field in response
+        self.assertContains(response, 'Precio total')
+        self.assertContains(response, self.item.price * self.item.stock)
+        
