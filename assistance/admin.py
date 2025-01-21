@@ -131,7 +131,7 @@ class YearFilter(admin.SimpleListFilter):
 class AssistanceAdmin(admin.ModelAdmin):
     """ Assistance model admin """
     list_display = (
-        'custom_date',
+        'date',
         'week_day_name',
         'company',
         'employee',
@@ -167,14 +167,9 @@ class AssistanceAdmin(admin.ModelAdmin):
                      'extra_unpaid_hours', 'notes')
 
     # Custom fields
-
     def week_day_name(self, obj):
         """ Return the name of the week day """
         return get_week_day(obj.date)
-
-    def custom_date(self, obj):
-        """ Return the date in the format dd/mm/yyyy """
-        return obj.date.strftime("%d/%b/%Y")
 
     def company(self, obj):
         """ Return the company name """
@@ -186,8 +181,6 @@ class AssistanceAdmin(admin.ModelAdmin):
 
     # Labels for custom fields
     week_day_name.short_description = 'Día de la semana'
-    custom_date.short_description = 'Fecha'
-    custom_date.admin_order_field = 'date'
     company.short_description = 'Empresa'
     employee.short_description = 'Empleado'
 
@@ -244,7 +237,6 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
     year_filter_field = "start_date"
 
     # Custom fields
-
     def company_name(self, obj):
         """ Return the company name """
         return obj.service.agreement.company_name

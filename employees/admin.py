@@ -43,7 +43,7 @@ class BankAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     """ Employee model admin """
     list_display = (
-        'start_date',
+        'created_at',
         'name',
         'last_name_1',
         'last_name_2',
@@ -157,7 +157,6 @@ class EmployeeAdmin(admin.ModelAdmin):
     )
 
     # CUSTOM FIELDS
-
     def custom_links(self, obj):
         """ Create custom Imprimir and Ver buttons """
         return format_html(
@@ -168,14 +167,8 @@ class EmployeeAdmin(admin.ModelAdmin):
             f"/admin/employees/employee/{obj.id}/preview/",
         )
     
-    def start_date(self, obj):
-        """ Return the created_at date in a specific format """
-        return obj.created_at.strftime("%d/%b/%Y")
-    
     # Labels for custom fields
     custom_links.short_description = 'Acciones'
-    start_date.short_description = 'Fecha de alta'
-    start_date.admin_order_field = 'created_at'
     
     # CUSTOM VIEWS
     
