@@ -40,11 +40,6 @@ class Item(models.Model):
         
     def __str__(self):
         return f"{self.uuid} ({self.name})"
-    
-    def save(self, *args, **kwargs):
-        # TODO: Create ItemsStock object if it does not exist
-        
-        super(Item, self).save(*args, **kwargs)
         
         
 class ItemTransaction(models.Model):
@@ -71,8 +66,7 @@ class ItemTransaction(models.Model):
         return f"{self.item.name} - transaction {self.quantity}"
     
     def save(self, *args, **kwargs):
-        # TODO: no update quantity
-        
+                
         # TODO: validate item stock
         
         # TODO: Update item stock
@@ -114,8 +108,7 @@ class ItemLoan(models.Model):
         return f"{self.item.name} - loan {self.quantity}"
     
     def save(self, *args, **kwargs):
-        # TODO: no update quantity
-        
+                
         # TODO: validate item stock
         
         # TODO: Add ItemTransaction
