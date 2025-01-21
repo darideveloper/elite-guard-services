@@ -79,7 +79,17 @@ class ItemTransactionAdmin(admin.ModelAdmin):
             # Set quantity to initial value
             obj.quantity = form.initial['quantity']
             
-        obj.save()
+        # Try to save and show error or confirmation message
+        try:
+            obj.save()
+        except Exception as e:
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, str(e))
+        else:
+            messages.info(
+                request,
+                'Stock actualizado'
+            )
     
 
 @admin.register(models.ItemLoan)
@@ -126,4 +136,14 @@ class ItemLoanAdmin(admin.ModelAdmin):
             # Set quantity to initial value
             obj.quantity = form.initial['quantity']
             
-        obj.save()
+        # Try to save and show error or confirmation message
+        try:
+            obj.save()
+        except Exception as e:
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, str(e))
+        else:
+            messages.info(
+                request,
+                'Stock actualizado'
+            )

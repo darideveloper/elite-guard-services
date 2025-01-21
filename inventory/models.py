@@ -1,6 +1,6 @@
 from django.db import models
 
-from employees.models import Employee
+from employees.models import Employee, Loan
 from services.models import Service
 
 
@@ -49,7 +49,7 @@ class ItemTransaction(models.Model):
         Item,
         on_delete=models.CASCADE
     )
-    quantity = models.PositiveIntegerField(
+    quantity = models.IntegerField(
         verbose_name='Cantidad de transacción',
         help_text='(+) Entrada, (-) Salida'
     )
@@ -70,9 +70,17 @@ class ItemTransaction(models.Model):
     
     def save(self, *args, **kwargs):
                 
-        # TODO: validate item stock
+        # validate item stock
+        is_nevagitve = self.item.stock + self.quantity < 0
+        if is_nevagitve:
+            raise ValueError(
+                'No hay suficiente stock para la transacción. '
+                f'Stock actual: {self.item.stock}'
+            )
         
-        # TODO: Update item stock
+        # Update item stock
+        self.item.stock += self.quantity
+        self.item.save()
         
         super(ItemTransaction, self).save(*args, **kwargs)
     
@@ -87,11 +95,6 @@ class ItemLoan(models.Model):
     quantity = models.PositiveIntegerField(
         verbose_name='Cantidad de préstamo',
     )
-    details = models.TextField(
-        verbose_name='Detalles',
-        blank=True,
-        null=True,
-    )
     employee = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
@@ -101,6 +104,11 @@ class ItemLoan(models.Model):
         Service,
         on_delete=models.CASCADE,
         verbose_name='Servicio'
+    )
+    details = models.TextField(
+        verbose_name='Detalles',
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -114,10 +122,28 @@ class ItemLoan(models.Model):
     
     def save(self, *args, **kwargs):
                 
-        # TODO: validate item stock
+        # validate item stock
+        is_nevagitve = self.item.stock - self.quantity < 0
+        if is_nevagitve:
+            raise ValueError(
+                'No hay suficiente stock para el préstamo. '
+                f'Stock actual: {self.item.stock}'
+            )
         
-        # TODO: Add ItemTransaction
+        # Add ItemTransaction
+        ItemTransaction.objects.create(
+            item=self.item,
+            quantity=-self.quantity,
+            details=f"<<Prestamo>>: empleado: {self.employee} "
+                    f"- servicio: {self.service} - detalles: {self.details}",
+        )
         
-        # TODO: Create Loan
+        # Create Loan
+        Loan.objects.create(
+            employee=self.employee,
+            amount=self.item.price * self.quantity,
+            details=f"<<Préstamo>>: item: {self.item} - cantidad: {self.quantity} "
+                    f"- servicio: {self.service} - detalles: {self.details}",
+        )
         
         super(ItemLoan, self).save(*args, **kwargs)
