@@ -65,5 +65,5 @@ class AgreementAdminTest(TestCase):
         # Validate date format
         self.assertContains(
             response,
-            self.agreement.effective_date.strftime("%d/%b/%Y")
+            self.agreement.effective_date.strftime("%d/%b/%Y").replace(".", ""),
         )

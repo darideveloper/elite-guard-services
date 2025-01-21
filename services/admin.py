@@ -27,15 +27,6 @@ class AgreementAdmin(admin.ModelAdmin):
     )
     list_filter = ('effective_date', 'salary', 'start_date')
     
-    # CUSTOM FIELDS
-    def end_date(self, obj):
-        """ Return the effective_date date in a specific format """
-        return obj.effective_date.strftime("%d/%b/%Y")
-    
-    # Labels for custom fields
-    end_date.short_description = 'Fecha de vigencia'
-    end_date.admin_order_field = 'effective_date'
-    
 
 @admin.register(models.Service)
 class ServiceAdmin(admin.ModelAdmin):

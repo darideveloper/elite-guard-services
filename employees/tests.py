@@ -145,7 +145,10 @@ class EmployeeAdminTest(TestCase):
         response = self.client.get("/admin/employees/employee/")
         
         # Validate date format
-        self.assertContains(response, self.employee.created_at.strftime("%d/%b/%Y"))
+        self.assertContains(
+            response,
+            self.employee.created_at.strftime("%d/%b/%Y").replace(".", "")
+        )
             
             
 class ReportEmployeeDetailsViewTest(TestCase):

@@ -153,7 +153,7 @@ class AssistanceAdminTest(TestCase):
         # Validate date
         time_zone = timezone.get_current_timezone()
         date = timezone.now().astimezone(time_zone).date()
-        date_str = date.strftime("%d/%b/%Y")
+        date_str = date.strftime("%d/%b/%Y").replace(".", "")
         self.assertContains(response, date_str)
     
     def test_custom_field_week_day_name(self):
@@ -262,8 +262,8 @@ class AssistanceAdminTest(TestCase):
         # Validate only today registers
         time_zone = timezone.get_current_timezone()
         today = timezone.now().astimezone(time_zone).date()
-        today_str = today.strftime("%d/%b/%Y")
-        dates = soup.select('.row .field-custom_date')
+        today_str = today.strftime("%d/%b/%Y").replace(".", "")
+        dates = soup.select('.row .field-date')
         self.assertEqual(len(dates), 1)
         self.assertEqual(dates[0].text.strip(), today_str)
         
