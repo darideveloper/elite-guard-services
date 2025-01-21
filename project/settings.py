@@ -245,14 +245,21 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        
         "employees.Employee": "fas fa-users",
         "employees.Loan": "fas fa-money-bill",
         "employees.Ref": "fas fa-people-arrows",
         "employees.Relative": "fas fa-user-friends",
+        
         "services.Agreement": "fas fa-handshake",
         "services.Service": "fas fa-briefcase",
+        
         "assistance.Assistance": "fas fa-calendar-check",
         "assistance.WeeklyAssistance": "fas fa-calendar-week",
+        
+        "inventory.item": "fas fa-box",
+        "inventory.itemtransaction": "fas fa-exchange-alt",
+        "inventory.itemloan": "fas fa-hand-holding-usd",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
