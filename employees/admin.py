@@ -86,6 +86,8 @@ class EmployeeAdmin(admin.ModelAdmin):
                     'name',
                     'last_name_1',
                     'last_name_2',
+                    'curp',
+                    'ine',
                     'height',
                     'weight',
                     'marital_status',
@@ -107,11 +109,9 @@ class EmployeeAdmin(admin.ModelAdmin):
             "Laboral", {
                 'fields': (
                     'daily_rate',
-                    'curp',
                     'rfc',
                     'imss',
                     'infonavit',
-                    'ine',
                     'uniform_date',
                     'status',
                     'status_change_details',
