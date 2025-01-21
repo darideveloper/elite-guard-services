@@ -204,3 +204,69 @@ def create_item() -> models_inventory.Item:
     )
     
     return item
+
+
+def create_item_transaction(
+    item: models_inventory.Item = None,
+    quantity: int = 2,
+) -> models_inventory.ItemTransaction:
+    """ Create a new item transaction and return it
+    
+    Args:
+        item (models_inventory.Item): Item of the transaction
+        quantity (int): Quantity of the transaction
+        
+    Returns:
+        models_inventory.ItemTransaction: Item transaction created
+    """
+    
+    # Default values
+    if item is None:
+        item = create_item()
+    
+    # Create item transaction
+    item_transaction = models_inventory.ItemTransaction.objects.create(
+        item=item,
+        quantity=quantity,
+        details='This is a test transaction',
+    )
+    
+    return item_transaction
+
+
+def create_item_loan(
+    item: models_inventory.Item = None,
+    employee: models_employees.Employee = None,
+    service: models_services.Service = None,
+    quantity: int = 2,
+) -> models_inventory.ItemLoan:
+    """ Create a new item loan and return it
+    
+    Args:
+        item (models_inventory.Item): Item of the loan
+        employee (models_employees.Employee): Employee of the loan
+        service (models_services.Service): Service of the loan
+        quantity (int): Quantity of the loan
+        
+    Returns:
+        models_inventory.ItemLoan: Item loan created
+    """
+    
+    # Default values
+    if item is None:
+        item = create_item()
+    if employee is None:
+        employee = create_employee()
+    if service is None:
+        service = create_service()
+    
+    # Create item loan
+    item_loan = models_inventory.ItemLoan.objects.create(
+        item=item,
+        employee=employee,
+        service=service,
+        quantity=quantity,
+        details='This is a test loan',
+    )
+    
+    return item_loan

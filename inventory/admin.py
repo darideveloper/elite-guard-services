@@ -20,6 +20,7 @@ class ItemAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         """ Save model without updating stock """
         
+        # No update stock directly
         if change and obj.stock != form.initial['stock']:
             # Show error
             messages.set_level(request, messages.WARNING)
@@ -62,6 +63,23 @@ class ItemTransactionAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         """ Save model without updating quantity """
+        
+        # No update quantity directly
+        if change and obj.quantity != form.initial['quantity']:
+            # Show error
+            messages.set_level(request, messages.WARNING)
+            messages.error(
+                request,
+                'No se puede modificar la cantidad de una transacción '
+                'de artículo directamente'
+            )
+            messages.warning(
+                request,
+                'Por favor, añada una nueva transacción de artículo'
+            )
+            
+            # Set quantity to initial value
+            obj.quantity = form.initial['quantity']
             
         # Try to save and show error or confirmation message
         try:

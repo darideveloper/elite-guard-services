@@ -7,6 +7,11 @@ from inventory import models as models_inventory
 from employees import models as models_employees
 
 
+# --------------------
+# MODELS TESTS
+# --------------------
+
+
 class ItemTransactionModelTestCase(TestCase):
     """ Validate model custom methods """
     
@@ -14,15 +19,6 @@ class ItemTransactionModelTestCase(TestCase):
         
         # Create test data
         self.item = test_data.create_item()
-        
-    def __create_transaction__(self, quantity: int):
-        """ Create a new transaction """
-        
-        return models_inventory.ItemTransaction.objects.create(
-            item=self.item,
-            quantity=quantity,
-            details='This is a test transaction',
-        )
         
     def test_no_negative_stock(self):
         """ Test negative stock not allowed """
@@ -32,7 +28,7 @@ class ItemTransactionModelTestCase(TestCase):
         
         # Create transaction
         try:
-            self.__create_transaction__(quantity)
+            test_data.create_item_transaction(self.item, quantity)
         except ValueError as e:
             self.assertEqual(
                 str(e),
@@ -48,7 +44,7 @@ class ItemTransactionModelTestCase(TestCase):
         
         # Create transaction
         quantity = -2
-        self.__create_transaction__(quantity)
+        test_data.create_item_transaction(self.item, quantity)
         
         # Check stock
         self.assertEqual(
@@ -70,17 +66,6 @@ class ItemLoanModelTestCase(TestCase):
         self.employee = test_data.create_employee()
         self.service = test_data.create_service()
         
-    def __create_item_loan__(self, quantity: int = 2):
-        """ Create a new loan """
-        
-        return models_inventory.ItemLoan.objects.create(
-            item=self.item,
-            quantity=quantity,
-            employee=self.employee,
-            service=self.service,
-            details='This is a test loan',
-        )
-        
     def test_no_negative_stock(self):
         """ Test negative item stock not allowed """
         
@@ -89,7 +74,12 @@ class ItemLoanModelTestCase(TestCase):
         
         # Create loan
         try:
-            self.__create_item_loan__(quantity)
+            test_data.create_item_loan(
+                self.item,
+                self.employee,
+                self.service,
+                quantity
+            )
         except ValueError as e:
             self.assertEqual(
                 str(e),
@@ -100,7 +90,11 @@ class ItemLoanModelTestCase(TestCase):
     def test_transaction_created(self):
         """ Test transaction created after loan """
         
-        self.__create_item_loan__()
+        test_data.create_item_loan(
+            self.item,
+            self.employee,
+            self.service,
+        )
         transaction = models_inventory.ItemTransaction.objects.last()
         self.assertEqual(transaction.item, self.item)
         self.assertEqual(transaction.quantity, -2)
@@ -117,7 +111,11 @@ class ItemLoanModelTestCase(TestCase):
         initial_stock = self.item.stock
         
         # Create loan
-        item_loan = self.__create_item_loan__()
+        item_loan = test_data.create_item_loan(
+            self.item,
+            self.employee,
+            self.service,
+        )
         
         # Check stock
         self.assertEqual(
@@ -128,7 +126,11 @@ class ItemLoanModelTestCase(TestCase):
     def test_loan_created(self):
         """ Test employee loan created after item loan """
         
-        item_loan = self.__create_item_loan__()
+        item_loan = test_data.create_item_loan(
+            self.item,
+            self.employee,
+            self.service,
+        )
         employee_loan = models_employees.Loan.objects.last()
         time_zone = timezone.get_current_timezone()
         
@@ -146,6 +148,10 @@ class ItemLoanModelTestCase(TestCase):
             f"<<Préstamo>>: item: {self.item} - cantidad: {item_loan.quantity} "
             f"- servicio: {self.service} - detalles: {item_loan.details}",
         )
+
+# --------------------
+# ADMIN TESTS
+# --------------------
 
 
 class ItemAdminTestCase(TestCase):
@@ -174,4 +180,178 @@ class ItemAdminTestCase(TestCase):
         # Check total price field in response
         self.assertContains(response, 'Precio total')
         self.assertContains(response, self.item.price * self.item.stock)
+        
+    def test_change_no_update_stock(self):
+        """ Test no update stock directly when save item """
+        
+        # Login and get change view response
+        self.client.login(
+            username=self.admin_user,
+            password=self.admin_pass
+        )
+        response = self.client.get(self.endpoints["change"])
+        initial_stock = self.item.stock
+        
+        # Submit form with different stock and follow redirect
+        stock = 100
+        response = self.client.post(
+            self.endpoints["change"],
+            {
+                "uuid": self.item.uuid,
+                "name": self.item.name,
+                "details": self.item.details,
+                "price": self.item.price,
+                "stock": stock,
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'No se puede modificar el stock de un artículo directamente'
+        )
+        self.assertContains(
+            response,
+            'Por favor, añada una transacción de artículo'
+        )
+        self.item.refresh_from_db()
+        new_stock = self.item.stock
+        self.assertEqual(new_stock, initial_stock)
+        
+        
+class ItemTransactionAdminTestCase(TestCase):
+    """ Validate custom fields and methods in model admin """
+    
+    def setUp(self):
+    
+        # Create test data
+        self.item_transaction = test_data.create_item_transaction()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
+        self.endpoints = {
+            "list": "/admin/inventory/itemtransaction/",
+            "change": "/admin/inventory/itemtransaction/"
+                      f"{self.item_transaction.id}/change/",
+            "add": "/admin/inventory/itemtransaction/add/",
+        }
+        
+    def test_add_no_negative_stock(self):
+        """ Test negative stock not allowed when add transaction """
+        
+        # Login and get change view response
+        self.client.login(
+            username=self.admin_user,
+            password=self.admin_pass
+        )
+        
+        # Submit form with negative quantity and follow redirect
+        quantity = -100
+        response = self.client.post(
+            self.endpoints["add"],
+            {
+                "item": self.item_transaction.item.pk,
+                "quantity": quantity,
+                "details": "This is a test transaction",
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'No hay suficiente stock para la transacción.'
+        )
+        self.assertContains(
+            response,
+            f'Stock actual: {self.item_transaction.item.stock}'
+        )
+    
+    def test_change_no_update_quantity(self):
+        """ Test no update quantity directly when save transaction """
+        
+        # Login and get change view response
+        self.client.login(
+            username=self.admin_user,
+            password=self.admin_pass
+        )
+        initial_quantity = self.item_transaction.quantity
+        
+        # Submit form with different quantity and follow redirect
+        quantity = 100
+        response = self.client.post(
+            self.endpoints["change"],
+            {
+                "item": self.item_transaction.item.pk,
+                "quantity": quantity,
+                "details": self.item_transaction.details,
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'No se puede modificar la cantidad de una transacción'
+        )
+        self.assertContains(
+            response,
+            'Por favor, añada una nueva transacción de artículo'
+        )
+        self.item_transaction.refresh_from_db()
+        new_quantity = self.item_transaction.quantity
+        self.assertEqual(new_quantity, initial_quantity)
+        
+        
+class ItemLoanAdminTestCase(TestCase):
+    """ Validate custom fields and methods in model admin """
+    
+    def setUp(self):
+        
+        # Load initial data
+        call_command("apps_loaddata")
+    
+        # Create test data
+        self.item_loan = test_data.create_item_loan()
+        self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
+        self.endpoints = {
+            "list": "/admin/inventory/itemloan/",
+            "change": f"/admin/inventory/itemloan/{self.item_loan.id}/change/",
+            "add": "/admin/inventory/itemloan/add/",
+        }
+        
+    def test_change_no_update_quantity(self):
+        """ Test no update quantity directly when save loan """
+        
+        # Login and get change view response
+        self.client.login(
+            username=self.admin_user,
+            password=self.admin_pass
+        )
+        initial_quantity = self.item_loan.quantity
+        
+        # Submit form with different quantity and follow redirect
+        quantity = 100
+        response = self.client.post(
+            self.endpoints["change"],
+            {
+                "item": self.item_loan.item.pk,
+                "employee": self.item_loan.employee.pk,
+                "service": self.item_loan.service.pk,
+                "quantity": quantity,
+                "details": self.item_loan.details,
+            },
+            follow=True
+        )
+        with open("temp.html", "w", encoding="utf-8") as f:
+            f.write(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'No se puede modificar la cantidad de un '
+            'préstamo de artículo directamente'
+        )
+        self.assertContains(
+            response,
+            'Por favor, añada un nuevo préstamo'
+        )
+        self.item_loan.refresh_from_db()
+        new_quantity = self.item_loan.quantity
+        self.assertEqual(new_quantity, initial_quantity)
         
