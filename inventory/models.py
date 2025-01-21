@@ -29,6 +29,7 @@ class Item(models.Model):
     details = models.TextField(
         verbose_name='Detalles',
         blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -54,6 +55,8 @@ class ItemTransaction(models.Model):
     )
     details = models.TextField(
         verbose_name='Detalles',
+        blank=True,
+        null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
