@@ -8,4 +8,9 @@ urlpatterns = [
         views.ReportEmployeeDetailsView.as_view(),
         name='report-employee'
     ),
+    path(
+        'api/validate-curp/',
+        views.ApiCurpView.as_view(),
+        name='api-validate-curp'
+    )
 ]
