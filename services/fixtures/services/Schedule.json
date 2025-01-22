@@ -3,81 +3,27 @@
         "model": "services.Schedule",
         "pk": 1,
         "fields": {
-            "name": "Matutino",
-            "start_time": "08:00:00",
-            "end_time": "14:00:00"
+            "name": "Vespertino",
+            "start_time": "07:00:00",
+            "end_time": "19:00:00"
         }
     },
     {
         "model": "services.Schedule",
         "pk": 2,
         "fields": {
-            "name": "Vespertino",
-            "start_time": "14:00:00",
-            "end_time": "20:00:00"
+            "name": "Nocturno",
+            "start_time": "19:00:00",
+            "end_time": "07:00:00"
         }
     },
     {
         "model": "services.Schedule",
         "pk": 3,
         "fields": {
-            "name": "Nocturno",
-            "start_time": "20:00:00",
-            "end_time": "02:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 4,
-        "fields": {
-            "name": "Mixto 8 am",
-            "start_time": "08:00:00",
-            "end_time": "14:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 5,
-        "fields": {
-            "name": "Mixto 2 pm",
-            "start_time": "14:00:00",
-            "end_time": "20:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 6,
-        "fields": {
-            "name": "Mixto 8 pm",
-            "start_time": "20:00:00",
-            "end_time": "02:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 7,
-        "fields": {
-            "name": "24 h 8 am",
-            "start_time": "08:00:00",
-            "end_time": "08:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 8,
-        "fields": {
-            "name": "24 h 2 pm",
-            "start_time": "14:00:00",
-            "end_time": "14:00:00"
-        }
-    },
-    {
-        "model": "services.Schedule",
-        "pk": 9,
-        "fields": {
-            "name": "24 h 8 pm",
-            "start_time": "20:00:00",
-            "end_time": "20:00:00"
+            "name": "24h",
+            "start_time": "07:00:00",
+            "end_time": "07:00:00"
         }
     }
 ]

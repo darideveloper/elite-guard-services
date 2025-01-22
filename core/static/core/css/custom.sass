@@ -137,9 +137,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible
     color: $color-white !important
 
 
-// Fix dashboard responsive
+// Fix responsive responsive
 @media screen and (max-width: 768px)
 
+    // Header 
     .container-fluid > .row > div:nth-child(1)
         flex-direction: column !important
 
@@ -151,9 +152,40 @@ input:focus-visible, textarea:focus-visible, select:focus-visible
             margin-left: 0 !important
             padding-left: 0 !important
 
+    // Add button
     .container-fluid > .row > div:nth-child(2)
         justify-content: flex-start !important
 
+@media screen and (max-width: 500px)
+
+    // Main content
+    .content
+        padding: 1rem 0 !important
+
+    // Filters
+    #changelist-search > .form-group
+        width: 100% !important
+
+    // Add button
+    .container-fluid > .row > div:nth-child(2)
+        justify-content: center !important
+
+    // Actions components
+    .actions 
+        button
+            margin-left: 0 !important
+
+        .select2, > label:nth-child(1)
+            width: 100% !important
+
+        > span
+            margin-left: 0 !important
+            display: block !important
+        
+    // Specific inputs
+    input[type="number"]
+        width: 80px !important
+    
 // custom classes
 .w-110
     width: 110px
