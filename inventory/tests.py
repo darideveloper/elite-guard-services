@@ -148,6 +148,23 @@ class ItemLoanModelTestCase(TestCase):
             f"<<Préstamo>>: item: {self.item} - cantidad: {item_loan.quantity} "
             f"- servicio: {self.service} - detalles: {item_loan.details}",
         )
+        
+    def test_no_edit_after_save(self):
+        """ Test no edit after loan creation """
+        
+        # Create loan
+        item_loan = test_data.create_item_loan(
+            self.item,
+            self.employee,
+            self.service,
+        )
+        
+        # Try to edit loan
+        try:
+            item_loan.quantity = 10
+            item_loan.save()
+        except ValueError as e:
+            self.assertEqual(str(e), 'No se puede editar un préstamo')
 
 # --------------------
 # ADMIN TESTS

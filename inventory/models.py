@@ -6,6 +6,7 @@ from services.models import Service
 
 class Item(models.Model):
     """ Main data of items """
+    
     uuid = models.CharField(
         primary_key=True,
         max_length=36,
@@ -45,6 +46,7 @@ class Item(models.Model):
         
 class ItemTransaction(models.Model):
     """ Transactions of items (in/out) """
+    
     item = models.ForeignKey(
         Item,
         on_delete=models.CASCADE
@@ -87,6 +89,7 @@ class ItemTransaction(models.Model):
     
 class ItemLoan(models.Model):
     """ Loans of items to employees in specific services """
+    
     item = models.ForeignKey(
         Item,
         on_delete=models.CASCADE,
@@ -121,6 +124,10 @@ class ItemLoan(models.Model):
         return f"{self.item.name} - loan {self.quantity}"
     
     def save(self, *args, **kwargs):
+        
+        # No edit after creation
+        if self.pk:
+            raise ValueError('No se puede editar un préstamo')
                 
         # validate item stock
         is_nevagitve = self.item.stock - self.quantity < 0
