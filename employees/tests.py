@@ -421,3 +421,136 @@ class ReportEmployeePreviewViewTest(TestCase):
         buttons = ["Editar", "Regresar"]
         for button in buttons:
             self.assertContains(response, button)
+      
+            
+class ApiValidateCurpViewTestCase(TestCase):
+    """ Test custom view to get CURP data from API """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        self.admin_user, self.admin_pass, self.admin = test_data.create_admin_user()
+        
+        # request data
+        self.endpoint = "/employees/api/validate-curp/"
+        self.data = {
+            "curp": "LOPJ991212HPLPRN06",
+        }
+        
+    def test_no_logged(self):
+        """ Validate redirect when user is not logged """
+        
+        # Open page
+        response = self.client.post(
+            self.endpoint,
+            self.data,
+            content_type="application/json"
+        )
+        
+        # Validate redirect
+        self.assertEqual(302, response.status_code)
+        
+    def test_no_permission(self):
+        """ Validate redirect when user don't have permission """
+        
+        # Update user to not have permission
+        self.admin.is_superuser = False
+        self.admin.save()
+        
+        # Open page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            self.data,
+            content_type="application/json"
+        )
+        
+        # Validate redirect
+        self.assertEqual(403, response.status_code)
+        
+    def test_invalid_curp_length(self):
+        """ Validate response when CURP length is invalid """
+        
+        # Update curp value
+        self.data["curp"] = self.data["curp"][:-1]
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            self.data,
+            content_type="application/json"
+        )
+        
+        # Validate response
+        self.assertEqual(400, response.status_code)
+        json_data = response.json()
+        self.assertEqual(json_data["status"], "error")
+        self.assertEqual(json_data["message"], "El CURP debe tener 18 caracteres")
+        self.assertEqual(json_data["data"], {})
+        
+    def test_invalid_curp_format(self):
+        """ Validate response when CURP format is invalid """
+        
+        # Update curp value
+        self.data["curp"] = "LOPJ991212HPLPRN07"
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            self.data,
+            content_type="application/json"
+        )
+        
+        # Validate response
+        self.assertEqual(400, response.status_code)
+        json_data = response.json()
+        self.assertEqual(json_data["status"], "error")
+        self.assertEqual(json_data["message"], "El CURP proporcionado no es válido")
+        self.assertEqual(json_data["data"], {})
+        
+    def test_curp_already_in_use(self):
+        """ Validate response when CURP already exists """
+        
+        # Create employee with same CURP
+        employee = test_data.create_employee()
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            {
+                "curp": employee.curp,
+            },
+            content_type="application/json"
+        )
+        
+        # Validate response
+        self.assertEqual(400, response.status_code)
+        json_data = response.json()
+        self.assertEqual(json_data["status"], "error")
+        self.assertEqual(
+            json_data["message"],
+            "Ya existe un empleado con el CURP proporcionado"
+        )
+        self.assertTrue(json_data["data"]["employee_id"])
+        
+    def test_valid_curp(self):
+        """ Validate response when CURP is valid """
+        
+        # Login as admin and get page
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            self.data,
+            content_type="application/json"
+        )
+        
+        # Validate response
+        self.assertEqual(200, response.status_code)
+        json_data = response.json()
+        self.assertEqual(json_data["status"], "success")
+        self.assertEqual(json_data["message"], "CURP válido")
+        self.assertEqual(json_data["data"], {})

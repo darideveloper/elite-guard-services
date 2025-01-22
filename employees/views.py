@@ -115,7 +115,7 @@ class ReportEmployeeDetailsView(
         return context
 
 
-class ApiCurpView(
+class ApiValidateCurpView(
     LoginRequiredMixin,
     PermissionRequiredMixin,
     View,
@@ -157,7 +157,6 @@ class ApiCurpView(
     def post(self, request, *args, **kwargs):
         json_data = json.loads(request.body)
         curp = json_data.get("curp")
-        print({curp})
 
         # Validate curp length
         if len(curp) != 18:

@@ -10,7 +10,7 @@ urlpatterns = [
     ),
     path(
         'api/validate-curp/',
-        views.ApiCurpView.as_view(),
+        views.ApiValidateCurpView.as_view(),
         name='api-validate-curp'
     )
 ]
