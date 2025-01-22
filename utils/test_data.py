@@ -7,6 +7,9 @@ from assistance import models as models_assistance
 from inventory import models as models_inventory
 
 
+CURP = "LOPJ991212HPLPRN06"
+
+
 def create_employee() -> models_employees.Employee:
     """ Create a new employee and return it
     
@@ -36,7 +39,7 @@ def create_employee() -> models_employees.Employee:
         birthdate=timezone.datetime(1999, 1, 1).date(),
         municipality_birth=municipality,
         daily_rate=100,
-        curp="test CURP",
+        curp=CURP,
         ine="test INE",
         knowledge="Knowledge",
         skills="Skills",

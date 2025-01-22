@@ -84,12 +84,18 @@ class AdminSetup {
         }
         contentWrapper.insertAdjacentHTML('afterbegin', alertHtml)
 
-        // Warning in the input field
+        // Warning in the input field and disable submit button
         const curpField = document.querySelector(curpSelector)
+        const submitButton = document.querySelector('input[type="submit"]')
+        console.log({submitButton})
         if (alertType === "danger") {
           curpField.classList.add('is-invalid')
+          submitButton.disabled = true
+          submitButton.classList.add('disabled')
         } else {
           curpField.classList.remove('is-invalid')
+          submitButton.disabled = false
+          submitButton.classList.remove('disabled')
         }
       })
     }

@@ -4,6 +4,9 @@ from django.utils import timezone
 
 from utils import test_data
 from employees import models
+from core.tests.base import TestAdminBase
+from utils.test_data import CURP
+from time import sleep
 
 
 class EmployeeModelTest(TestCase):
@@ -150,7 +153,130 @@ class EmployeeAdminTest(TestCase):
             self.employee.created_at.strftime("%d/%b/%Y").replace(".", "")
         )
             
-            
+
+class EmployeeAdminSeleniumTest(TestAdminBase):
+    """ Test custom features in admin/employee with selenium """
+    
+    def setUp(self):
+        
+        # setup and login
+        super().setUp("/admin/employees/employee/add")
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        self.employee = test_data.create_employee()
+        
+        self.data = {
+            "curp": CURP,
+        }
+        self.selectors = {
+            "inputs": {
+                "curp_input": ".field-curp input",
+                "ine_input": ".field-ine input",
+            },
+            "elems": {
+                "message": ".alert",
+                "submit_btn": "input[type='submit']",
+            }
+        }
+        
+    def __fill_curp__(self, curp: str) -> list:
+        """ Fill curp in form and get message
+
+        Args:
+            curp (str): employee curp
+
+        Returns:
+            list:
+                message (str): message text
+                submit (WebElement): submit button
+        """
+        
+        # Write curp in form
+        fields = self.get_selenium_elems(self.selectors["inputs"])
+        fields["curp_input"].send_keys(curp)
+        fields["ine_input"].send_keys("TEST")
+        sleep(2)
+        
+        # Get message and submit button
+        elems = self.get_selenium_elems(self.selectors["elems"])
+        message = elems["message"].text
+        submit_btn = elems["submit_btn"]
+        
+        # return message
+        return message, submit_btn
+        
+    def test_add_invalid_curp_length(self):
+        """ Validate error message when CURP length is invalid """
+        
+        # Change curp length
+        self.data["curp"] = self.data["curp"][:-1]
+        message, submit_btn = self.__fill_curp__(self.data["curp"])
+        
+        # Validate message
+        self.assertIn("El CURP debe tener 18 caracteres", message)
+        
+        # Validate submit button is disabled
+        self.assertFalse(submit_btn.is_enabled())
+    
+    def test_add_invalid_curp_format(self):
+        """ Validate error message when CURP format is invalid """
+        
+        # Change curp format
+        self.data["curp"] = "LOPJ991212HPLPRN07"
+        message, submit_btn = self.__fill_curp__(self.data["curp"])
+        
+        # Validate message
+        self.assertIn("El CURP proporcionado no es válido", message)
+        
+        # Validate submit button is disabled
+        self.assertFalse(submit_btn.is_enabled())
+        
+    def test_add_curp_already_in_use(self):
+        """ Validate error message when CURP already exists """
+        
+        selectors = {
+            "link": ".alert a"
+        }
+        
+        # Delete all employees
+        models.Employee.objects.all().delete()
+        
+        # Create employee with same CURP
+        employee = test_data.create_employee()
+        
+        # Fill curp in form
+        message, submit_btn = self.__fill_curp__(employee.curp)
+        
+        # Get link to employee details
+        link = self.get_selenium_elems(selectors)["link"]
+        
+        # Validate message and link
+        self.assertIn("Ya existe un empleado con el CURP proporcionado", message)
+        self.assertIn(
+            f"/admin/employees/employee/{employee.id}/change/",
+            link.get_attribute("href")
+        )
+        self.assertEqual("Ver empleado", link.text)
+        
+        # Validate submit button is disabled
+        self.assertFalse(submit_btn.is_enabled())
+        
+    def test_add_valid_curp(self):
+        
+        # Delete all employees
+        models.Employee.objects.all().delete()
+        
+        # Fill curp in form
+        message, submit_btn = self.__fill_curp__(self.data["curp"])
+        
+        # Validate message
+        self.assertIn("CURP válido", message)
+        
+        # Validate submit button is enabled
+        self.assertTrue(submit_btn.is_enabled())
+      
+      
 class ReportEmployeeDetailsViewTest(TestCase):
     """ Test content of custom view with employee details """
     
@@ -435,7 +561,7 @@ class ApiValidateCurpViewTestCase(TestCase):
         # request data
         self.endpoint = "/employees/api/validate-curp/"
         self.data = {
-            "curp": "LOPJ991212HPLPRN06",
+            "curp": CURP,
         }
         
     def test_no_logged(self):
