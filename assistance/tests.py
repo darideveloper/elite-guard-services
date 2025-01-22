@@ -141,34 +141,6 @@ class AssistanceAdminTest(TestCase):
         
         self.endpoint = "/admin/assistance/assistance/"
     
-    def test_custom_field_custom_date(self):
-        """ Validate "date" custom field in list view """
-        
-        # Login as admin
-        self.client.login(username=self.admin_user, password=self.admin_pass)
-        
-        # Open employee list page
-        response = self.client.get(self.endpoint)
-        
-        # Validate date
-        time_zone = timezone.get_current_timezone()
-        date = timezone.now().astimezone(time_zone).date()
-        date_str = date.strftime("%d/%b/%Y").replace(".", "")
-        self.assertContains(response, date_str)
-    
-    def test_custom_field_week_day_name(self):
-        """ Validate "week day name" custom field in list view """
-        
-        # Login as admin
-        self.client.login(username=self.admin_user, password=self.admin_pass)
-        
-        # Open employee list page
-        response = self.client.get(self.endpoint)
-        
-        # Validate week day name
-        week_day = get_week_day(timezone.now(), "es")
-        self.assertContains(response, week_day)
-    
     def test_custom_field_company(self):
         """ Validate "company name" custom field in list view """
         
@@ -260,12 +232,8 @@ class AssistanceAdminTest(TestCase):
         )
         
         # Validate only today registers
-        time_zone = timezone.get_current_timezone()
-        today = timezone.now().astimezone(time_zone).date()
-        today_str = today.strftime("%d/%b/%Y").replace(".", "")
-        dates = soup.select('.row .field-date')
-        self.assertEqual(len(dates), 1)
-        self.assertEqual(dates[0].text.strip(), today_str)
+        rows = soup.select('tr[role="row"]')
+        self.assertEqual(len(rows), 1)
         
         
 class WeeklyAssistanceAdminTest(TestCase):

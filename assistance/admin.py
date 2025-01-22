@@ -7,7 +7,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from assistance import models
-from utils.dates import get_week_day, get_current_week
+from utils.dates import get_current_week
 
 
 # FILTERS
@@ -131,10 +131,8 @@ class YearFilter(admin.SimpleListFilter):
 class AssistanceAdmin(admin.ModelAdmin):
     """ Assistance model admin """
     list_display = (
-        'date',
-        'week_day_name',
-        'company',
         'employee',
+        'company',
         'attendance',
         'extra_paid_hours',
         'extra_unpaid_hours',
@@ -167,10 +165,6 @@ class AssistanceAdmin(admin.ModelAdmin):
                      'extra_unpaid_hours', 'notes')
 
     # Custom fields
-    def week_day_name(self, obj):
-        """ Return the name of the week day """
-        return get_week_day(obj.date)
-
     def company(self, obj):
         """ Return the company name """
         return obj.weekly_assistance.service.agreement.company_name
@@ -180,7 +174,6 @@ class AssistanceAdmin(admin.ModelAdmin):
         return str(obj.weekly_assistance.service.employee)
 
     # Labels for custom fields
-    week_day_name.short_description = 'Día de la semana'
     company.short_description = 'Empresa'
     employee.short_description = 'Empleado'
 
