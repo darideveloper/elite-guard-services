@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from utils import test_data
 from employees import models
-from core.tests.base import TestAdminBase
+from core.test_base.test_admin import TestAdminBase
 from utils.test_data import CURP
 from time import sleep
 
