@@ -62,8 +62,8 @@ class ItemTransaction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        verbose_name = 'Transacción de Artículo'
-        verbose_name_plural = 'Transacciones de Artículos'
+        verbose_name = 'Transacción'
+        verbose_name_plural = 'Transacciones'
         
     def __str__(self):
         return f"{self.item.name} - transaction {self.quantity}"
@@ -114,8 +114,8 @@ class ItemLoan(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        verbose_name = 'Préstamo de Artículo'
-        verbose_name_plural = 'Préstamos de Artículos'
+        verbose_name = 'Préstamo'
+        verbose_name_plural = 'Préstamos'
         
     def __str__(self):
         return f"{self.item.name} - loan {self.quantity}"
