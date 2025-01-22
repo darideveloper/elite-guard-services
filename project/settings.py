@@ -381,6 +381,6 @@ else:
     
 # Global datetime format
 DATE_FORMAT = "d/b/Y"
-TIME_FORMAT = "H:m"
+TIME_FORMAT = "H:i"
 DATETIME_FORMAT = f"{DATE_FORMAT} {TIME_FORMAT}"
 USE_L10N = False
