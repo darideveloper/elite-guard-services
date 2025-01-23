@@ -172,7 +172,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   }
 }
 @media screen and (max-width: 500px) {
-  .content {
+  .content, .tab-content .card-body {
     padding: 1rem 0 !important;
   }
   #changelist-search > .form-group {
