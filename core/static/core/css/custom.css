@@ -49,6 +49,11 @@
   border-radius: 5px;
 }
 
+a.dropdown-item:active {
+  background-color: #7c332c !important;
+  color: #e1e0de !important;
+}
+
 .content-wrapper {
   background-color: #e1e0de;
 }
