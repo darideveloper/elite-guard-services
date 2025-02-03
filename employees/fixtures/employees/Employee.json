@@ -11,7 +11,7 @@
             "education": 1,
             "birthdate": "2020-01-01",
             "municipality_birth": 1,
-            "daily_rate": 0,
+            "weekly_rate": 0,
             "curp": "test CURP",
             "ine": "test INE",
             "knowledge": "conocimientos",

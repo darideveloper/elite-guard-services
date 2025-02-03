@@ -208,10 +208,10 @@ class Employee(models.Model):
     )
     
     # Work info
-    daily_rate = models.DecimalField(
+    weekly_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Sueldo diario'
+        verbose_name='Salario semanal'
     )
     curp = models.CharField(
         max_length=18,

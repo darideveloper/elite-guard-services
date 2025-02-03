@@ -38,7 +38,7 @@ def create_employee() -> models_employees.Employee:
         education=education,
         birthdate=timezone.datetime(1999, 1, 1).date(),
         municipality_birth=municipality,
-        daily_rate=100,
+        weekly_rate=100,
         curp=CURP,
         ine="test INE",
         knowledge="Knowledge",

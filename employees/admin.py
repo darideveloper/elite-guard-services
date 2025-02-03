@@ -47,7 +47,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'name',
         'last_name_1',
         'last_name_2',
-        'daily_rate',
+        'weekly_rate',
         'birthdate',
         'neighborhood',
         'address_street',
@@ -108,7 +108,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         (
             "Laboral", {
                 'fields': (
-                    'daily_rate',
+                    'weekly_rate',
                     'rfc',
                     'imss',
                     'infonavit',
@@ -219,7 +219,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             "Nombre": employee.name.title(),
             "Apellidos": last_name.title(),
             "Servicio": service_text,
-            "Sueldo": f"$ {employee.daily_rate} / dia",
+            "Sueldo": f"$ {employee.weekly_rate} / semana",
             "Fecha de nacimiento": employee.birthdate.strftime("%d/%m/%Y"),
             "Edad": employee.get_age(),
             "RFC": employee.rfc if employee.rfc else "N/A",
