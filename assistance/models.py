@@ -18,11 +18,11 @@ class Assistance(models.Model):
         default=False
     )
     extra_paid_hours = models.IntegerField(
-        verbose_name='Horas extras pagadas',
+        verbose_name='Hrs extras pagadas',
         default=0
     )
     extra_unpaid_hours = models.IntegerField(
-        verbose_name='Horas extras no pagadas',
+        verbose_name='Hrs no pagadas',
         default=0
     )
     notes = models.TextField(

@@ -174,18 +174,31 @@ class AdminSetup {
     }
   }
 
+  /**
+   * Add custom class to input numbers to make them smaller
+   */
+  smallerInputNumber() {
+    const inputs = document.querySelectorAll('input[type="number"]')
+    for (const input of inputs) {
+      input.classList.add('small')
+    }
+  }
+
 
   /**
    * Run the functions for the current page
    */
   autorun() {
     const methods = {
-      "asistencias semanales": this.setupWeeklyAssistance,
-      "empleados": this.validateCurp,
-      "extras": this.extrasGoBackButtonAssistance,
+      "asistencias semanales": [this.setupWeeklyAssistance],
+      "empleados": [this.validateCurp],
+      "extras": [this.extrasGoBackButtonAssistance],
+      "asistencias diarias": [this.smallerInputNumber],
     }
     if (methods[this.currrentPage]) {
-      methods[this.currrentPage].call(this)
+      for (const method of methods[this.currrentPage]) {
+        method.call(this)
+      }
     }
   }
 }

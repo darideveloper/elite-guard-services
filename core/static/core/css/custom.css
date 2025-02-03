@@ -209,4 +209,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 
 .is-invalid {
   border: 2px solid red !important;
+}
+
+input[type=number].small {
+  width: 100px !important;
 }/*# sourceMappingURL=custom.css.map */
