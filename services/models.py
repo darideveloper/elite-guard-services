@@ -11,6 +11,12 @@ class Schedule(models.Model):
         max_length=100,
         verbose_name='Nombre'
     )
+    weekly_attendances = models.IntegerField(
+        verbose_name='Asistencias semanales'
+    )
+    hours = models.IntegerField(
+        verbose_name='Horas'
+    )
     start_time = models.TimeField(
         verbose_name='Hora de inicio'
     )
