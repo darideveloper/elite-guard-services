@@ -5,6 +5,7 @@ from employees import models as models_employees
 from services import models as models_services
 from assistance import models as models_assistance
 from inventory import models as models_inventory
+from accounting import models as models_accounting
 
 # Global public data
 CURP = "LOPJ991212HPLPRN06"
@@ -287,3 +288,46 @@ def create_item_loan(
     )
 
     return item_loan
+
+
+def create_payroll(
+    skip_payment: bool = False,
+    employee: models_employees.Employee = None,
+    weekly_assistance: models_assistance.WeeklyAssistance = None,
+    work_days: int = 5,
+    no_attendance_days: int = 2,
+    sub_total: float = 100,
+) -> models_accounting.Payroll:
+    """Create a new payroll and return it
+
+    Args:
+        skip_payment (bool): Skip payment flag
+        employee (models_employees.Employee): Employee of the payroll
+        weekly_assistance (models_assistance.WeeklyAssistance):
+            Weekly assistance of the payroll
+        work_days (int): Work days of the payroll
+        no_attendance_days (int): No attendance days of the payroll
+        sub_total (float): Sub total of the payroll
+
+    Returns:
+        models_assistance.Payroll: Payroll created
+    """
+
+    # Default values
+    if employee is None:
+        employee = create_employee()
+        
+    if weekly_assistance is None:
+        weekly_assistance = create_weekly_assistance()
+        
+    # Create payroll
+    payroll = models_accounting.Payroll.objects.create(
+        skip_payment=skip_payment,
+        employee=employee,
+        weekly_assistance=weekly_assistance,
+        work_days=work_days,
+        no_attendance_days=no_attendance_days,
+        sub_total=sub_total,
+    )
+    
+    return payroll
