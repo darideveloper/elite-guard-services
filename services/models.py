@@ -129,7 +129,7 @@ class Service(models.Model):
     description = models.TextField(
         verbose_name='Descripción'
     )
-    
+
     class Meta:
         verbose_name = 'Servicio'
         verbose_name_plural = 'Servicios'

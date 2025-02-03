@@ -17,6 +17,7 @@ class EmployeeModelTest(TestCase):
         # Create initial data
         call_command("apps_loaddata")
         self.employee = test_data.create_employee()
+        self.service = test_data.create_service(employee=self.employee)
         
     def test_save_initial_status(self):
         """ Test set initial value in status_history """
@@ -31,7 +32,11 @@ class EmployeeModelTest(TestCase):
         self.employee.status = estatus_dismissed
         self.employee.save()
         
+        # Validate status change
         self.assertIn("Estado: Activo >>> Despido", self.employee.status_history)
+        
+        # Validate status change details reset
+        self.assertEqual("", self.employee.status_change_details)
         
     def test_save_new_status_details(self):
         """ Test set new value in status_history
@@ -47,6 +52,22 @@ class EmployeeModelTest(TestCase):
             f"Estado: Activo >>> Despido - Detalles: {details}",
             self.employee.status_history
         )
+    
+    def test_save_new_status_details_service(self):
+        """ Test set new value in status_history
+        when status is updated, with details and service s"""
+        
+        estatus_dismissed = models.Status.objects.get(name="Despido")
+        details = "Por falta de asistencia"
+        self.employee.status = estatus_dismissed
+        self.employee.status_change_details = details
+        self.employee.save()
+        
+        text = "Estado: Activo >>> Despido "
+        text += f"- Detalles: {details} "
+        text += f"- Servicio: {self.service.agreement.company_name}"
+        
+        self.assertIn(text, self.employee.status_history)
         
     def test_get_age_already_birthday(self):
         """ Test get age when birthday is 20 years ago on

@@ -373,18 +373,37 @@ class Employee(models.Model):
         is_new = self._state.adding
         now = timezone.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        
+                
         # save in status_history the employee status change
         if is_new:
             self.status_history += f"({now_str}) Estado: {self.status}"
         else:
+            
+            # Import services models avoiding circular imports
+            from services import models as services_models
+            
+            # Get current emoloyee service
+            employee_services = services_models.Service.objects.filter(
+                employee=self.pk
+            )
+            if employee_services:
+                employee_service = employee_services.order_by('-id').first()
+            else:
+                employee_service = None
+            
+            # Generate new status log
             old_status = self._meta.model.objects.get(pk=self.pk).status
             new_status = self.status
             if old_status != new_status:
                 text = f"\n({now_str}) Estado: {old_status} >>> {new_status}"
                 if self.status_change_details:
                     text += f" - Detalles: {self.status_change_details}"
+                if employee_service:
+                    text += f" - Servicio: {employee_service.agreement.company_name}"
                 self.status_history += text
+                
+            # Reset status change details
+            self.status_change_details = ''
 
         # Save the employee
         super(Employee, self).save(*args, **kwargs)
