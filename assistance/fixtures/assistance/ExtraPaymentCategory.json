@@ -15,6 +15,13 @@
     },
     {
         "model": "assistance.ExtraPaymentCategory",
+        "pk": 2,
+        "fields": {
+            "name": "Descuento por robo o daño"
+        }
+    },
+    {
+        "model": "assistance.ExtraPaymentCategory",
         "pk": 3,
         "fields": {
             "name": "Otro"

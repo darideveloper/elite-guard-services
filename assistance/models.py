@@ -37,6 +37,14 @@ class Assistance(models.Model):
         null=True,
         blank=True
     )
+    created_at = models.DateTimeField(
+        verbose_name='Fecha de creación',
+        default=timezone.now
+    )
+    updated_at = models.DateTimeField(
+        verbose_name='Fecha de actualización',
+        default=timezone.now
+    )
 
     class Meta:
         verbose_name = 'Asistencia diaria'
@@ -238,11 +246,11 @@ class ExtraPayment(models.Model):
     )
     created_at = models.DateTimeField(
         verbose_name='Fecha de creación',
-        default=timezone.now
+        auto_now_add=True
     )
     updated_at = models.DateTimeField(
         verbose_name='Fecha de actualización',
-        default=timezone.now
+        auto_now=True
     )
     
     class Meta:

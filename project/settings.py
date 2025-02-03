@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'services',
     'assistance',
     'inventory',
+    'accounting',
     
     # Template admin
     'jazzmin',
