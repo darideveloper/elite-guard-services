@@ -216,33 +216,38 @@ class Employee(models.Model):
     curp = models.CharField(
         max_length=18,
         verbose_name='CURP',
-        help_text='Clave Única de Registro de Población'
+        help_text='Clave Única de Registro de Población',
+        unique=True
     )
     rfc = models.CharField(
         max_length=13,
         verbose_name='RFC',
         help_text='Registro Federal de Contribuyentes',
         blank=True,
-        null=True
+        null=True,
+        unique=True
     )
     imss = models.CharField(
         max_length=11,
         verbose_name='IMSS',
         help_text='Instituto Mexicano del Seguro Social',
         blank=True,
-        null=True
+        null=True,
+        unique=True
     )
     infonavit = models.CharField(
         max_length=11,
         verbose_name='INFONAVIT',
         help_text='Instituto del Fondo Nacional de la Vivienda para los Trabajadores',
         blank=True,
-        null=True
+        null=True,
+        unique=True
     )
     ine = models.CharField(
         max_length=13,
         verbose_name='INE',
-        help_text='Número de credencial de Instituto Nacional Electoral'
+        help_text='Número de credencial de Instituto Nacional Electoral',
+        unique=True
     )
     uniform_date = models.DateField(
         verbose_name='Fecha de uniforme',
@@ -298,7 +303,8 @@ class Employee(models.Model):
     )
     phone = models.CharField(
         max_length=10,
-        verbose_name='Teléfono'
+        verbose_name='Teléfono',
+        unique=True
     )
     emergency_phone = models.CharField(
         max_length=10,
@@ -319,7 +325,8 @@ class Employee(models.Model):
         verbose_name='Número de tarjeta',
         help_text='Número de tarjeta de débito o nómina',
         blank=True,
-        null=True
+        null=True,
+        unique=True
     )
     balance = models.DecimalField(
         max_digits=10,
