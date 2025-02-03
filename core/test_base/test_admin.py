@@ -107,3 +107,9 @@ class TestAdminBase(LiveServerTestCase):
         )
         
         return user.username, password, user
+    
+    def select_set_value(self, selector: str, value: str):
+        """ Send value to select with js """
+        
+        code = f"document.querySelector('{selector}').value = '{value}';"
+        self.driver.execute_script(code)

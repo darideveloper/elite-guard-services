@@ -16,6 +16,7 @@ from assistance import models
 from utils import test_data
 from utils.dates import get_week_day, get_current_week
 from utils.automation import get_selenium_elems
+from core.test_base.test_admin import TestAdminBase
 
 
 class AssistanceModelTest(TestCase):
@@ -171,7 +172,7 @@ class AssistanceAdminTest(TestCase):
 
         # Open employee list page
         response = self.client.get(self.endpoint)
-        
+
         # Validate links
         for link_text, link in links.items():
             self.assertContains(response, link_text)
@@ -631,3 +632,60 @@ class CommandCreateAssistanceTest(TestCase):
         self.assertEqual(len(assistance), 1)
         assistance = assistance[0]
         self.assertEqual(assistance.weekly_assistance, weekly_assistance)
+
+
+class ExtraPaymentAdminSeleniumTest(TestAdminBase):
+    """ Test custom features in admin/extra-payment """
+
+    def setUp(self):
+        """Load data, setup and login in each test"""
+
+        super().setUp("/admin/assistance/extrapayment/")
+
+        # Create initial data
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistance = test_data.create_assistance(
+            weekly_assistance=self.weekly_assistance
+        )
+
+    def test_go_back_extra(self):
+        """ Validate 'Guardar y regresar' button when adding extra payment
+        with custom admin action
+        """
+        
+        # Load assistance page
+        self.driver.get(f"{self.live_server_url}/admin/assistance/assistance/")
+        
+        # Click in "Añadir extra" link
+        selectors = {
+            "add_extra_btn": ".field-custom_links a:nth-child(2)",
+        }
+        elems = self.get_selenium_elems(selectors)
+        elems["add_extra_btn"].click()
+        
+        # Validate redirect to new page
+        sleep(2)
+        self.assertIn(
+            f"/admin/assistance/extrapayment/add/?assistance={self.assistance.id}",
+            self.driver.current_url
+        )
+        
+        # Fill form
+        selectors = {
+            "category": '.field-category select',
+            "amount": '.field-amount input',
+            "save_and_go_back": '[value="Guardar y regresar"]',
+        }
+        elems = self.get_selenium_elems(selectors)
+        self.select_set_value(selectors["category"], "1")
+        elems["amount"].send_keys("100")
+        
+        # Save and go back
+        elems["save_and_go_back"].click()
+        sleep(3)
+        
+        # Validate redirect to assistance page
+        self.assertEqual(
+            f"{self.live_server_url}/admin/assistance/assistance/",
+            self.driver.current_url
+        )

@@ -3,7 +3,7 @@ class AdminSetup {
   /**
    * Setup global data
    */
-  constructor () {
+  constructor() {
     this.currrentPage = document.querySelector('h1').textContent.toLowerCase().trim()
     console.log(this.currrentPage)
     this.autorun()
@@ -28,6 +28,43 @@ class AdminSetup {
     document.querySelector('#action-toggle').click()
   }
 
+  /**
+   * Save a cookie
+   * @param {string} name - The name of the cookie
+   * @param {string} value - The value of the cookie
+   */
+  #saveCookie(name, value) {
+    document.cookie = `${name}=${value}; path=/`
+    console.log('save cookie')
+  }
+
+  /**
+   * Delete a cookie
+   * @param {string} name - The name of the cookie
+   */
+  #deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+  }
+
+  /**
+   * Get cookie value
+   * @param {string} name - The name of the cookie
+   */
+  #getCookie(name) {
+    const cookies = document.cookie.split(';')
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim()
+      if (cookie.startsWith(name)) {
+        return cookie.split('=')[1]
+      }
+    }
+    return null
+  }
+
+
+  /**
+   * Setup the weekly assistance page
+   */
   setupWeeklyAssistance() {
     this.#selectDropdownOption('action', 'export_excel')
     setTimeout(() => {
@@ -87,7 +124,7 @@ class AdminSetup {
         // Warning in the input field and disable submit button
         const curpField = document.querySelector(curpSelector)
         const submitButton = document.querySelector('input[type="submit"]')
-        console.log({submitButton})
+        console.log({ submitButton })
         if (alertType === "danger") {
           curpField.classList.add('is-invalid')
           submitButton.disabled = true
@@ -103,16 +140,53 @@ class AdminSetup {
   }
 
   /**
+   * Create a new button to save and go back to assistance page
+   */
+  extrasGoBackButtonAssistance() {
+
+    // Validate assistance queryparam
+    const urlParams = new URLSearchParams(window.location.search)
+    const fromAssistance = urlParams.get('assistance')
+    console.log({ fromAssistance })
+
+    // Render button
+    if (fromAssistance) {
+      console.log('Render button')
+      const container = document.querySelector('#jazzy-actions')
+      const saveButton = container.querySelector('.form-group:first-child')
+      
+      // Clone node as firts child
+      const newButton = saveButton.cloneNode(true)
+      newButton.querySelector('input').value = 'Guardar y regresar'
+      container.insertAdjacentElement('afterbegin', newButton)
+
+      // Save cookie when click the button
+      newButton.addEventListener('click', () => {
+        this.#saveCookie('back_to_assistance', 'true')
+      })
+    } else {
+      // Go back to assistance page if cookie exists
+      const backToAssistance = this.#getCookie('back_to_assistance')
+      if (backToAssistance) {
+        this.#deleteCookie('back_to_assistance')
+        window.location.href = '/admin/assistance/assistance/'
+      }
+    }
+  }
+
+
+  /**
    * Run the functions for the current page
    */
-  autorun () {
+  autorun() {
     const methods = {
       "asistencias semanales": this.setupWeeklyAssistance,
-      "empleados": this.validateCurp
+      "empleados": this.validateCurp,
+      "extras": this.extrasGoBackButtonAssistance,
     }
     if (methods[this.currrentPage]) {
       methods[this.currrentPage].call(this)
-    }   
+    }
   }
 }
 
