@@ -264,7 +264,11 @@ class EmployeeAdminSeleniumTest(TestAdminBase):
         models.Employee.objects.all().delete()
         
         # Create employee with same CURP
-        employee = test_data.create_employee()
+        employee = test_data.create_employee(
+            curp=CURP,
+            ine="test INE",
+            phone="test phone",
+        )
         
         # Fill curp in form
         message, submit_btn = self.__fill_curp__(employee.curp)
