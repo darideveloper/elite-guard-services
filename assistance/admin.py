@@ -378,3 +378,4 @@ class ExtraPaymentAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
     )
+    raw_id_fields = ('assistance',)
