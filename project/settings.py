@@ -256,6 +256,8 @@ JAZZMIN_SETTINGS = {
         
         "assistance.Assistance": "fas fa-calendar-check",
         "assistance.WeeklyAssistance": "fas fa-calendar-week",
+        "assistance.ExtraPaymentCategory": "fas fa-file",
+        "assistance.ExtraPayment": "fas fa-file-invoice-dollar",
         
         "inventory.item": "fas fa-box",
         "inventory.itemtransaction": "fas fa-exchange-alt",

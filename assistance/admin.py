@@ -325,3 +325,38 @@ class WeeklyAssistanceAdmin(admin.ModelAdmin):
 
     export_excel.short_description = 'Exportar a Excel'
     actions = [export_excel]
+
+
+@admin.register(models.ExtraPaymentCategory)
+class ExtraPaymentCategoryAdmin(admin.ModelAdmin):
+    """ Extra payment category model admin """
+    list_display = (
+        'name',
+        'description',
+    )
+    
+
+@admin.register(models.ExtraPayment)
+class ExtraPaymentAdmin(admin.ModelAdmin):
+    """ Extra payment model admin """
+    list_display = (
+        'assistance',
+        'category',
+        'amount',
+        'notes',
+    )
+    search_fields = (
+        'notes',
+    )
+    list_filter = (
+        'category',
+        'assistance',
+        'assistance__weekly_assistance',
+        'assistance__weekly_assistance__service',
+        'assistance__weekly_assistance__service__employee',
+    )
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+    

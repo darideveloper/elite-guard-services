@@ -192,3 +192,64 @@ class WeeklyAssistance(models.Model):
             self.total_extra_unpaid_hours,
             self.notes
         ])
+
+
+class ExtraPaymentCategory(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
+        verbose_name='Nombre',
+        max_length=100
+    )
+    description = models.TextField(
+        verbose_name='Descripción',
+        null=True,
+        blank=True
+    )
+    
+    class Meta:
+        verbose_name = 'Categoría de extra'
+        verbose_name_plural = 'Categorías de extras'
+        
+    def __str__(self):
+        return self.name
+
+
+class ExtraPayment(models.Model):
+    id = models.AutoField(primary_key=True)
+    assistance = models.ForeignKey(
+        Assistance,
+        on_delete=models.CASCADE,
+        verbose_name='Asistencia'
+    )
+    category = models.ForeignKey(
+        ExtraPaymentCategory,
+        on_delete=models.CASCADE,
+        verbose_name='Categoría'
+    )
+    amount = models.DecimalField(
+        verbose_name='Monto',
+        max_digits=10,
+        decimal_places=2
+    )
+    notes = models.TextField(
+        verbose_name='Notas',
+        null=True,
+        blank=True
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Fecha de creación',
+        default=timezone.now
+    )
+    updated_at = models.DateTimeField(
+        verbose_name='Fecha de actualización',
+        default=timezone.now
+    )
+    
+    class Meta:
+        verbose_name = 'Extra'
+        verbose_name_plural = 'Extras'
+    
+    def __str__(self):
+        employee = self.assistance.weekly_assistance.service.employee
+        return f"{employee} - {self.category.name}"
+    
