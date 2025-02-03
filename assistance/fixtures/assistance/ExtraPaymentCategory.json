@@ -1,0 +1,23 @@
+[
+    {
+        "model": "assistance.ExtraPaymentCategory",
+        "pk": 1,
+        "fields": {
+            "name": "Bono"
+        }
+    },
+    {
+        "model": "assistance.ExtraPaymentCategory",
+        "pk": 2,
+        "fields": {
+            "name": "Penalización"
+        }
+    },
+    {
+        "model": "assistance.ExtraPaymentCategory",
+        "pk": 3,
+        "fields": {
+            "name": "Otro"
+        }
+    }
+]
