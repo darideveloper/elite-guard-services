@@ -73,7 +73,6 @@ class Assistance(models.Model):
                 assistance.notes for assistance in all_weekly_assistances
             ]
             all_comments = list(filter(lambda note: note is not None, all_comments))
-            print(all_comments)
             self.weekly_assistance.notes = "\n".join(all_comments)
             
         # Save the object

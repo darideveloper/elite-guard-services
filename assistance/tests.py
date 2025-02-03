@@ -667,8 +667,6 @@ class CommandCreateAssistanceTest(TestCase):
         
         # Validate start date in weekly assistance
         week_start_date = weekly_assistance.start_date
-        print(">>>>>")
-        print(week_start_date)
         week_start_date_num = week_start_date.weekday()
         self.assertEqual(week_start_date_num, 3)
         
