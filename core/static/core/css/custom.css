@@ -213,4 +213,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 
 input[type=number].small {
   width: 100px !important;
+}
+
+.small.quiet {
+  margin: 0 10px !important;
+}
+
+[role=status] input[type=submit] {
+  margin: 0 10px !important;
 }/*# sourceMappingURL=custom.css.map */
