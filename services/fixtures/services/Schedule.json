@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "Vespertino",
-            "weekly_attendances": 3,
+            "weekly_attendances": 7,
             "hours": 12,
             "start_time": "07:00:00",
             "end_time": "19:00:00"
@@ -26,7 +26,7 @@
         "pk": 3,
         "fields": {
             "name": "24h",
-            "weekly_attendances": 7,
+            "weekly_attendances": 3,
             "hours": 12,
             "start_time": "07:00:00",
             "end_time": "07:00:00"
