@@ -24,6 +24,9 @@ class Command(BaseCommand):
             "services": [
                 "Schedule",
             ],
+            "assistance": [
+                "ExtraPaymentCategory",
+            ],
         }
         
         for command_category, commands in commands_data.items():

@@ -140,7 +140,7 @@ class EmployeeAdminTest(TestCase):
         self.employee = test_data.create_employee()
         self.admin_user, self.admin_pass, _ = test_data.create_admin_user()
         
-    def test_custom_links(self):
+    def test_custom_actions(self):
         """ Validate custom custom links """
         
         links = {

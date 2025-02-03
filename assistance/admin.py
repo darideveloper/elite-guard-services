@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponse
+
 import openpyxl
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
@@ -136,6 +137,7 @@ class AssistanceAdmin(admin.ModelAdmin):
         'attendance',
         'extra_paid_hours',
         'extra_unpaid_hours',
+        'custom_links',
         'notes',
     )
     search_fields = (
@@ -172,10 +174,27 @@ class AssistanceAdmin(admin.ModelAdmin):
     def employee(self, obj):
         """ Return the employee name """
         return str(obj.weekly_assistance.service.employee)
+    
+    def custom_links(self, obj):
+        """ Create custom Imprimir and Ver buttons """
+
+        # Generate links
+        link_view = "/admin/assistance/extrapayment/?"
+        link_view += f"assistance__id__exact={obj.id}"
+        
+        link_add = "/admin/assistance/extrapayment/add/?"
+        link_add += f"assistance={obj.id}"
+
+        return format_html(
+            '<a class="btn btn-primary my-1 w-120" href="{}">Ver extras</a>'
+            '<a class="btn btn-primary my-1 w-120" href="{}">Añadir extra</a>',
+            link_view, link_add
+        )
 
     # Labels for custom fields
     company.short_description = 'Empresa'
     employee.short_description = 'Empleado'
+    custom_links.short_description = 'Acciones'
 
 
 @admin.register(models.WeeklyAssistance)
@@ -351,12 +370,11 @@ class ExtraPaymentAdmin(admin.ModelAdmin):
     list_filter = (
         'category',
         'assistance',
-        'assistance__weekly_assistance',
-        'assistance__weekly_assistance__service',
+        'assistance__weekly_assistance__week_number',
+        'assistance__weekly_assistance__service__agreement__company_name',
         'assistance__weekly_assistance__service__employee',
     )
     readonly_fields = (
         'created_at',
         'updated_at',
     )
-    

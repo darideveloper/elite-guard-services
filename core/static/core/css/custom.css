@@ -199,6 +199,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   width: 110px;
 }
 
+.w-120 {
+  width: 120px;
+}
+
 .field-notes > textarea {
   height: 37px;
 }
