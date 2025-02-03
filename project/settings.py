@@ -252,6 +252,7 @@ JAZZMIN_SETTINGS = {
         
         "services.Agreement": "fas fa-handshake",
         "services.Service": "fas fa-briefcase",
+        "services.Schedule": "fas fa-calendar-alt",
         
         "assistance.Assistance": "fas fa-calendar-check",
         "assistance.WeeklyAssistance": "fas fa-calendar-week",
