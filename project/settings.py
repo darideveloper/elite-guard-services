@@ -221,7 +221,6 @@ JAZZMIN_SETTINGS = {
         "employees.Status",
         "employees.Bank",
         "employees.Relationship",
-        "services.Schedule",
     ],
 
     # List of apps (and/or models) to base side menu ordering off of
