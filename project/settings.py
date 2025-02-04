@@ -263,6 +263,8 @@ JAZZMIN_SETTINGS = {
         "inventory.item": "fas fa-box",
         "inventory.itemtransaction": "fas fa-exchange-alt",
         "inventory.itemloan": "fas fa-hand-holding-usd",
+     
+        "accounting.payroll": "fas fa-solid fa-wallet",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
