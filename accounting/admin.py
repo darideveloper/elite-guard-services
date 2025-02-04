@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from accounting import models
 from utils.admin_filters import (
@@ -9,29 +10,107 @@ from utils.admin_filters import (
 @admin.register(models.Payroll)
 class PayrollAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
+        'agreement_name',
+        'employee_name',
         'skip_payment',
-        'weekly_assistance',
-        'employee',
-        'work_days',
+        'weekly_rate',
+        'daily_rate',
+        'thusday_assistance',
+        'friday_assistance',
+        'satuday_assistance',
+        'sunday_assistance',
+        'monday_assistance',
+        'tuesday_assistance',
+        'wednesday_assistance',
+        'worked_days',
         'no_attendance_days',
-        'sub_total',
+        'no_attendance_penalty',
+        'penalties_amount',
+        'bonuses_amount',
+        'other_amount',
+        'extra_unpaid_hours_amount',
+        'subtotal',
+        'discount_amount',
+        'discount_loans',
+        'location',
+        'bank',
+        'card_number',
+        'total',
     )
     list_filter = (
         'weekly_assistance__service',
         WeekNumberFilter,
         YearFilter,
-        'employee',
         'skip_payment'
     )
     list_editable = (
         'skip_payment',
     )
     readonly_fields = (
-        'sub_total',
+        'created_at',
+        'updated_at',
     )
     ordering = (
         'id',
     )
+    readonly_fields = (
+        'discount_loans',
+    )
     year_filter_field = "weekly_assistance__start_date"
     week_filter_field = "weekly_assistance__week_number"
+    
+    # reusable methods
+    def __get_boolean_icon__(self, value: bool):
+        """ Return a boolean icon
+        
+        Args:
+            value (bool): The boolean value to evaluate
+        """
+        if value:
+            image = "icon-no.svg"
+        else:
+            image = "icon-yes.svg"
+            
+        return format_html(
+            '<img src="/static/admin/img/{}" alt="False">',
+            image
+        )
+    
+    # Custom fields
+    def thusday_assistance(self, obj):
+        """ Return the assistance of the thusday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("thursday"))
+    
+    def friday_assistance(self, obj):
+        """ Return the assistance of the friday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("friday"))
+    
+    def satuday_assistance(self, obj):
+        """ Return the assistance of the saturday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("saturday"))
+    
+    def sunday_assistance(self, obj):
+        """ Return the assistance of the sunday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("sunday"))
+    
+    def monday_assistance(self, obj):
+        """ Return the assistance of the monday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("monday"))
+    
+    def tuesday_assistance(self, obj):
+        """ Return the assistance of the tuesday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("tuesday"))
+    
+    def wednesday_assistance(self, obj):
+        """ Return the assistance of the wednesday """
+        return self.__get_boolean_icon__(obj.get_day_assistance("wednesday"))
+    
+    # Labels for custom fields
+    thusday_assistance.short_description = 'J'
+    friday_assistance.short_description = 'V'
+    satuday_assistance.short_description = 'S'
+    sunday_assistance.short_description = 'D'
+    monday_assistance.short_description = 'L'
+    tuesday_assistance.short_description = 'M'
+    wednesday_assistance.short_description = 'X'
+    

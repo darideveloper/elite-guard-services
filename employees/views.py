@@ -134,7 +134,6 @@ class ApiValidateCurpView(
 
         # Check if it matches the general format
         if not matched:
-            print("No match")
             return False
 
         # Function to calculate the verification digit

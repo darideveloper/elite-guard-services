@@ -200,7 +200,50 @@ class WeeklyAssistance(models.Model):
             self.total_extra_unpaid_hours,
             self.notes
         ])
+        
+    def get_day_assistance(self, day: str) -> bool:
+        """ Get the assistance of the day
 
+        Args:
+            day (str): Day of the week (e.g. 'monday')
+
+        Returns:
+            bool: True if the employee attended, False otherwise
+        """
+        
+        return getattr(self, day)
+    
+    def get_worked_days(self) -> int:
+        """ Get the number of days worked in the week
+
+        Returns:
+            int: Number of days worked
+        """
+        
+        return sum([
+            self.thursday,
+            self.friday,
+            self.saturday,
+            self.sunday,
+            self.monday,
+            self.tuesday,
+            self.wednesday
+        ])
+        
+    def no_attendance_days(self) -> int:
+        """ Get the number of days without attendance in the week
+
+        Returns:
+            int: Number of days without attendance
+        """
+        
+        weekly_attendances = self.service.schedule.weekly_attendances
+        work_days = self.get_worked_days()
+        no_attendances = weekly_attendances - work_days
+        if no_attendances < 0:
+            return 0
+        return weekly_attendances - work_days
+    
 
 class ExtraPaymentCategory(models.Model):
     id = models.AutoField(primary_key=True)
@@ -237,7 +280,8 @@ class ExtraPayment(models.Model):
     amount = models.DecimalField(
         verbose_name='Monto',
         max_digits=10,
-        decimal_places=2
+        decimal_places=2,
+        default=0
     )
     notes = models.TextField(
         verbose_name='Notas',

@@ -55,7 +55,6 @@ class WeekNumberFilter(admin.SimpleListFilter):
         week_numbers = model_admin.get_queryset(
             request).values(WeekNumberFilter.field_name).distinct()
         current_week = get_current_week()
-        print(">>>>>>>>", week_numbers, current_week)
 
         # Generate the options
         options = []
