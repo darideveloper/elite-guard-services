@@ -221,4 +221,8 @@ input[type=number].small {
 
 [role=status] input[type=submit] {
   margin: 0 10px !important;
+}
+
+.highlight-row {
+  background-color: rgba(124, 51, 44, 0.4) !important;
 }/*# sourceMappingURL=custom.css.map */

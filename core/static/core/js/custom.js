@@ -61,7 +61,6 @@ class AdminSetup {
     return null
   }
 
-
   /**
    * Setup the weekly assistance page
    */
@@ -184,6 +183,19 @@ class AdminSetup {
     }
   }
 
+  /**
+   * Highlight rows in the table with slow payment checkbox checked
+   */
+  highlightSkipPaymentRows() {
+    const fields = document.querySelectorAll(
+      '.field-skip_payment input[type="checkbox"]:checked'
+    )
+    fields.forEach(field => {
+      const row = field.closest('tr')
+      row.classList.add('highlight-row')
+    })
+  }
+
 
   /**
    * Run the functions for the current page
@@ -194,6 +206,7 @@ class AdminSetup {
       "empleados": [this.validateCurp],
       "extras": [this.extrasGoBackButtonAssistance],
       "asistencias diarias": [this.smallerInputNumber],
+      "nóminas": [this.highlightSkipPaymentRows],
     }
     if (methods[this.currrentPage]) {
       for (const method of methods[this.currrentPage]) {

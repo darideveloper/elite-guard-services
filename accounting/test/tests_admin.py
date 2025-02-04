@@ -5,6 +5,7 @@ from django.utils import timezone
 from bs4 import BeautifulSoup
 from utils.dates import get_current_week
 from utils import test_data
+from core.test_base.test_admin import TestAdminBase
 
 
 class PayrollAdminTest(TestCase):
@@ -67,7 +68,6 @@ class PayrollAdminTest(TestCase):
                 ]
             )
         )
-        print(">>>>>>>", weeks)
 
         weeks_options = soup.select(
             'option[data-name="week_number"]'
@@ -96,3 +96,26 @@ class PayrollAdminTest(TestCase):
         week_selected = soup.select_one('option[data-name="week_number"]' "[selected]")
         self.assertEqual(int(week_selected["value"]), current_week)
         self.assertEqual(week_selected.text.strip(), f"Semana actual ({current_week})")
+
+
+class PayrollAdminSeleniumTest(TestAdminBase):
+    """ Test Payroll admin customization and mtehods """
+    
+    def setUp(self):
+        
+        # Set enpoint
+        super().setUp("/admin/accounting/payroll/")
+   
+        # Create payrolls
+        test_data.create_payroll()
+        test_data.create_payroll(skip_payment=True)
+        
+    def test_highlight_skip_payment(self):
+        """ Test highlight skip payment """
+        
+        # Check highlight class
+        selectors = {
+            "hightlight_row": 'tr.highlight-row',
+        }
+        elems = self.get_selenium_elems(selectors)
+        self.assertEqual(len(elems), 1)
