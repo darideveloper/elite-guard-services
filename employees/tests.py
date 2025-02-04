@@ -160,7 +160,7 @@ class EmployeeAdminTest(TestCase):
             self.assertContains(response, link)
             
     def test_start_date(self):
-        """ Validate start_date format like dd/mo./yyyy """
+        """ Validate start_date format like dd/mo/yyyy """
         
         # Login as admin
         self.client.login(username=self.admin_user, password=self.admin_pass)
@@ -169,10 +169,11 @@ class EmployeeAdminTest(TestCase):
         response = self.client.get("/admin/employees/employee/")
         
         # Validate date format
-        self.assertContains(
-            response,
-            self.employee.created_at.strftime("%d/%b/%Y").replace(".", "")
+        created_as_timezone = self.employee.created_at.astimezone(
+            timezone.get_current_timezone()
         )
+        created_at_str = created_as_timezone.strftime("%d/%b/%Y").replace(".", "")
+        self.assertContains(response, created_at_str)
             
 
 class EmployeeAdminSeleniumTest(TestAdminBase):
