@@ -32,4 +32,11 @@ class Payroll(models.Model):
         default=0
     )
     
+    class Meta:
+        verbose_name = 'Nómina'
+        verbose_name_plural = 'Nóminas'
+        
+    def __str__(self):
+        return f'{self.employee} - {self.weekly_assistance}'
+    
     
