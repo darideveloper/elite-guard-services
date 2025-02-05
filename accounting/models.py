@@ -118,7 +118,6 @@ class Payroll(models.Model):
         Returns:
             float: Weekly rate of the employee
         """
-        print(">>>>>", self.weekly_assistance.service.employee.weekly_rate)
         return self.weekly_assistance.service.employee.weekly_rate
     
     @property
@@ -249,7 +248,7 @@ class Payroll(models.Model):
         Returns:
             str: Bank of the employee
         """
-        return self.weekly_assistance.service.employee.bank
+        return str(self.weekly_assistance.service.employee.bank)
     
     @property
     def card_number(self) -> str:

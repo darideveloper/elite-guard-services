@@ -294,11 +294,8 @@ def create_item_loan(
 
 def create_payroll(
     skip_payment: bool = False,
-    employee: models_employees.Employee = None,
     weekly_assistance: models_assistance.WeeklyAssistance = None,
-    work_days: int = 5,
-    no_attendance_days: int = 2,
-    sub_total: float = 100,
+    discount_loans: int = 0,
 ) -> models_accounting.Payroll:
     """Create a new payroll and return it
 
@@ -314,10 +311,6 @@ def create_payroll(
     Returns:
         models_assistance.Payroll: Payroll created
     """
-
-    # Default values
-    if employee is None:
-        employee = create_employee()
         
     if weekly_assistance is None:
         weekly_assistance = create_weekly_assistance()
@@ -325,11 +318,41 @@ def create_payroll(
     # Create payroll
     payroll = models_accounting.Payroll.objects.create(
         skip_payment=skip_payment,
-        employee=employee,
         weekly_assistance=weekly_assistance,
-        work_days=work_days,
-        no_attendance_days=no_attendance_days,
-        sub_total=sub_total,
+        discount_loans=discount_loans,
     )
     
     return payroll
+
+
+def create_extra_payment(
+    assistance: models_assistance.Assistance = None,
+    category: models_assistance.ExtraPaymentCategory = None,
+    amount: float = 10.0,
+) -> models_assistance.ExtraPayment:
+    """Create a new extra payment and return it
+
+    Args:
+        assistance (models_assistance.Assistance): Assistance of the extra payment
+        category (models_assistance.ExtraPaymentCategory): Category of the extra payment
+        amount (float): Amount of the extra payment
+        
+    Returns:
+        models_assistance.ExtraPayment: Extra payment created
+    """
+    
+    # Default values
+    if assistance is None:
+        assistance = create_assistance()
+        
+    if category is None:
+        category = models_assistance.ExtraPaymentCategory.objects.all()[0]
+    
+    # Create extra payment
+    extra_payment = models_assistance.ExtraPayment.objects.create(
+        assistance=assistance,
+        category=category,
+        amount=amount,
+    )
+    
+    return extra_payment
