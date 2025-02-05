@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 from assistance import models as assistance_models
 
 
@@ -156,7 +158,7 @@ class Payroll(models.Model):
         Returns:
             float: Total amount of the no attendance penalty
         """
-        return - self.no_attendance_days * 1000
+        return - self.no_attendance_days * settings.PENAALTY_NO_ATTENDANCE
     
     @property
     def penalties_amount(self) -> float:
@@ -198,9 +200,8 @@ class Payroll(models.Model):
         extra_unpaid_hours = sum([
             assistance.extra_unpaid_hours for assistance in assistances
         ])
-        extra_hour_multiplier = 2
         extra_hours_rate = int(extra_unpaid_hours * self.get_hour_rate() * 100) / 100
-        return float(extra_hours_rate * extra_hour_multiplier)
+        return float(extra_hours_rate * settings.EXTRA_HOUR_RATE)
     
     @property
     def subtotal(self) -> float:

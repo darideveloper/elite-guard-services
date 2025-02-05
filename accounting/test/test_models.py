@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
+from django.conf import settings
 
 from utils import test_data
 from assistance import models as assistance_models
@@ -223,7 +224,7 @@ class PayrollTest(TestCase):
         # Validate extra unpaid hours amount
         self.assertEqual(
             self.payroll.extra_unpaid_hours_amount,
-            int(hour_rate * 5 * 100) / 100 * 2
+            int(hour_rate * 5 * 100) / 100 * settings.EXTRA_HOUR_RATE
         )
         
     def test_subtotal(self):
@@ -258,10 +259,9 @@ class PayrollTest(TestCase):
         self.assistance_2.save()
         
         # Validate payroll subtotal
-        self.assertEqual(
-            self.payroll.subtotal,
-            2000 - 1000 - 30 + 70 + 110 + 3 * hour_rate * 2
-        )
+        total = 2000 - settings.PENAALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
+            * hour_rate * settings.EXTRA_HOUR_RATE
+        self.assertEqual(self.payroll.subtotal, total)
         
     def test_discount_amount(self):
         """Validate discount amount"""
@@ -336,19 +336,20 @@ class PayrollTest(TestCase):
         self.assistance_2.extra_unpaid_hours = 2
         self.assistance_2.save()
         
-        subtotal = 2000 - 1000 - 30 + 70 + 110 + 3 * hour_rate * 2
+        subtotal = 2000 - settings.PENAALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
+            * hour_rate * settings.EXTRA_HOUR_RATE
         
         # Add discounts
         self.__create_extra__("Descuento por robo o daño", [100, 200])
         
         # Update discount loans
-        self.payroll.discount_loans = -1000
+        self.payroll.discount_loans = -500
         self.payroll.save()
         
         # Validate total
         self.assertEqual(
             self.payroll.total,
-            subtotal - 300 - 1000
+            subtotal - 800
         )
         
     def test_total_0_no_attendance_penalty(self):

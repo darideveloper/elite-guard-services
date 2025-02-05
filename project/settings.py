@@ -20,6 +20,8 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 STORAGE_AWS = os.environ.get("STORAGE_AWS") == "True"
 HOST = os.getenv('HOST')
 TEST_HEADLESS = os.getenv('TEST_HEADLESS', 'False') == 'True'
+EXTRA_HOUR_RATE = float(os.getenv('EXTRA_HOUR_RATE', 0))
+PENAALTY_NO_ATTENDANCE = float(os.getenv('PENAALTY_NO_ATTENDANCE', 0))
 
 print(f"DEBUG: {DEBUG}")
 print(f"STORAGE_AWS: {STORAGE_AWS}")
