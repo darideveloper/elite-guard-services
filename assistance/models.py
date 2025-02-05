@@ -98,7 +98,6 @@ class WeeklyAssistance(models.Model):
     )
     week_number = models.IntegerField(
         verbose_name='Número de semana',
-        default=get_current_week()
     )
     start_date = models.DateField(
         verbose_name='Fecha de inicio',
@@ -156,6 +155,14 @@ class WeeklyAssistance(models.Model):
 
     def __str__(self):
         return f"{self.service} - Semana {self.week_number}"
+    
+    def save(self, *args, **kwargs):
+        """ Calculate default values """
+        
+        # Calculate week number
+        self.week_number = get_current_week(self.start_date)
+        
+        super(WeeklyAssistance, self).save(*args, **kwargs)
     
     def get_data_header(self):
         
