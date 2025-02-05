@@ -230,7 +230,7 @@ class WeeklyAssistance(models.Model):
             self.wednesday
         ])
         
-    def no_attendance_days(self) -> int:
+    def get_no_attendance_days(self) -> int:
         """ Get the number of days without attendance in the week
 
         Returns:

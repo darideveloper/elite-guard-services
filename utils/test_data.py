@@ -178,6 +178,7 @@ def create_assistance(
     service: models_services.Service = None,
     weekly_assistance: models_assistance.WeeklyAssistance = None,
     date: timezone.datetime = timezone.now(),
+    attendance: bool = True,
 ) -> models_assistance.Assistance:
     """Create a new assistance and return it
 
@@ -200,6 +201,7 @@ def create_assistance(
     assistance = models_assistance.Assistance.objects.create(
         weekly_assistance=weekly_assistance,
         date=date,
+        attendance=attendance,
     )
 
     return assistance

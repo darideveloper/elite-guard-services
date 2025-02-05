@@ -228,6 +228,62 @@ class AssistanceAdminTest(TestCase):
         self.assertEqual(len(rows), 1)
 
 
+class WeeklyAssistanceTest(TestCase):
+    """ validate custom methods in WeeklyAssistance model """
+    
+    def setUp(self):
+        
+        # Create initial data
+        call_command("apps_loaddata")
+        
+        # Create 2 assistances
+        today = timezone.now().date()
+        yesterday = today - timezone.timedelta(days=1)
+        self.weekly_assistance = test_data.create_weekly_assistance()
+        self.assistance_1 = test_data.create_assistance(
+            date=today,
+            weekly_assistance=self.weekly_assistance,
+            attendance=True,
+        )
+        self.assistance_2 = test_data.create_assistance(
+            date=yesterday,
+            weekly_assistance=self.weekly_assistance,
+            attendance=True,
+        )
+        self.assistance_1.save()
+        self.assistance_2.save()
+        
+    def test_get_worked_days(self):
+        """ Validate 2 worked days in weekly assistance """
+        
+        worked_days = self.weekly_assistance.get_worked_days()
+        self.assertEqual(worked_days, 2)
+        
+    def test_no_attendance_days(self):
+        """ Validate no attendance days based in shcedule weekly_attendances """
+        
+        weekly_attendances = self.weekly_assistance.service.schedule.weekly_attendances
+        worked_days = self.weekly_assistance.get_worked_days()
+        no_attendance_days = weekly_attendances - worked_days
+        self.assertEqual(
+            self.weekly_assistance.get_no_attendance_days(),
+            no_attendance_days
+        )
+        
+    def test_no_attendance_days_no_negative(self):
+        """ Validate no attendance days based in shcedule weekly_attendances
+        with no negative value (employee worked more than weekly attendances)
+        """
+        
+        weekly_attendances = 0
+        self.weekly_assistance.service.schedule.weekly_attendances = weekly_attendances
+        self.weekly_assistance.service.schedule.save()
+        self.assertEqual(
+            self.weekly_assistance.get_no_attendance_days(),
+            0
+        )
+        
+
 class WeeklyAssistanceAdminTest(TestCase):
     """Test custom features in admin/weekly-assistance"""
 

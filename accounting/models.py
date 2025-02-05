@@ -148,7 +148,7 @@ class Payroll(models.Model):
         Returns:
             int: Total of days without attendance
         """
-        return self.weekly_assistance.no_attendance_days()
+        return self.weekly_assistance.get_no_attendance_days()
     
     @property
     def no_attendance_penalty(self) -> float:
