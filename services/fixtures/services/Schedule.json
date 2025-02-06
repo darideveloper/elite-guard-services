@@ -27,7 +27,7 @@
         "fields": {
             "name": "24h",
             "weekly_attendances": 3,
-            "hours": 12,
+            "hours": 24,
             "start_time": "07:00:00",
             "end_time": "07:00:00"
         }
