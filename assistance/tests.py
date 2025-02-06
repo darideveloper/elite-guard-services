@@ -730,11 +730,13 @@ class ExtraPaymentAdminSeleniumTest(TestAdminBase):
         selectors = {
             "category": '.field-category select',
             "amount": '.field-amount input',
+            "notes": '.field-notes textarea',
             "save_and_go_back": '[value="Guardar y regresar"]',
         }
         elems = self.get_selenium_elems(selectors)
         self.select_set_value(selectors["category"], "1")
         elems["amount"].send_keys("100")
+        elems["notes"].send_keys("Test notes")
         
         # Save and go back
         elems["save_and_go_back"].click()
