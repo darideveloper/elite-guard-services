@@ -98,6 +98,26 @@ class EmployeeModelTest(TestCase):
         self.employee.save()
         
         self.assertEqual(19, self.employee.get_age())
+    
+    def test_get_full_name(self):
+        """ Test get full name with name, last_name_1 and last_name_2 """
+        
+        self.employee.last_name_2 = "Last 2"
+        self.employee.save()
+        
+        self.assertEqual(
+            f"{self.employee.name} {self.employee.last_name_1} "
+            f"{self.employee.last_name_2}",
+            self.employee.get_full_name()
+        )
+        
+    def test_get_full_name_no_last_2(self):
+        """ Test get full name with only name and last_name_1 """
+        
+        self.assertEqual(
+            f"{self.employee.name} {self.employee.last_name_1}",
+            self.employee.get_full_name()
+        )
         
 
 class LoanModelTest(TestCase):

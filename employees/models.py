@@ -426,7 +426,11 @@ class Employee(models.Model):
         Returns:
             str: Full name of the employee
         """
-        return f"{self.name} {self.last_name_1} {self.last_name_2}"
+        
+        full_name = f"{self.name} {self.last_name_1}"
+        if self.last_name_2:
+            full_name += f" {self.last_name_2}"
+        return full_name
     
 
 class Loan(models.Model):
