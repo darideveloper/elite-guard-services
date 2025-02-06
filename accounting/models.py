@@ -158,7 +158,7 @@ class Payroll(models.Model):
         Returns:
             float: Total amount of the no attendance penalty
         """
-        return - self.no_attendance_days * settings.PENAALTY_NO_ATTENDANCE
+        return - self.no_attendance_days * settings.PENALTY_NO_ATTENDANCE
     
     @property
     def penalties_amount(self) -> float:

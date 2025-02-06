@@ -259,7 +259,7 @@ class PayrollTest(TestCase):
         self.assistance_2.save()
         
         # Validate payroll subtotal
-        total = 2000 - settings.PENAALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
+        total = 2000 - settings.PENALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
             * hour_rate * settings.EXTRA_HOUR_RATE
         self.assertEqual(self.payroll.subtotal, total)
         
@@ -336,7 +336,7 @@ class PayrollTest(TestCase):
         self.assistance_2.extra_unpaid_hours = 2
         self.assistance_2.save()
         
-        subtotal = 2000 - settings.PENAALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
+        subtotal = 2000 - settings.PENALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
             * hour_rate * settings.EXTRA_HOUR_RATE
         
         # Add discounts
@@ -406,7 +406,7 @@ class PayrollTest(TestCase):
         # Validate penalties and subtotal
         self.assertEqual(
             self.payroll.no_attendance_penalty,
-            - self.payroll.no_attendance_days * settings.PENAALTY_NO_ATTENDANCE
+            - self.payroll.no_attendance_days * settings.PENALTY_NO_ATTENDANCE
         )
         self.assertEqual(self.payroll.subtotal, 0)
         
