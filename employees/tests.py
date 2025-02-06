@@ -412,6 +412,7 @@ class ReportEmployeeDetailsViewTest(TestCase):
             "Telefono de emergencias": self.employee.emergency_phone,
             "Conocimientos": self.employee.knowledge,
             "Habilidades": self.employee.skills,
+            "Historial de Estatus": self.employee.status_history,
         }
         
         # Login as admin and get page
@@ -503,7 +504,8 @@ class ReportEmployeePreviewViewTest(TestCase):
             self.employee.municipality.name,
             self.employee.postal_code,
             self.employee.phone,
-            "Si"
+            "Si",
+            self.employee.status_history,
         ]
         
         # Login as admin and get page
@@ -552,7 +554,8 @@ class ReportEmployeePreviewViewTest(TestCase):
             self.employee.bank.name,
             self.employee.card_number,
             self.employee.uniform_date.strftime("%d/%m/%Y"),
-            "Si"
+            "Si",
+            self.employee.status_history,
         ]
         
         # Login as admin and get page

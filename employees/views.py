@@ -53,6 +53,8 @@ class ReportEmployeeDetailsView(
         estado, municipio = employee.municipality.name.split(" / ")
         context['employee']["estado"] = estado
         context['employee']["municipio"] = municipio
+        
+        context['employee']["status_history"] = employee.status_history
 
         # add refs contact numbers
         refs = models.Ref.objects.filter(employee=employee)

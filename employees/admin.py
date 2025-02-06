@@ -236,6 +236,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             "Numero de tarjeta": employee.card_number if employee.card_number else "N/A",
             "Fecha de uniforme": uniform_date,
             "Activo": "Si" if employee.status.name == "Activo" else "No",
+            "Historial de estatus": employee.status_history,
         }
         full_name = f"{employee.name.title()} {last_name.title()}"
         context['title'] = f"Vista previa de {full_name}"
