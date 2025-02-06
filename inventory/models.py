@@ -41,7 +41,7 @@ class Item(models.Model):
         verbose_name_plural = 'Artículos'
         
     def __str__(self):
-        return f"{self.name} ({self.uuid}) En stock: {self.stock}"
+        return f"{self.name} ({self.uuid}) - En stock: {self.stock}"
         
         
 class ItemTransaction(models.Model):
