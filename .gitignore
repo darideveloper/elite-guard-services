@@ -13,3 +13,6 @@ db.*
 credentials.json
 staticfiles
 media
+.env
+.env.dev
+.env.prod
