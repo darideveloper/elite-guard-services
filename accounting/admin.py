@@ -15,9 +15,9 @@ class PayrollAdmin(admin.ModelAdmin):
         'skip_payment',
         'weekly_rate',
         'daily_rate',
-        'thusday_assistance',
+        'thursday_assistance',
         'friday_assistance',
-        'satuday_assistance',
+        'saturday_assistance',
         'sunday_assistance',
         'monday_assistance',
         'tuesday_assistance',
@@ -67,9 +67,9 @@ class PayrollAdmin(admin.ModelAdmin):
             value (bool): The boolean value to evaluate
         """
         if value:
-            image = "icon-no.svg"
-        else:
             image = "icon-yes.svg"
+        else:
+            image = "icon-no.svg"
             
         return format_html(
             '<img src="/static/admin/img/{}" alt="False">',
@@ -77,15 +77,15 @@ class PayrollAdmin(admin.ModelAdmin):
         )
     
     # Custom fields
-    def thusday_assistance(self, obj):
-        """ Return the assistance of the thusday """
+    def thursday_assistance(self, obj):
+        """ Return the assistance of the thursday """
         return self.__get_boolean_icon__(obj.get_day_assistance("thursday"))
     
     def friday_assistance(self, obj):
         """ Return the assistance of the friday """
         return self.__get_boolean_icon__(obj.get_day_assistance("friday"))
     
-    def satuday_assistance(self, obj):
+    def saturday_assistance(self, obj):
         """ Return the assistance of the saturday """
         return self.__get_boolean_icon__(obj.get_day_assistance("saturday"))
     
@@ -106,9 +106,9 @@ class PayrollAdmin(admin.ModelAdmin):
         return self.__get_boolean_icon__(obj.get_day_assistance("wednesday"))
     
     # Labels for custom fields
-    thusday_assistance.short_description = 'J'
+    thursday_assistance.short_description = 'J'
     friday_assistance.short_description = 'V'
-    satuday_assistance.short_description = 'S'
+    saturday_assistance.short_description = 'S'
     sunday_assistance.short_description = 'D'
     monday_assistance.short_description = 'L'
     tuesday_assistance.short_description = 'M'

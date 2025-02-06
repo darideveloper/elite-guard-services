@@ -115,7 +115,55 @@ class PayrollAdminTest(TestCase):
             len(weeks_options_values),
             len(set(weeks_options_values))
         )
+    
+    def test_days_icons(self):
+        """ Validate render "yes" and "no" icons in assistance days """
         
+        # Delete all payrolls
+        for payroll in self.payrolls:
+            payroll.delete()
+        
+        # Delete no required weekly assistances
+        for weekly_assistances in self.weekly_assistances[0:3]:
+            weekly_assistances.delete()
+        weekly_assistance = self.weekly_assistances[-1]
+        
+        # Update daily assistance
+        weekly_assistance.monday = True
+        weekly_assistance.tuesday = False
+        weekly_assistance.wednesday = True
+        weekly_assistance.thursday = False
+        weekly_assistance.friday = True
+        weekly_assistance.saturday = False
+        weekly_assistance.sunday = True
+        weekly_assistance.save()
+        
+        # Create payroll
+        payroll = test_data.create_payroll(weekly_assistance=weekly_assistance)
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        
+        # Open list page
+        response = self.client.get(self.endpoint)
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Validate icons
+        img_monday = soup.select_one(".field-monday_assistance > img")
+        img_tuesday = soup.select_one(".field-tuesday_assistance > img")
+        img_wednesday = soup.select_one(".field-wednesday_assistance > img")
+        img_thursday = soup.select_one(".field-thursday_assistance > img")
+        img_friday = soup.select_one(".field-friday_assistance > img")
+        img_saturday = soup.select_one(".field-saturday_assistance > img")
+        img_sunday = soup.select_one(".field-sunday_assistance > img")
+        self.assertEqual(img_monday["src"], "/static/admin/img/icon-yes.svg")
+        self.assertEqual(img_tuesday["src"], "/static/admin/img/icon-no.svg")
+        self.assertEqual(img_wednesday["src"], "/static/admin/img/icon-yes.svg")
+        self.assertEqual(img_thursday["src"], "/static/admin/img/icon-no.svg")
+        self.assertEqual(img_friday["src"], "/static/admin/img/icon-yes.svg")
+        self.assertEqual(img_saturday["src"], "/static/admin/img/icon-no.svg")
+        self.assertEqual(img_sunday["src"], "/static/admin/img/icon-yes.svg")
+
 
 class PayrollAdminSeleniumTest(TestAdminBase):
     """ Test Payroll admin customization and mtehods """
