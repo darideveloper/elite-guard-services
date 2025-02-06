@@ -376,7 +376,7 @@ class Employee(models.Model):
         """ Custom save method """
         
         is_new = self._state.adding
-        now = timezone.now()
+        now = timezone.now().astimezone()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
                 
         # save in status_history the employee status change
