@@ -384,5 +384,54 @@ class PayrollTest(TestCase):
         self.assistance_2.save()
         
         self.assertEqual(self.payroll.total, 0)
+    
+    def test_subtotal_0_no_negative(self):
+        """ Validate subtotal fixed to 0 if negative """
+        
+        # Update assistances in weekly assistance
+        # 0 assistances
+        self.payroll.weekly_assistance.monday = False
+        self.payroll.weekly_assistance.tuesday = False
+        self.payroll.weekly_assistance.wednesday = False
+        self.payroll.weekly_assistance.thursday = False
+        self.payroll.weekly_assistance.friday = False
+        self.payroll.weekly_assistance.saturday = False
+        self.payroll.weekly_assistance.sunday = False
+        self.payroll.weekly_assistance.save()
+
+        # Update weekly_attendances
+        self.payroll.weekly_assistance.service.schedule.weekly_attendances = 5
+        self.payroll.weekly_assistance.service.schedule.save()
+
+        # Validate penalties and subtotal
+        self.assertEqual(
+            self.payroll.no_attendance_penalty,
+            - self.payroll.no_attendance_days * settings.PENAALTY_NO_ATTENDANCE
+        )
+        self.assertEqual(self.payroll.subtotal, 0)
+        
+    def test_total_0_no_negative(self):
+        """ Validate total fixed to 0 if negative """
+        
+        # Update assistances in weekly assistance
+        # full attendance
+        self.payroll.weekly_assistance.monday = True
+        self.payroll.weekly_assistance.tuesday = True
+        self.payroll.weekly_assistance.wednesday = True
+        self.payroll.weekly_assistance.thursday = True
+        self.payroll.weekly_assistance.friday = True
+        self.payroll.weekly_assistance.saturday = True
+        self.payroll.weekly_assistance.sunday = True
+        self.payroll.weekly_assistance.save()
+
+        # Add discounts
+        self.__create_extra__("Descuento por robo o daño", [20000])
+        
+        # Validate subtotal and total
+        self.assertEqual(
+            self.payroll.subtotal,
+            self.payroll.weekly_rate
+        )
+        self.assertEqual(self.payroll.total, 0)
         
         

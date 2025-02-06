@@ -270,7 +270,10 @@ class Payroll(models.Model):
         total = float(self.subtotal)
         total += float(self.discount_amount)
         total += float(self.discount_loans)
-        return int(total * 100) / 100
+        total = int(total * 100) / 100
+        if total < 0:
+            return 0
+        return total
     
     # Custom name for properties
     agreement_name.fget.short_description = 'Servicio'
