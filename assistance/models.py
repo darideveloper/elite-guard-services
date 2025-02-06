@@ -292,8 +292,7 @@ class ExtraPayment(models.Model):
     )
     notes = models.TextField(
         verbose_name='Notas',
-        null=True,
-        blank=True
+        default=''
     )
     created_at = models.DateTimeField(
         verbose_name='Fecha de creación',

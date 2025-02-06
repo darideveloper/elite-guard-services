@@ -329,6 +329,7 @@ def create_extra_payment(
     assistance: models_assistance.Assistance = None,
     category: models_assistance.ExtraPaymentCategory = None,
     amount: float = 10.0,
+    notes: str = "",
 ) -> models_assistance.ExtraPayment:
     """Create a new extra payment and return it
 
@@ -336,6 +337,7 @@ def create_extra_payment(
         assistance (models_assistance.Assistance): Assistance of the extra payment
         category (models_assistance.ExtraPaymentCategory): Category of the extra payment
         amount (float): Amount of the extra payment
+        notes (str): Notes of the extra payment
         
     Returns:
         models_assistance.ExtraPayment: Extra payment created
@@ -353,6 +355,7 @@ def create_extra_payment(
         assistance=assistance,
         category=category,
         amount=amount,
+        notes=notes,
     )
     
     return extra_payment

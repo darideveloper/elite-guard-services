@@ -328,9 +328,7 @@ class Employee(models.Model):
         null=True,
         unique=True
     )
-    balance = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
+    balance = models.FloatField(
         verbose_name='Saldo de préstamos',
         default=0
     )
@@ -472,7 +470,7 @@ class Loan(models.Model):
         """ Custom save method """
         
         # update employee balance when save a wekly loan
-        self.employee.balance += self.amount
+        self.employee.balance += float(self.amount)
         self.employee.save()
         
         # Save the wekly loan
