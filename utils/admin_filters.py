@@ -53,22 +53,27 @@ class WeekNumberFilter(admin.SimpleListFilter):
         
         # Get all distinct week numbers from the dataset
         week_numbers = model_admin.get_queryset(
-            request).values(WeekNumberFilter.field_name).distinct()
+            request
+        ).values(WeekNumberFilter.field_name).distinct()
         current_week = get_current_week()
-
+        
         # Generate the options
         options = []
         for week_number in week_numbers:
             if week_number[WeekNumberFilter.field_name] == current_week:
-                options.append((
+                option = (
                     week_number[WeekNumberFilter.field_name],
                     f'Semana actual ({current_week})'
-                ))
+                )
             else:
-                options.append((
+                option = (
                     week_number[WeekNumberFilter.field_name],
                     f'Semana {week_number[WeekNumberFilter.field_name]}'
-                ))
+                )
+                
+            # Save option without duplicates
+            if option not in options:
+                options.append(option)
 
         return options
 

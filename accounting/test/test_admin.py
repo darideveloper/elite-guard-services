@@ -19,9 +19,7 @@ class PayrollAdminTest(TestCase):
 
         # Create today and last week and last year assistances
         self.weekly_assistances = [
-            test_data.create_weekly_assistance(),
-            test_data.create_weekly_assistance(),
-            test_data.create_weekly_assistance(),
+            test_data.create_weekly_assistance() for _ in range(4)
         ]
         current_week = get_current_week()
         last_year = timezone.now() - timezone.timedelta(days=365)
@@ -97,6 +95,27 @@ class PayrollAdminTest(TestCase):
         self.assertEqual(int(week_selected["value"]), current_week)
         self.assertEqual(week_selected.text.strip(), f"Semana actual ({current_week})")
 
+    def test_custom_filters_no_duplicated_week_number(self):
+        """ Validate no duplicated week number in admin filter """
+        
+        # Login as admin
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+
+        # Open list page
+        response = self.client.get(self.endpoint)
+        soup = BeautifulSoup(response.content, "html.parser")
+         
+        # Validate week numbers
+        weeks_options = soup.select(
+            'option[data-name="week_number"]'
+        )
+        weeks_options_values = [int(option["value"]) for option in weeks_options]
+        
+        self.assertEqual(
+            len(weeks_options_values),
+            len(set(weeks_options_values))
+        )
+        
 
 class PayrollAdminSeleniumTest(TestAdminBase):
     """ Test Payroll admin customization and mtehods """
