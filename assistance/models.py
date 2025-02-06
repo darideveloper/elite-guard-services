@@ -101,11 +101,9 @@ class WeeklyAssistance(models.Model):
     )
     start_date = models.DateField(
         verbose_name='Fecha de inicio',
-        default=timezone.now
     )
     end_date = models.DateField(
         verbose_name='Fecha de fin',
-        default=timezone.now() + timezone.timedelta(days=6)
     )
     thursday = models.BooleanField(
         verbose_name='Jueves',
@@ -159,7 +157,9 @@ class WeeklyAssistance(models.Model):
     def save(self, *args, **kwargs):
         """ Calculate default values """
         
-        # Calculate week number
+        # Calculate dates
+        self.start_date = timezone.now()
+        self.end_date = timezone.now() + timezone.timedelta(days=6)
         self.week_number = get_current_week(self.start_date)
         
         super(WeeklyAssistance, self).save(*args, **kwargs)
