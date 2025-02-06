@@ -93,6 +93,8 @@ class Command(BaseCommand):
                     amount=-discounts_total,
                     details=loan_details,
                 )
+                
+                print(f"\tCreated loan for {employee} with amount {discounts_total}")
 
             else:
                 # Discount loans from total
