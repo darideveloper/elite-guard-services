@@ -246,3 +246,26 @@ class PayrollAdminSeleniumTest(TestAdminBase):
         checkboxes = self.driver.find_elements(By.CSS_SELECTOR, selector_checkboxes)
         for checkbox in checkboxes:
             self.assertTrue(checkbox.is_selected())
+
+
+class PayrollSummaryAdminSeleniumTest(TestAdminBase):
+    """ Test Payroll admin customization and mtehods """
+    
+    def setUp(self):
+        
+        # Set enpoint
+        super().setUp("/admin/accounting/payrollsummary/")
+   
+        # Create payrolls
+        test_data.create_payroll()
+        test_data.create_payroll(skip_payment=True)
+        
+    def test_highlight_skip_payment(self):
+        """ Test highlight skip payment """
+        
+        # Check highlight class
+        selectors = {
+            "hightlight_row": 'tr.highlight-row',
+        }
+        elems = self.get_selenium_elems(selectors)
+        self.assertEqual(len(elems), 1)

@@ -204,6 +204,7 @@ class AdminSetup {
       "extras": [this.extrasGoBackButtonAssistance],
       "asistencias diarias": [this.smallerInputNumber],
       "nóminas": [this.highlightSkipPaymentRows, this.exportExcelSetup],
+      "resúmenes de nómina": [this.highlightSkipPaymentRows],
     }
     if (methods[this.currrentPage]) {
       for (const method of methods[this.currrentPage]) {
