@@ -297,7 +297,8 @@ class ExtraPayment(models.Model):
         verbose_name='Monto',
         max_digits=10,
         decimal_places=2,
-        default=0
+        default=0,
+        help_text='Monto del extra (sieempre positivo +)'
     )
     notes = models.TextField(
         verbose_name='Notas',
