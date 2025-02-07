@@ -61,10 +61,7 @@ class AdminSetup {
     return null
   }
 
-  /**
-   * Setup the weekly assistance page
-   */
-  setupWeeklyAssistance() {
+  exportExcelSetup() {
     this.#selectDropdownOption('action', 'export_excel')
     setTimeout(() => {
       this.#selectAllRegisters()
@@ -202,11 +199,11 @@ class AdminSetup {
    */
   autorun() {
     const methods = {
-      "asistencias semanales": [this.setupWeeklyAssistance],
+      "asistencias semanales": [this.exportExcelSetup],
       "empleados": [this.validateCurp],
       "extras": [this.extrasGoBackButtonAssistance],
       "asistencias diarias": [this.smallerInputNumber],
-      "nóminas": [this.highlightSkipPaymentRows],
+      "nóminas": [this.highlightSkipPaymentRows, this.exportExcelSetup],
     }
     if (methods[this.currrentPage]) {
       for (const method of methods[this.currrentPage]) {

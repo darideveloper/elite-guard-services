@@ -1,3 +1,4 @@
+from time import sleep
 from io import BytesIO
 
 from django.test import TestCase
@@ -6,6 +7,7 @@ from django.utils import timezone
 
 import openpyxl
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
 
 from utils.dates import get_current_week
 from utils import test_data
@@ -202,7 +204,7 @@ class PayrollAdminTest(TestCase):
         data_row = self.payrolls[0].get_data_list()
         self.assertEqual([cell.value for cell in worksheet[1]], header)
         self.assertEqual([cell.value for cell in worksheet[2]], data_row)
-        
+
 
 class PayrollAdminSeleniumTest(TestAdminBase):
     """ Test Payroll admin customization and mtehods """
@@ -225,3 +227,22 @@ class PayrollAdminSeleniumTest(TestAdminBase):
         }
         elems = self.get_selenium_elems(selectors)
         self.assertEqual(len(elems), 1)
+        
+    def test_default_action(self):
+        """Validate to have the export_excel action as default with js"""
+
+        self.driver.refresh()
+        sleep(2)
+        selectors = {"select_action_value": 'select[name="action"] + span'}
+        values = self.get_selenium_elems(selectors)
+        self.assertEqual(values["select_action_value"].text, "Exportar a Excel")
+
+    def test_all_rows_selected(self):
+        """Validate all rows selected by default"""
+
+        self.driver.refresh()
+        sleep(2)
+        selector_checkboxes = "input.action-select"
+        checkboxes = self.driver.find_elements(By.CSS_SELECTOR, selector_checkboxes)
+        for checkbox in checkboxes:
+            self.assertTrue(checkbox.is_selected())
