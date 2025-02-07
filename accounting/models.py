@@ -92,7 +92,11 @@ class Payroll(models.Model):
             float: Hourly rate of the employee
         """
         hours = self.weekly_assistance.service.schedule.hours
-        return self.daily_rate / hours
+        hour_rate = self.daily_rate / hours
+        print("hours", hours)
+        print("daily_rate", self.daily_rate)
+        print("hour_rate", hour_rate)
+        return hour_rate
     
     def get_data_header(self) -> list:
         """ get the header of the payroll data
@@ -280,8 +284,10 @@ class Payroll(models.Model):
         extra_unpaid_hours = sum([
             assistance.extra_unpaid_hours for assistance in assistances
         ])
-        extra_hours_rate = int(extra_unpaid_hours * self.get_hour_rate() * 100) / 100
-        return float(extra_hours_rate * settings.EXTRA_HOUR_RATE)
+        extra_hours_base_amount = extra_unpaid_hours * self.get_hour_rate()
+        extra_hours_amount = extra_hours_base_amount * settings.EXTRA_HOUR_RATE
+        extra_hours_amount_fixed = int(extra_hours_amount * 100) / 100
+        return extra_hours_amount_fixed
     
     @property
     def subtotal(self) -> float:

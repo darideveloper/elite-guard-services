@@ -224,11 +224,25 @@ class PayrollTest(TestCase):
         # Validate extra unpaid hours amount
         self.assertEqual(
             self.payroll.extra_unpaid_hours_amount,
-            int(hour_rate * 5 * 100) / 100 * settings.EXTRA_HOUR_RATE
+            int(hour_rate * 5 * 100 * settings.EXTRA_HOUR_RATE) / 100
         )
         
     def test_subtotal(self):
         """Validate payroll subtotal"""
+       
+        # Update weekly rate
+        self.payroll.weekly_assistance.service.employee.weekly_rate = 2000
+       
+        # Update weekly_attendances
+        self.payroll.weekly_assistance.service.schedule.weekly_attendances = 5
+        self.payroll.weekly_assistance.service.schedule.save()
+        
+        # Update extra unpaid hours
+        hour_rate = self.payroll.get_hour_rate()
+        self.assistance_1.extra_unpaid_hours = 1
+        self.assistance_1.save()
+        self.assistance_2.extra_unpaid_hours = 2
+        self.assistance_2.save()
         
         # Update assistances in weekly assistance
         # Only 1 no attendance
@@ -241,27 +255,20 @@ class PayrollTest(TestCase):
         self.payroll.weekly_assistance.sunday = False
         self.payroll.weekly_assistance.save()
 
-        # Update weekly_attendances
-        self.payroll.weekly_assistance.service.schedule.weekly_attendances = 5
-        self.payroll.weekly_assistance.service.schedule.save()
-
         # Update amount required for the subtotal
-        self.payroll.weekly_assistance.service.employee.weekly_rate = 2000
         self.__create_extra__("Penalización", [10, 20])
         self.__create_extra__("Bono", [30, 40])
         self.__create_extra__("Otro", [50, 60])
         
-        # Update extra unpaid hours
-        hour_rate = self.payroll.get_hour_rate()
-        self.assistance_1.extra_unpaid_hours = 1
-        self.assistance_1.save()
-        self.assistance_2.extra_unpaid_hours = 2
-        self.assistance_2.save()
-        
         # Validate payroll subtotal
-        total = 2000 - settings.PENALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
-            * hour_rate * settings.EXTRA_HOUR_RATE
-        self.assertEqual(self.payroll.subtotal, total)
+        subtotal = 2000
+        subtotal -= settings.PENALTY_NO_ATTENDANCE
+        subtotal -= 30
+        subtotal += 70
+        subtotal += 110
+        subtotal += 3 * hour_rate * settings.EXTRA_HOUR_RATE
+        
+        self.assertEqual(self.payroll.subtotal, subtotal)
         
     def test_discount_amount(self):
         """Validate discount amount"""
@@ -305,8 +312,21 @@ class PayrollTest(TestCase):
         # Validate card number
         self.assertEqual(self.payroll.card_number, card_number)
         
-    def test_total(self):
-        """Validate total"""
+    def test_total_discounts(self):
+        """ Validate total with disccounts """
+        
+        # Update weekly rate
+        self.payroll.weekly_assistance.service.employee.weekly_rate = 2000
+        
+        # Update weekly_attendances
+        self.payroll.weekly_assistance.service.schedule.weekly_attendances = 5
+        self.payroll.weekly_assistance.service.schedule.save()
+        
+        # Update extra unpaid hours
+        self.assistance_1.extra_unpaid_hours = 1
+        self.assistance_1.save()
+        self.assistance_2.extra_unpaid_hours = 2
+        self.assistance_2.save()
         
         # Update assistances in weekly assistance
         # Only 1 no attendance
@@ -319,25 +339,10 @@ class PayrollTest(TestCase):
         self.payroll.weekly_assistance.sunday = False
         self.payroll.weekly_assistance.save()
 
-        # Update weekly_attendances
-        self.payroll.weekly_assistance.service.schedule.weekly_attendances = 5
-        self.payroll.weekly_assistance.service.schedule.save()
-
         # Update amount required for the subtotal
-        self.payroll.weekly_assistance.service.employee.weekly_rate = 2000
         self.__create_extra__("Penalización", [10, 20])
         self.__create_extra__("Bono", [30, 40])
         self.__create_extra__("Otro", [50, 60])
-        
-        # Update extra unpaid hours
-        hour_rate = self.payroll.get_hour_rate()
-        self.assistance_1.extra_unpaid_hours = 1
-        self.assistance_1.save()
-        self.assistance_2.extra_unpaid_hours = 2
-        self.assistance_2.save()
-        
-        subtotal = 2000 - settings.PENALTY_NO_ATTENDANCE - 30 + 70 + 110 + 3 \
-            * hour_rate * settings.EXTRA_HOUR_RATE
         
         # Add discounts
         self.__create_extra__("Descuento por robo o daño", [100, 200])
@@ -349,9 +354,9 @@ class PayrollTest(TestCase):
         # Validate total
         self.assertEqual(
             self.payroll.total,
-            subtotal - 800
-        )
-        
+            self.payroll.subtotal - 800
+        )        
+    
     def test_total_0_no_attendance_penalty(self):
         """Validate total when the value is 0
         because of the no attendance penalty"""
