@@ -27,6 +27,10 @@ class Payroll(models.Model):
         verbose_name='Fecha de actualización',
         auto_now=True,
     )
+    paid = models.BooleanField(
+        default=False,
+        verbose_name='Pagado',
+    )
     
     class Meta:
         verbose_name = 'Nómina'

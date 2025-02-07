@@ -37,6 +37,7 @@ class PayrollAdmin(admin.ModelAdmin):
         'bank',
         'card_number',
         'total',
+        'paid',
     )
     list_filter = (
         'weekly_assistance__service',
@@ -46,6 +47,7 @@ class PayrollAdmin(admin.ModelAdmin):
     )
     list_editable = (
         'skip_payment',
+        'paid',
     )
     readonly_fields = (
         'created_at',
@@ -134,6 +136,7 @@ class PayrollSummaryAdmin(admin.ModelAdmin):
         'bank',
         'card_number',
         'total',
+        'paid',
     )
     list_filter = (
         'weekly_assistance__service',
@@ -143,6 +146,7 @@ class PayrollSummaryAdmin(admin.ModelAdmin):
     )
     list_editable = (
         'skip_payment',
+        'paid',
     )
     readonly_fields = (
         'created_at',
