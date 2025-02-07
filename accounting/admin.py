@@ -123,3 +123,33 @@ class PayrollAdmin(admin.ModelAdmin):
     
     export_excel.short_description = 'Exportar a Excel'
     actions = [export_excel]
+    
+    
+@admin.register(models.PayrollSummary)
+class PayrollSummaryAdmin(admin.ModelAdmin):
+    list_display = (
+        'agreement_name',
+        'employee_name',
+        'skip_payment',
+        'bank',
+        'card_number',
+        'total',
+    )
+    list_filter = (
+        'weekly_assistance__service',
+        WeekNumberFilter,
+        YearFilter,
+        'skip_payment'
+    )
+    list_editable = (
+        'skip_payment',
+    )
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+    ordering = (
+        'id',
+    )
+    year_filter_field = "weekly_assistance__start_date"
+    week_filter_field = "weekly_assistance__week_number"

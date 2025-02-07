@@ -390,3 +390,12 @@ class Payroll(models.Model):
     card_number.fget.short_description = 'Número de tarjeta'
     total.fget.short_description = 'A pagar'
     
+    
+class PayrollSummary(Payroll):
+    class Meta:
+        proxy = True
+        verbose_name = 'Resumen de nómina'
+        verbose_name_plural = 'Resúmenes de nómina'
+        
+    def __str__(self):
+        return f'(Resumen) {self.weekly_assistance}'
