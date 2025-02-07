@@ -5,6 +5,7 @@ from accounting import models
 from utils.admin_filters import (
     YearFilter, WeekNumberFilter
 )
+from utils.excel import get_excel_response
 
 
 @admin.register(models.Payroll)
@@ -114,3 +115,11 @@ class PayrollAdmin(admin.ModelAdmin):
     tuesday_assistance.short_description = 'M'
     wednesday_assistance.short_description = 'X'
     
+    # Custom actions
+    def export_excel(self, request, queryset):
+        """ Export the selected payrolls to an excel file with custom styles """
+        
+        return get_excel_response(queryset, "Nómina Semana")
+    
+    export_excel.short_description = 'Exportar a Excel'
+    actions = [export_excel]

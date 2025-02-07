@@ -5,7 +5,6 @@ import openpyxl
 from django.test import TestCase, LiveServerTestCase
 from django.core.management import call_command
 from django.utils import timezone
-from django.urls import reverse
 from django.conf import settings
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
@@ -441,10 +440,9 @@ class WeeklyAssistanceAdminTest(TestCase):
         """Validate excel generated in export action"""
 
         # Generate excel
-        url = reverse("admin:assistance_weeklyassistance_changelist")
         self.client.login(username=self.admin_user, password=self.admin_pass)
         response = self.client.post(
-            url,
+            self.endpoint,
             {"action": "export_excel", "_selected_action": [self.weekly_assistance.id]},
         )
 

@@ -1,8 +1,12 @@
+from io import BytesIO
+
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
 
+import openpyxl
 from bs4 import BeautifulSoup
+
 from utils.dates import get_current_week
 from utils import test_data
 from core.test_base.test_admin import TestAdminBase
@@ -164,6 +168,41 @@ class PayrollAdminTest(TestCase):
         self.assertEqual(img_saturday["src"], "/static/admin/img/icon-no.svg")
         self.assertEqual(img_sunday["src"], "/static/admin/img/icon-yes.svg")
 
+    def test_action_export_excel(self):
+        """ Validate excel generated in export action """
+        
+        self.client.login(username=self.admin_user, password=self.admin_pass)
+        response = self.client.post(
+            self.endpoint,
+            {"action": "export_excel", "_selected_action": [self.payrolls[0].id]},
+        )
+        
+        # Check response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response["Content-Type"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        self.assertIn("Content-Disposition", response)
+        self.assertIn(
+            "attachment; filename=export.xlsx", response["Content-Disposition"]
+        )
+        
+        workbook = openpyxl.load_workbook(BytesIO(response.content))
+        worksheet = workbook.active
+
+        # Check the sheet title
+        week_number = self.payrolls[0].weekly_assistance.week_number
+        self.assertEqual(
+            worksheet.title, f"Nómina Semana {week_number}"
+        )
+        
+        # Check header and data row
+        header = self.payrolls[0].get_data_header()
+        data_row = self.payrolls[0].get_data_list()
+        self.assertEqual([cell.value for cell in worksheet[1]], header)
+        self.assertEqual([cell.value for cell in worksheet[2]], data_row)
+        
 
 class PayrollAdminSeleniumTest(TestAdminBase):
     """ Test Payroll admin customization and mtehods """

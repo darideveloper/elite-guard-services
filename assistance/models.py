@@ -208,6 +208,15 @@ class WeeklyAssistance(models.Model):
             self.notes
         ])
         
+    def get_is_highlighted(self) -> bool:
+        """ get if the weekly assistance is highlighted
+        (no highlighted by default)
+        
+        Returns:
+            bool: always False
+        """
+        return False
+        
     def get_day_assistance(self, day: str) -> bool:
         """ Get the assistance of the day
 

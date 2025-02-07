@@ -94,6 +94,86 @@ class Payroll(models.Model):
         hours = self.weekly_assistance.service.schedule.hours
         return self.daily_rate / hours
     
+    def get_data_header(self) -> list:
+        """ get the header of the payroll data
+        
+        Returns:
+            list: Header of the payroll data
+        """
+        
+        return [
+            'Servicio',
+            'Empleado',
+            'Omitir pago',
+            'Salario semanal',
+            'Salario diario',
+            'j',
+            'v',
+            's',
+            'd',
+            'l',
+            'm',
+            'x',
+            'Días trabajados',
+            'Faltas',
+            'Penalización por faltas',
+            'Otras penalizaciones',
+            'Bonos',
+            'Otros',
+            'Horas extras',
+            'Subtotal',
+            'Descuentos por robo o daño',
+            'Descuento por préstamos',
+            'Ubicación',
+            'Banco',
+            'Número de tarjeta',
+            'A pagar',
+        ]
+        
+    def get_data_list(self) -> list:
+        """ get the data of the payroll
+        
+        Returns:
+            list: Data of the payroll
+        """
+        
+        return [
+            self.agreement_name,
+            self.employee_name,
+            "sí" if self.skip_payment else "no",
+            self.weekly_rate,
+            self.daily_rate,
+            'a' if self.get_day_assistance('thursday') else 'f',
+            'a' if self.get_day_assistance('friday') else 'f',
+            'a' if self.get_day_assistance('saturday') else 'f',
+            'a' if self.get_day_assistance('sunday') else 'f',
+            'a' if self.get_day_assistance('monday') else 'f',
+            'a' if self.get_day_assistance('tuesday') else 'f',
+            'a' if self.get_day_assistance('wednesday') else 'f',
+            self.worked_days,
+            self.no_attendance_days,
+            self.no_attendance_penalty,
+            self.penalties_amount,
+            self.bonuses_amount,
+            self.other_amount,
+            self.extra_unpaid_hours_amount,
+            self.subtotal,
+            self.discount_amount,
+            self.discount_loans,
+            self.location,
+            self.bank,
+            self.card_number,
+            self.total,
+        ]
+        
+    def get_is_highlighted(self) -> bool:
+        """ get if the payroll is highlighted
+        
+        Returns:
+            bool: True if the payroll is highlighted, False otherwise
+        """
+        return self.skip_payment
+    
     # Custom properties
     @property
     def agreement_name(self) -> str:
@@ -274,6 +354,16 @@ class Payroll(models.Model):
         if total < 0:
             return 0
         return total
+    
+    @property
+    def week_number(self) -> int:
+        """ get the week number of the payroll
+        
+        Returns:
+            int: Week number of the payroll
+        """
+        
+        return self.weekly_assistance.week_number
     
     # Custom name for properties
     agreement_name.fget.short_description = 'Servicio'
