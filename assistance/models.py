@@ -158,8 +158,8 @@ class WeeklyAssistance(models.Model):
         """ Calculate default values """
         
         # Calculate dates
-        self.start_date = timezone.now()
-        self.end_date = timezone.now() + timezone.timedelta(days=6)
+        self.start_date = timezone.now().astimezone()
+        self.end_date = self.start_date + timezone.timedelta(days=6)
         self.week_number = get_current_week(self.start_date)
         
         super(WeeklyAssistance, self).save(*args, **kwargs)

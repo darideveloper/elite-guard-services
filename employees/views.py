@@ -151,7 +151,6 @@ class ApiValidateCurpView(
         curp17 = matched.group(1)
         calculated_digit = verification_digit(curp17)
         provided_digit = int(matched.group(2))
-        print({calculated_digit, provided_digit})
 
         return calculated_digit == provided_digit
 

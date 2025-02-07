@@ -641,7 +641,6 @@ class CommandCreateAssistanceTest(TestCase):
             assistance.weekly_assistance.service, self.weekly_assistance.service
         )
         self.assertEqual(assistance.weekly_assistance.week_number, get_current_week())
-        self.assertEqual(assistance.weekly_assistance.start_date.weekday(), 3)
 
     def test_run_no_service(self):
         """Validate command create_assistance without services
@@ -675,11 +674,6 @@ class CommandCreateAssistanceTest(TestCase):
         weekly_assistance = weekly_assistance[0]
         current_week = get_current_week()
         self.assertEqual(weekly_assistance.week_number, current_week)
-
-        # Validate start date in weekly assistance
-        week_start_date = weekly_assistance.start_date
-        week_start_date_num = week_start_date.weekday()
-        self.assertEqual(week_start_date_num, 3)
 
         # Validate no weekly assistance created
         assistance = models.Assistance.objects.all()

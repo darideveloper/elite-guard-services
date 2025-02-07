@@ -355,7 +355,7 @@ class PayrollTest(TestCase):
         self.assertEqual(
             self.payroll.total,
             self.payroll.subtotal - 800
-        )        
+        )
     
     def test_total_0_no_attendance_penalty(self):
         """Validate total when the value is 0
