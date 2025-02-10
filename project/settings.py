@@ -262,11 +262,12 @@ JAZZMIN_SETTINGS = {
         "assistance.ExtraPaymentCategory": "fas fa-file",
         "assistance.ExtraPayment": "fas fa-file-invoice-dollar",
         
-        "inventory.item": "fas fa-box",
-        "inventory.itemtransaction": "fas fa-exchange-alt",
-        "inventory.itemloan": "fas fa-hand-holding-usd",
+        "inventory.Item": "fas fa-box",
+        "inventory.ItemTransaction": "fas fa-exchange-alt",
+        "inventory.ItemLoan": "fas fa-hand-holding-usd",
      
-        "accounting.payroll": "fas fa-solid fa-wallet",
+        "accounting.Payroll": "fas fa-solid fa-wallet",
+        "accounting.PayrollSummary": "fas fa-money-check-alt",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
