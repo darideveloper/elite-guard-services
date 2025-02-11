@@ -631,6 +631,8 @@ class CommandCreateAssistanceTest(TestCase):
 
         # Run command
         call_command("create_assistance")
+        
+        weekly_assistances_num = models.WeeklyAssistance.objects.count()
 
         # Validate weekly assistance created and content
         time_zone = timezone.get_current_timezone()
@@ -641,6 +643,10 @@ class CommandCreateAssistanceTest(TestCase):
             assistance.weekly_assistance.service, self.weekly_assistance.service
         )
         self.assertEqual(assistance.weekly_assistance.week_number, get_current_week())
+        
+        # Validate keep same amount of weekly assistances
+        weekly_assistances_num_new = models.WeeklyAssistance.objects.count()
+        self.assertEqual(weekly_assistances_num, weekly_assistances_num_new)
 
     def test_run_no_service(self):
         """Validate command create_assistance without services
@@ -658,29 +664,25 @@ class CommandCreateAssistanceTest(TestCase):
 
     def test_run_no_weekly_assistance(self):
         """Validate command create_assistance without weekly assistance
-        (assistance and weekly asistance created)"""
+        (raise error)"""
 
         # Delete all services
         models.WeeklyAssistance.objects.all().delete()
 
         # Run command
-        call_command("create_assistance")
+        try:
+            call_command("create_assistance")
+        except Exception:
+            pass
 
-        # Validate weekly assistances created
+        # Validate weekly assistances no created
         weekly_assistance = models.WeeklyAssistance.objects.all()
-        self.assertEqual(len(weekly_assistance), 1)
+        self.assertEqual(len(weekly_assistance), 0)
 
-        # Validate week number in weekly assistance
-        weekly_assistance = weekly_assistance[0]
-        current_week = get_current_week()
-        self.assertEqual(weekly_assistance.week_number, current_week)
-
-        # Validate no weekly assistance created
+        # Validate no weekly assistance no created
         assistance = models.Assistance.objects.all()
-        self.assertEqual(len(assistance), 1)
-        assistance = assistance[0]
-        self.assertEqual(assistance.weekly_assistance, weekly_assistance)
-
+        self.assertEqual(len(assistance), 0)
+        
 
 class ExtraPaymentAdminSeleniumTest(TestAdminBase):
     """ Test custom features in admin/extra-payment """
