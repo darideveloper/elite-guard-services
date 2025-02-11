@@ -161,7 +161,7 @@ class WeeklyAssistance(models.Model):
         self.start_date = timezone.now().astimezone()
         self.end_date = self.start_date + timezone.timedelta(days=6)
         self.week_number = get_current_week(self.start_date)
-        
+    
         super(WeeklyAssistance, self).save(*args, **kwargs)
     
     def get_data_header(self):
