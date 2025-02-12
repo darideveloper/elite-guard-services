@@ -161,7 +161,7 @@ class WeeklyAssistance(models.Model):
         self.start_date = timezone.now().astimezone()
         self.end_date = self.start_date + timezone.timedelta(days=6)
         self.week_number = get_current_week(self.start_date)
-        
+    
         super(WeeklyAssistance, self).save(*args, **kwargs)
     
     def get_data_header(self):
@@ -297,7 +297,8 @@ class ExtraPayment(models.Model):
         verbose_name='Monto',
         max_digits=10,
         decimal_places=2,
-        default=0
+        default=0,
+        help_text='Monto del extra (sieempre positivo +)'
     )
     notes = models.TextField(
         verbose_name='Notas',
