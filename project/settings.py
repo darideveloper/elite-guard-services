@@ -22,6 +22,7 @@ HOST = os.getenv('HOST')
 TEST_HEADLESS = os.getenv('TEST_HEADLESS', 'False') == 'True'
 EXTRA_HOUR_RATE = float(os.getenv('EXTRA_HOUR_RATE', 0))
 PENALTY_NO_ATTENDANCE = float(os.getenv('PENALTY_NO_ATTENDANCE', 0))
+LOCALE_VALUE = os.getenv('LOCALE_VALUE')
 
 print(f"DEBUG: {DEBUG}")
 print(f"STORAGE_AWS: {STORAGE_AWS}")
@@ -143,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Setup language and time zone
 LANGUAGE_CODE = 'es-mx'
-locale.setlocale(locale.LC_TIME, "es_MX.UTF-8")
+locale.setlocale(locale.LC_TIME, LOCALE_VALUE)
 TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
