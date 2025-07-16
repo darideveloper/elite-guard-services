@@ -202,12 +202,9 @@ class Employee(models.Model):
     birthdate = models.DateField(
         verbose_name='Fecha de nacimiento'
     )
-    municipality_birth = models.ForeignKey(
-        Municipality,
-        on_delete=models.PROTECT,
-        verbose_name='Lugar de nacimiento',
-        help_text='Estado y municipio de nacimiento',
-        related_name='municipality_birth'
+    municipality_birth = models.CharField(
+        max_length=100,
+        verbose_name='Lugar de nacimiento'
     )
     
     # Work info
