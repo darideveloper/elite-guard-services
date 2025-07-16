@@ -49,12 +49,9 @@ class EmployeeAdmin(admin.ModelAdmin):
         'last_name_2',
         'weekly_rate',
         'birthdate',
-        'neighborhood',
-        'address_street',
-        'address_number',
-        'custom_links',
         'status',
         'code',
+        'custom_links',
     )
     search_fields = (
         'name',
