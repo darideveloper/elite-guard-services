@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+import random
+
 
 class Neighborhood(models.Model):
     """ Secondary model for employee neighborhood """
@@ -194,7 +196,8 @@ class Employee(models.Model):
         blank=True,
         null=True
     )
-    
+    code = models.CharField(max_length=6, unique=True, editable=False)
+
     # Birth info
     birthdate = models.DateField(
         verbose_name='Fecha de nacimiento'
@@ -382,6 +385,9 @@ class Employee(models.Model):
         # save in status_history the employee status change
         if is_new:
             self.status_history += f"({now_str}) Estado: {self.status}"
+            
+            # Generate unique code
+            self.code = self.generate_unique_code()
         else:
             
             # Import services models avoiding circular imports
@@ -412,6 +418,12 @@ class Employee(models.Model):
 
         # Save the employee
         super(Employee, self).save(*args, **kwargs)
+    
+    def generate_unique_code(self):
+        while True:
+            code = "{:06d}".format(random.randint(0, 999999))
+            if not Employee.objects.filter(code=code).exists():
+                return code
     
     def get_age(self):
         """ Calculate employee age """

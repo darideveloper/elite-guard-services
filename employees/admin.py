@@ -53,6 +53,8 @@ class EmployeeAdmin(admin.ModelAdmin):
         'address_street',
         'address_number',
         'custom_links',
+        'status',
+        'code',
     )
     search_fields = (
         'name',
