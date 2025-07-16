@@ -20,6 +20,7 @@ class Command(BaseCommand):
                 "Municipality",
                 "Neighborhood",
                 "Employee",
+                "Department",
             ],
             "services": [
                 "Schedule",

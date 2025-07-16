@@ -1,0 +1,16 @@
+[
+    {
+        "model": "employees.Department",
+        "pk": 1,
+        "fields": {
+            "name": "Guardia"
+        }
+    },
+    {
+        "model": "employees.Department",
+        "pk": 2,
+        "fields": {
+            "name": "Limpieza"
+        }
+    }
+]

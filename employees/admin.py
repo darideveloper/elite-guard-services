@@ -116,6 +116,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                     'status_change_details',
                     'knowledge',
                     'skills',
+                    'department',
                 ),
             }
         ),

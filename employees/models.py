@@ -142,6 +142,26 @@ class Language(models.Model):
     def __str__(self):
         """ Text representation """
         return self.name
+
+
+class Department(models.Model):
+    """ Secondary model for employee department """
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nombre del departamento'
+    )
+    
+    class Meta:
+        """ Model metadata """
+        verbose_name = 'Departamento'
+        verbose_name_plural = 'Departamentos'
+        ordering = ['name']
+        
+    def __str__(self):
+        """ Text representation """
+        return self.name
     
     
 class Employee(models.Model):
@@ -274,6 +294,11 @@ class Employee(models.Model):
     skills = models.TextField(
         verbose_name='Habilidades',
         help_text='Habilidades y destrezas del empleado'
+    )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.PROTECT,
+        verbose_name='Departamento'
     )
     
     # Contact info
