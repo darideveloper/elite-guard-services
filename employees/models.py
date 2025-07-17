@@ -188,26 +188,36 @@ class Employee(models.Model):
         decimal_places=2,
         verbose_name='Estatura',
         help_text='Estatura en metros',
+        blank=True,
+        null=True
     )
     weight = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         verbose_name='Peso',
         help_text='Peso en kilogramos',
+        blank=True,
+        null=True
     )
     marital_status = models.ForeignKey(
         MaritalStatus,
         on_delete=models.PROTECT,
-        verbose_name='Estado civil'
+        verbose_name='Estado civil',
+        blank=True,
+        null=True
     )
     education = models.ForeignKey(
         Education,
         on_delete=models.PROTECT,
-        verbose_name='Nivel de educación'
+        verbose_name='Nivel de educación',
+        blank=True,
+        null=True
     )
     languages = models.ManyToManyField(
         Language,
-        verbose_name='Idiomas'
+        verbose_name='Idiomas',
+        blank=True,
+        null=True
     )
     photo = models.ImageField(
         upload_to='employees/photos/',
@@ -224,7 +234,9 @@ class Employee(models.Model):
     )
     municipality_birth = models.CharField(
         max_length=100,
-        verbose_name='Lugar de nacimiento'
+        verbose_name='Lugar de nacimiento',
+        blank=True,
+        null=True
     )
     
     # Work info
@@ -235,7 +247,9 @@ class Employee(models.Model):
     weekly_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Salario semanal'
+        verbose_name='Salario semanal',
+        blank=True,
+        null=True
     )
     curp = models.CharField(
         max_length=18,
@@ -283,7 +297,9 @@ class Employee(models.Model):
         Status,
         on_delete=models.PROTECT,
         verbose_name='Estatus de empleado',
-        default=1
+        default=1,
+        blank=True,
+        null=True
     )
     status_change_details = models.TextField(
         verbose_name='Detalles de cambio de estatus',
@@ -293,16 +309,22 @@ class Employee(models.Model):
     )
     knowledge = models.TextField(
         verbose_name='Conocimientos',
-        help_text='Conocimientos y experiencia del empleado'
+        help_text='Conocimientos y experiencia del empleado',
+        blank=True,
+        null=True
     )
     skills = models.TextField(
         verbose_name='Habilidades',
-        help_text='Habilidades y destrezas del empleado'
+        help_text='Habilidades y destrezas del empleado',
+        blank=True,
+        null=True
     )
     department = models.ForeignKey(
         Department,
         on_delete=models.PROTECT,
-        verbose_name='Departamento'
+        verbose_name='Departamento',
+        blank=True,
+        null=True
     )
     
     # Contact info
@@ -310,7 +332,7 @@ class Employee(models.Model):
         Municipality,
         on_delete=models.PROTECT,
         verbose_name='Lugar de residencia',
-        help_text='Estado y municipio de residencia'
+        help_text='Estado y municipio de residencia',
     )
     neighborhood = models.ForeignKey(
         Neighborhood,
@@ -323,21 +345,25 @@ class Employee(models.Model):
     )
     address_street = models.CharField(
         max_length=100,
-        verbose_name='Calle de residencia'
+        verbose_name='Calle de residencia',
     )
     address_number = models.CharField(
         max_length=10,
         verbose_name='Número de residencia',
-        help_text='Número de la casa o departamento'
+        help_text='Número de la casa o departamento',
     )
     phone = models.CharField(
         max_length=10,
         verbose_name='Teléfono',
-        unique=True
+        unique=True,
+        blank=True,
+        null=True
     )
     emergency_phone = models.CharField(
         max_length=10,
-        verbose_name='Teléfono de emergencia'
+        verbose_name='Teléfono de emergencia',
+        blank=True,
+        null=True
     )
     
     # Bank info
@@ -359,18 +385,24 @@ class Employee(models.Model):
     )
     balance = models.FloatField(
         verbose_name='Saldo de préstamos',
-        default=0
+        default=0,
+        blank=True,
+        null=True
     )
     
     # Other info
     anti_doping_results = models.TextField(
         verbose_name='Resultados de antidoping',
-        default='Sin resultados de antidoping'
+        default='Sin resultados de antidoping',
+        blank=True,
+        null=True
     )
     administrative_violations = models.IntegerField(
         verbose_name='Infracciones administrativas',
         help_text='Número de infracciones administrativas hasta la fecha',
-        default=0
+        default=0,
+        blank=True,
+        null=True
     )
     administrative_comments = models.TextField(
         verbose_name='Comentarios administrativos',
@@ -381,7 +413,9 @@ class Employee(models.Model):
     status_history = models.TextField(
         verbose_name='Historial de estatus',
         help_text='Historial de estatus (activo, inactivo, baja, etc). Autollenado',
-        default=''
+        default='',
+        blank=True,
+        null=True
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
