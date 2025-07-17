@@ -51,6 +51,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         'birthdate',
         'status',
         'code',
+        'is_eventual',
         'custom_links',
     )
     search_fields = (
