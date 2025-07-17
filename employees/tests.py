@@ -416,7 +416,7 @@ class ReportEmployeeDetailsViewTest(TestCase):
             "Estatura": self.employee.height,
             "Peso": self.employee.weight,
             "Estado Civil": self.employee.marital_status.name.upper(),
-            "Lugar de nacimiento": self.employee.municipality_birth.name,
+            "Lugar de nacimiento": self.employee.municipality_birth,
             "Fecha de nacimiento":
                 self.employee.birthdate.strftime("%d/%m/%Y"),
             "Calle": self.employee.address_street,

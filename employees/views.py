@@ -44,7 +44,7 @@ class ReportEmployeeDetailsView(
         marital_status = employee.marital_status.name
         context['employee']["marital_status"] = marital_status
 
-        municipality_birth = employee.municipality_birth.name
+        municipality_birth = employee.municipality_birth
         context['employee']["municipality_birth"] = municipality_birth
 
         neighborhood = employee.neighborhood.name

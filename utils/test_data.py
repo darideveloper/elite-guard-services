@@ -30,6 +30,7 @@ def create_employee(
     marital_status = models_employees.MaritalStatus.objects.get(name="Soltero")
     education = models_employees.Education.objects.get(name="Primaria")
     languages_es = models_employees.Language.objects.get(name="Español")
+    department = models_employees.Department.objects.get(name="Guardia")
     municipality = models_employees.Municipality.objects.create(
         name="Estado / Municipio"
     )
@@ -56,7 +57,8 @@ def create_employee(
         marital_status=marital_status,
         education=education,
         birthdate=timezone.datetime(1999, 1, 1).date(),
-        municipality_birth=municipality,
+        municipality_birth="Aguascalientes",
+        department=department,
         weekly_rate=100,
         curp=unique_data["curp"],
         ine=unique_data["ine"],

@@ -19,8 +19,8 @@ class Command(BaseCommand):
                 "Relationship",
                 "Municipality",
                 "Neighborhood",
-                "Employee",
                 "Department",
+                "Employee",
             ],
             "services": [
                 "Schedule",
