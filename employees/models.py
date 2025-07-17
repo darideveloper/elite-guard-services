@@ -1,7 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from django.core.files.base import File
+from django.core.files.storage import default_storage
 
 import random
+from django.conf import settings
+import qrcode
+import os
 
 
 class Neighborhood(models.Model):
@@ -326,6 +331,11 @@ class Employee(models.Model):
         blank=True,
         null=True
     )
+    qr_image = models.ImageField(
+        upload_to='employees/qr_images/',
+        verbose_name='Imagen QR',
+        editable=False
+    )
     
     # Contact info
     municipality = models.ForeignKey(
@@ -448,6 +458,14 @@ class Employee(models.Model):
             
             # Generate unique code
             self.code = self.generate_unique_code()
+            
+            # Generate QR image
+            qr_image_path = self.generate_qr_image()
+            print(qr_image_path)
+            file_name = os.path.basename(qr_image_path)  # Solo el nombre del archivo
+            print(file_name)
+            with open(qr_image_path, 'rb') as f:
+                self.qr_image.name = default_storage.save(file_name, File(f))
         else:
             
             # Import services models avoiding circular imports
@@ -484,6 +502,31 @@ class Employee(models.Model):
             code = "{:06d}".format(random.randint(0, 999999))
             if not Employee.objects.filter(code=code).exists():
                 return code
+    
+    def generate_qr_image(self):
+        """ Generate QR image """
+        host = settings.HOST
+        link = f"{host}/api/qr/{self.code}"
+
+        # Generate QR image
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(link)
+        qr.make(fit=True)
+        qr_folder = os.path.join(settings.MEDIA_ROOT, "employees/qr_images/")
+        qr_path = os.path.join(qr_folder, f"{self.code}.png")
+
+        # Crear la carpeta si no existe
+        os.makedirs(qr_folder, exist_ok=True)
+        
+        img = qr.make_image(fill='black', back_color='white')
+        img.save(qr_path)
+
+        return qr_path
     
     def get_age(self):
         """ Calculate employee age """
