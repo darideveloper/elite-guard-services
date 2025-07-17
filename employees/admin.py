@@ -107,6 +107,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         (
             "Laboral", {
                 'fields': (
+                    'is_eventual',
                     'weekly_rate',
                     'rfc',
                     'imss',

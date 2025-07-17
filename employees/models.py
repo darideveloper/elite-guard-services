@@ -228,6 +228,10 @@ class Employee(models.Model):
     )
     
     # Work info
+    is_eventual = models.BooleanField(
+        default=False,
+        verbose_name='Es eventual'
+    )
     weekly_rate = models.DecimalField(
         max_digits=10,
         decimal_places=2,
