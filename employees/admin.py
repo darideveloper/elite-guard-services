@@ -114,6 +114,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "is_eventual",
+                    "department",
                     "weekly_rate",
                     "rfc",
                     "imss",
@@ -123,7 +124,6 @@ class EmployeeAdmin(admin.ModelAdmin):
                     "status_change_details",
                     "knowledge",
                     "skills",
-                    "department",
                 ),
             },
         ),
