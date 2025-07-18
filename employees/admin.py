@@ -48,6 +48,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     """Employee model admin"""
 
     list_display = (
+        "code",
         "created_at",
         "name",
         "last_name_1",
@@ -55,7 +56,6 @@ class EmployeeAdmin(admin.ModelAdmin):
         "weekly_rate",
         "birthdate",
         "status",
-        "code",
         "is_eventual",
         "custom_links",
     )
