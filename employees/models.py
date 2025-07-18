@@ -205,7 +205,7 @@ class Employee(models.Model):
         null=True,
     )
     code = models.CharField(
-        max_length=6, unique=True, editable=False, verbose_name="Código de empleado"
+        max_length=6, unique=True, verbose_name="Código de empleado"
     )
 
     # Birth info
