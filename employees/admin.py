@@ -91,6 +91,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         "status_history",
         "balance",
         "qr_image",
+        "code",
     )
     fieldsets = (
         (
