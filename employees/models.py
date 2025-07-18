@@ -410,9 +410,7 @@ class Employee(models.Model):
 
             # Generate QR image
             qr_image_path = self.generate_qr_image()
-            print(qr_image_path)
             file_name = os.path.basename(qr_image_path)  # Solo el nombre del archivo
-            print(file_name)
             with open(qr_image_path, "rb") as f:
                 self.qr_image.name = default_storage.save(file_name, File(f))
         else:
