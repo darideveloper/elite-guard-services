@@ -298,7 +298,7 @@ class Employee(models.Model):
         default=1
     )
     qr_image = models.ImageField(
-        upload_to="employees/qr_images/", verbose_name="Imagen QR", editable=False
+        upload_to="employees/qr_images/", verbose_name="Imagen QR"
     )
 
     # Contact info

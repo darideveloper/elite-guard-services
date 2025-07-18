@@ -85,7 +85,13 @@ class EmployeeAdmin(admin.ModelAdmin):
         "updated_at",
     )
     list_per_page = 20
-    readonly_fields = ("created_at", "updated_at", "status_history", "balance")
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "status_history",
+        "balance",
+        "qr_image",
+    )
     fieldsets = (
         (
             "General",
@@ -126,6 +132,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                     "status_change_details",
                     "knowledge",
                     "skills",
+                    "qr_image",
                 ),
             },
         ),
