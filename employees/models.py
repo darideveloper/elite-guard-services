@@ -7,6 +7,7 @@ import random
 from django.conf import settings
 import qrcode
 import os
+import string
 
 
 class Neighborhood(models.Model):
@@ -497,9 +498,10 @@ class Employee(models.Model):
         # Save the employee
         super(Employee, self).save(*args, **kwargs)
     
-    def generate_unique_code(self):
+    def generate_unique_code(self, length=6):
+        characters = string.ascii_uppercase + string.digits
         while True:
-            code = "{:06d}".format(random.randint(0, 999999))
+            code = ''.join(random.choices(characters, k=length))
             if not Employee.objects.filter(code=code).exists():
                 return code
     
