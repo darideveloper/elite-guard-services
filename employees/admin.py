@@ -79,6 +79,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         "municipality",
         "neighborhood",
         "bank",
+        "department",
         "created_at",
         "updated_at",
     )
