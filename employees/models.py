@@ -463,12 +463,16 @@ class Employee(models.Model):
         )
         qr.add_data(link)
         qr.make(fit=True)
-        qr_folder = os.path.join(settings.MEDIA_ROOT, "employees/qr_images/")
-        qr_path = os.path.join(qr_folder, f"{self.code}.png")
-
-        # Crear la carpeta si no existe
-        os.makedirs(qr_folder, exist_ok=True)
-
+        
+        # Calculate and create temp qr folder
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        temp_qr_folder = os.path.join(current_path, "temp_qr_images")
+        os.makedirs(temp_qr_folder, exist_ok=True)
+        
+        # Generate qr image
+        qr_path = os.path.join(temp_qr_folder, f"{self.code}.png")
+        
+        # Save qr image
         img = qr.make_image(fill="black", back_color="white")
         img.save(qr_path)
 

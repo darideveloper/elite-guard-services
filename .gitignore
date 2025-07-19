@@ -16,3 +16,5 @@ media
 .env
 .env.dev
 .env.prod
+/temp_qr_images
+employees/temp_qr_images/
