@@ -41,20 +41,25 @@ class ReportEmployeeDetailsView(
         age = employee.get_age()
         context['employee']["age"] = age
 
-        marital_status = employee.marital_status.name
-        context['employee']["marital_status"] = marital_status
+        if employee.marital_status:
+            marital_status = employee.marital_status.name
+            context['employee']["marital_status"] = marital_status
 
-        municipality_birth = employee.municipality_birth
-        context['employee']["municipality_birth"] = municipality_birth
+        if employee.municipality_birth:
+            municipality_birth = employee.municipality_birth.name
+            context['employee']["municipality_birth"] = municipality_birth
 
-        neighborhood = employee.neighborhood.name
-        context['employee']["neighborhood"] = neighborhood
+        if employee.neighborhood:
+            neighborhood = employee.neighborhood.name
+            context['employee']["neighborhood"] = neighborhood
 
-        estado, municipio = employee.municipality.name.split(" / ")
-        context['employee']["estado"] = estado
-        context['employee']["municipio"] = municipio
+        if employee.municipality:
+            estado, municipio = employee.municipality.name.split(" / ")
+            context['employee']["estado"] = estado
+            context['employee']["municipio"] = municipio
         
-        context['employee']["status_history"] = employee.status_history
+        if employee.status_history:
+            context['employee']["status_history"] = employee.status_history
 
         # add refs contact numbers
         refs = models.Ref.objects.filter(employee=employee)
@@ -79,8 +84,9 @@ class ReportEmployeeDetailsView(
         for option in education_options:
             education_options_names.append(option.name)
         context["education_options"] = education_options_names
-        education = employee.education.name
-        context["education"] = education
+        if employee.education:
+            education = employee.education.name
+            context["education"] = education
 
         # Add created at date
         context['employee']["created_at"] = employee.created_at
