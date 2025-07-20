@@ -195,7 +195,7 @@ class Employee(models.Model):
         null=True,
     )
     languages = models.ManyToManyField(
-        Language, verbose_name="Idiomas", blank=True, null=True
+        Language, verbose_name="Idiomas"
     )
     photo = models.ImageField(
         upload_to="employees/photos/",
