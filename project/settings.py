@@ -167,7 +167,7 @@ JAZZMIN_SETTINGS = {
     # Text
     "site_title": "Grupo SION",
     "site_header": "Admin",
-    "site_brand": "Grupo SION Dashboard",
+    "site_brand": "Grupo SION",
     "welcome_sign": "Bienvenido a Grupo SION Dashboard",
     "copyright": "",
 
