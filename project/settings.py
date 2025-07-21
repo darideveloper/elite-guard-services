@@ -165,10 +165,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Jazzmin (layout template) settings
 JAZZMIN_SETTINGS = {
     # Text
-    "site_title": "Elite Guard Services",
+    "site_title": "Grupo SION",
     "site_header": "Admin",
-    "site_brand": "EGS Dashboard",
-    "welcome_sign": "Bienvenido a Elite Guard Services Dashboard",
+    "site_brand": "Grupo SION Dashboard",
+    "welcome_sign": "Bienvenido a Grupo SION Dashboard",
     "copyright": "",
 
     # Media
