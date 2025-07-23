@@ -118,7 +118,14 @@ class EmployeeModelTest(TestCase):
             f"{self.employee.name} {self.employee.last_name_1}",
             self.employee.get_full_name()
         )
+    
+    def test_generate_code(self):
+        """ Test generate code """
         
+        employee_test = test_data.create_employee()
+        
+        self.assertEqual(6, len(employee_test.code))
+
 
 class LoanModelTest(TestCase):
     """ Test custom methods in Loan Model """

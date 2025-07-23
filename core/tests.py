@@ -57,6 +57,6 @@ class AppCoreTestCase(TestCase):
     def test_qr_images_folder_empty(self):
         """ Validate that always the qr_images folder its empty """
         
-        qr_images_path = os.path.join(settings.BASE_DIR, "employees", "qr_images")
+        qr_images_path = os.path.join(settings.BASE_DIR, "employees", "temp_qr_images")
         
         self.assertEqual(len(os.listdir(qr_images_path)), 0)
