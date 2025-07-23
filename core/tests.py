@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.utils import timezone
 from utils import dates
+import os
+from django.conf import settings
 
 
 class RedirectsTest(TestCase):
@@ -47,3 +49,14 @@ class UtilsDatesGetCurrentWeekTest(TestCase):
         week = dates.get_current_week(date)
         
         self.assertEqual(week, 52)
+
+
+class AppCoreTestCase(TestCase):
+    """ Test app core """
+    
+    def test_qr_images_folder_empty(self):
+        """ Validate that always the qr_images folder its empty """
+        
+        qr_images_path = os.path.join(settings.BASE_DIR, "employees", "qr_images")
+        
+        self.assertEqual(len(os.listdir(qr_images_path)), 0)
