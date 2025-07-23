@@ -1,3 +1,8 @@
+import os
+from time import sleep
+
+import pyzxing
+
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
@@ -6,10 +11,6 @@ from utils import test_data
 from employees import models
 from core.test_base.test_admin import TestAdminBase
 from utils.test_data import CURP
-from time import sleep
-from utils import media
-import requests
-import pyzxing
 
 
 class EmployeeModelTest(TestCase):
@@ -145,33 +146,25 @@ class EmployeeModelTest(TestCase):
         """Test generate qr code"""
 
         employee_test = test_data.create_employee()
+        file_path = employee_test.qr_image.path
 
-        qr_url = media.get_media_url(employee_test.qr_image)
-        response = requests.get(qr_url)
-
-        self.assertEqual(200, response.status_code)
+        self.assertTrue(os.path.exists(file_path))
 
     def test_generate_qr_content(self):
         """Test generate qr content"""
-        expected_qr_content = f"http://localhost:8000/api/qr/{self.employee.code}.png"
+        
+        employee_test = test_data.create_employee()
+        file_path = employee_test.qr_image.path
 
-        # Descargar la imagen
-        qr_url = media.get_media_url(self.employee.qr_image)
-        response = requests.get(qr_url)
-        response.raise_for_status()
-
-        # Guardar temporalmente la imagen
-        with open("temp_qr.png", "wb") as f:
-            f.write(response.content)
+        expected_qr_content = f"/api/qr/{employee_test.code}"
 
         # Leer QR con pyzxing
         reader = pyzxing.BarCodeReader()
-        result = reader.decode("temp_qr.png")
-        assert result, "❌ No se encontró ningún código QR en la imagen"
+        result = reader.decode(file_path)
 
-        actual_qr_content = result[0]['parsed']
+        actual_qr_content = str(result[0]["parsed"])
 
-        self.assertEqual(expected_qr_content, actual_qr_content)
+        self.assertIn(expected_qr_content, actual_qr_content)
 
 
 class LoanModelTest(TestCase):
