@@ -7,8 +7,9 @@ from employees import models
 from core.test_base.test_admin import TestAdminBase
 from utils.test_data import CURP
 from time import sleep
-import requests
 from utils import media
+import requests
+import pyzxing
 
 
 class EmployeeModelTest(TestCase):
@@ -149,6 +150,28 @@ class EmployeeModelTest(TestCase):
         response = requests.get(qr_url)
 
         self.assertEqual(200, response.status_code)
+
+    def test_generate_qr_content(self):
+        """Test generate qr content"""
+        expected_qr_content = f"http://localhost:8000/api/qr/{self.employee.code}.png"
+
+        # Descargar la imagen
+        qr_url = media.get_media_url(self.employee.qr_image)
+        response = requests.get(qr_url)
+        response.raise_for_status()
+
+        # Guardar temporalmente la imagen
+        with open("temp_qr.png", "wb") as f:
+            f.write(response.content)
+
+        # Leer QR con pyzxing
+        reader = pyzxing.BarCodeReader()
+        result = reader.decode("temp_qr.png")
+        assert result, "❌ No se encontró ningún código QR en la imagen"
+
+        actual_qr_content = result[0]['parsed']
+
+        self.assertEqual(expected_qr_content, actual_qr_content)
 
 
 class LoanModelTest(TestCase):
