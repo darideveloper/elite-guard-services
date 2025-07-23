@@ -7,6 +7,8 @@ from employees import models
 from core.test_base.test_admin import TestAdminBase
 from utils.test_data import CURP
 from time import sleep
+import requests
+from utils import media
 
 
 class EmployeeModelTest(TestCase):
@@ -126,6 +128,16 @@ class EmployeeModelTest(TestCase):
         
         self.assertEqual(6, len(employee_test.code))
 
+    def test_generate_qr_code(self):
+        """ Test generate qr code """
+        
+        employee_test = test_data.create_employee()
+
+        qr_url = media.get_media_url(employee_test.qr_image)
+        response = requests.get(qr_url)
+        
+        self.assertEqual(200, response.status_code)
+    
 
 class LoanModelTest(TestCase):
     """ Test custom methods in Loan Model """
